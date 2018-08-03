@@ -1,6 +1,9 @@
 ################# FCT TRANSFORM DATA #################
 #######################################################
 
+#Turn off warnings
+options(warn=-1)
+
 #(Un)load libraries
 library(zoo)
 library(xts)

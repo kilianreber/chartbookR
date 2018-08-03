@@ -1,5 +1,8 @@
 getFRED <- function(tickers, names){
 
+  #Turn off warnings
+  options(warn=-1)
+  
   #Load packages
   library(readxl)
   library(quantmod)

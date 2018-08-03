@@ -1,5 +1,8 @@
 getBBG <- function(tickers, field, names, time, start, end, freq, na){
 
+  #Turn off warnings
+  options(warn=-1)
+  
   #Load libraries
   library(Rblpapi)
   library(bsts)

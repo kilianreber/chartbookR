@@ -1,5 +1,8 @@
 BarChart <- function(no, title, data, side,d1, d2, l1, xf, y1, y2, y1_def, y2_def, date_spc, dt_format, spc, leg, lgb) {
 
+  #Turn off warnings
+  options(warn=-1)
+  
   #Set default values
   if (missing(no))        {no      <-  ""    }
   if (missing(y1_def))    {y1_def  <- "none" }

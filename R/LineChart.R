@@ -1,5 +1,8 @@
 LineChart <- function(no, title, data, d1, d2, y1, y2, y1_def, y2_def, y2_rev, fn, leg, grid, rec, dt_format, h, v) {
 
+#Turn off warnings
+options(warn=-1)
+  
 #Load libraries
 library(xlsx)
 lapply(c("quantmod", "zoo", "stringr"), library, character.only = TRUE)
