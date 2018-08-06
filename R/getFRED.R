@@ -1,18 +1,23 @@
-getFRED <- function(tickers, names){
+getFRED <- function(start, tickers, names){
 
   #Turn off warnings
   options(warn=-1)
   
   #Load packages
-  library(readxl)
   library(quantmod)
   library(zoo)
-  library(xts)
+  #library(xts)
 
   ####### DOWNLOAD FRED DATA BASED ON INPUTS #######
   ##################################################
 
-    #Download FRED data and merge
+  #Set missing values
+  if (missing(start))      {start      <- "01/01/1666" }
+  
+  #Prepare data
+  if (start!="01/01/1666") {start <- as.Date(start, "%d/%m/%Y")}
+  
+  #Download FRED data and merge
   fred <- lapply(tickers, function(sym) {na.omit(getSymbols(sym, src="FRED", auto.assign=FALSE, return.class = "zoo"))})
   fred <- Reduce(merge, fred)
   n <- ncol(fred)
@@ -26,6 +31,9 @@ getFRED <- function(tickers, names){
   #Adjust column headers
   colnames(df) <- names
 
+  #Subset data according to start date provided
+  if (start!="01/01/1666") {df <- subset(df, index(df)>=start)}
+  
   #Return results
   return(df)
 

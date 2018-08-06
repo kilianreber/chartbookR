@@ -26,11 +26,16 @@ if (missing(y2_rev))      {y2_rev=FALSE     }
 if (y2_def!="none")       {ylim_input=c(y2_def[1], y2_def[2])}
 if (y2_def!="none" & y2_rev==TRUE) {ylim_input=rev(range(c(y2_def[1], y2_def[2])))}
 
+#Load recession data & reset recession indicator if necessary
+nber <- NBER_Recessions
+if (index(data)[1] > as.Date(nber$Rec_Start[1])) {rec <- FALSE}
+
 #Adjust title
 if (no!="") {title <- paste("Fig. ", no, ": ", title, sep="")}
 
-#Set color Palette
-palette(c("#428bce", "#595959", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667"))
+#Set color Palette (only if currently standard)
+if (palette()==c("#428BCE", "gray35", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667")) {palette(c("#428bce", "#595959", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667"))}
+if (palette()==c("black", "red", "green3", "blue", "cyan", "magenta")) {palette(c("#428bce", "#595959", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667"))}
 
 #Create data vectors and data column vectors
 data1 <- as.data.frame(data[,d1])
@@ -68,7 +73,6 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
     if (rec!=FALSE){
 
     #Load recession data & create date vectors
-    nber <- NBER_Recessions
     rec_start <- as.Date(nber$Rec_Start)
     rec_end   <- as.Date(nber$Rec_End)
 
@@ -109,7 +113,6 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
     if (rec!=FALSE){
 
     #Load recession data & create date vectors
-    nber <- NBER_Recessions
     rec_start <- as.Date(nber$Rec_Start)
     rec_end   <- as.Date(nber$Rec_End)
 
