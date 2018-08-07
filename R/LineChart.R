@@ -17,18 +17,30 @@ if (missing(fn))          {fn      <-  ""   }
 if (missing(no))          {no      <-  ""   }
 if (missing(grid))        {grid    <-  FALSE}
 if (missing(rec))         {rec     <-  FALSE}
-if (missing(dt_format))   {dt_format  <-  c("1 years", "%Y")}
 if (missing(leg))         {leg <- "topleft" }
 if (missing(h))           {h <- "none"      }
 if (missing(v))           {v <- "none"      }
 if (missing(y2_rev))      {y2_rev=FALSE     }
+#if (missing(dt_format))   {dt_format  <-  c("1 years", "%Y")}
 
 if (y2_def!="none")       {ylim_input=c(y2_def[1], y2_def[2])}
 if (y2_def!="none" & y2_rev==TRUE) {ylim_input=rev(range(c(y2_def[1], y2_def[2])))}
 
+#Set dt_format defaults (if user provides none)
+if (missing(dt_format))   
+  {
+  day_diff <- as.numeric(tail(index(df),1) - index(df)[1])
+  if(day_diff <= 1.5*365) 				                 {dt_format <- c("3 mon", "%m-%Y")}
+  if((day_diff > 1.5*365) & (day_diff <=3*365)) 	 {dt_format <- c("6 mon", "%m-%Y")}
+  if((day_diff > 3  *365) & (day_diff <=5*365)) 	 {dt_format <- c("1 years", "%Y") }
+  if((day_diff > 5  *365) & (day_diff <=12*365)) 	 {dt_format <- c("2 years", "%Y") }
+  if((day_diff > 12  *365) & (day_diff <=20*365))  {dt_format <- c("3 years", "%Y") }
+  if(day_diff > 20*365)                            {dt_format <- c("5 years", "%Y") }
+  }
+
 #Load recession data & reset recession indicator if necessary
 nber <- NBER_Recessions
-if (index(data)[1] > as.Date(nber$Rec_Start[1])) {rec <- FALSE}
+if (index(data)[1] > as.Date(tail(nber$Rec_End, 1))) {rec <- FALSE}
 
 #Adjust title
 if (no!="") {title <- paste("Fig. ", no, ": ", title, sep="")}
