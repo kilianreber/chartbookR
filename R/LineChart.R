@@ -8,10 +8,12 @@ library(xlsx)
 lapply(c("quantmod", "zoo", "stringr"), library, character.only = TRUE)
 
 #Set default values
-if (missing(title))       {title   <- "GIVE YOUR CHART A TITLE !"}
+if (missing(title))       {title   <- ""    }
+if (missing(d1))          {d1 <- c(1:ncol(df))}
+if (missing(y1))          {y1 <- ""         }
 if (missing(y1_def))      {y1_def  <- "none"}
 if (missing(y2_def))      {y2_def  <- "none"}
-if (missing(y2))          {y2      <- "NAME YOUR 2ND Y-AXIS !"}
+if (missing(y2))          {y2      <- ""    }
 if (missing(d2))          {d2      <- "none"}
 if (missing(fn))          {fn      <-  ""   }
 if (missing(no))          {no      <-  ""   }
@@ -21,8 +23,6 @@ if (missing(leg))         {leg <- "topleft" }
 if (missing(h))           {h <- "none"      }
 if (missing(v))           {v <- "none"      }
 if (missing(y2_rev))      {y2_rev=FALSE     }
-#if (missing(dt_format))   {dt_format  <-  c("1 years", "%Y")}
-
 if (y2_def!="none")       {ylim_input=c(y2_def[1], y2_def[2])}
 if (y2_def!="none" & y2_rev==TRUE) {ylim_input=rev(range(c(y2_def[1], y2_def[2])))}
 
