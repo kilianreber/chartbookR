@@ -30,8 +30,8 @@ if (y2_def!="none" & y2_rev==TRUE) {ylim_input=rev(range(c(y2_def[1], y2_def[2])
 if (missing(dt_format))   
   {
   day_diff <- as.numeric(tail(index(df),1) - index(df)[1])
-  if(day_diff <= 1.5*365) 				                 {dt_format <- c("3 mon", "%m-%Y")}
-  if((day_diff > 1.5*365) & (day_diff <=3*365)) 	 {dt_format <- c("6 mon", "%m-%Y")}
+  if(day_diff <= 1.5*365) 				                 {dt_format <- c("3 mon", "%b-%Y")}
+  if((day_diff > 1.5*365) & (day_diff <=3*365)) 	 {dt_format <- c("6 mon", "%b-%Y")}
   if((day_diff > 3  *365) & (day_diff <=5*365)) 	 {dt_format <- c("1 years", "%Y") }
   if((day_diff > 5  *365) & (day_diff <=12*365)) 	 {dt_format <- c("2 years", "%Y") }
   if((day_diff > 12  *365) & (day_diff <=20*365))  {dt_format <- c("3 years", "%Y") }
