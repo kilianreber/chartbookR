@@ -1,3 +1,6 @@
+####### DOWNLOAD FRED DATA BASED ON INPUTS #######
+##################################################
+
 getFRED <- function(start, tickers, names){
 
   #Turn off warnings
@@ -6,15 +9,12 @@ getFRED <- function(start, tickers, names){
   #Load packages
   library(quantmod)
   library(zoo)
-  #library(xts)
-
-  ####### DOWNLOAD FRED DATA BASED ON INPUTS #######
-  ##################################################
-
+  
   #Set missing values
   if (missing(start))      {start      <- "01/01/1666" }
   
   #Prepare data
+  # Add flipTime
   if (start!="01/01/1666") {start <- as.Date(start, "%d/%m/%Y")}
   
   #Download FRED data and merge

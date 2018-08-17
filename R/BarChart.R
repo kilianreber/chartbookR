@@ -1,77 +1,187 @@
-BarChart <- function(no, title, data, side,d1, d2, l1, xf, y1, y2, y1_def, y2_def, date_spc, dt_format, spc, leg, lgb) {
+BarChart <- function(no, title, data, stacked, d1, d2, y1, y2, y1_def, y2_def, y2_rev, space, fn, leg, grid, rec, dt_format, h, v) {
 
-  #Turn off warnings
-  options(warn=-1)
+#Turn off warnings
+options(warn=-1)
   
-  #Set default values
-  if (missing(no))        {no      <-  ""    }
-  if (missing(y1_def))    {y1_def  <- "none" }
-  if (missing(l1))        {l1  <- "none"     }
-  if (missing(side))      {side  <- FALSE    }
-  if (missing(y2_def))    {y2_def  <- "none" }
-  if (missing(d2))        {d2      <- "none" }
-  if (missing(spc))       {spc     <- 1      }
-  if (missing(lgb))       {lgb     <- "n"    }
-  if (missing(xf))        {xf      <- "%Y"   }
-  if (missing(date_spc))     {date_spc      <- 1   }
-  if (missing(dt_format)) {dt_format <- c("1 years", "%m-%Y")}
+#Load libraries
+#library(xlsx)
+library(MALDIquant)
+lapply(c("quantmod", "zoo", "stringr"), library, character.only = TRUE)
+source("C:/Users/Kyle/Dropbox/R/My_Programs/Usable_Tools/Chartbook/Functions/Barplot_param.R")
 
-  # Format for having bars side by side:
-  if(side == TRUE){spc <- NULL
-  date_spc <- 2}
+# DONT CONFUSE DATA AND DF!!!
 
-  if(spc == 0){
-  date_spc <- 0}
+#Set default values
+if (missing(title))       {title   <- ""    }
+if (missing(d1))          {d1 <- c(1:ncol(df))}
+if (missing(stacked))     {stacked <- TRUE  }
+if (missing(y1))          {y1 <- ""         }
+if (missing(y1_def))      {y1_def  <- "none"}
+if (missing(y2_def))      {y2_def  <- "none"}
+if (missing(y2))          {y2      <- ""    }
+if (missing(d2))          {d2      <- "none"}
+if (missing(fn))          {fn      <-  ""   }
+if (missing(no))          {no      <-  ""   }
+if (missing(grid))        {grid    <-  FALSE}
+if (missing(rec))         {rec     <-  FALSE}
+if (missing(leg))         {leg <- "topleft" }
+if (missing(h))           {h <- "none"      }
+if (missing(v))           {v <- "none"      }
+if (missing(y2_rev))      {y2_rev=FALSE     }
+if (missing(space))       {space <- 0       } else if (stacked==FALSE) {space=NULL}
+if (y2_def!="none")       {ylim_input=c(y2_def[1], y2_def[2])}
+if (y2_def!="none" & y2_rev==TRUE) {ylim_input=rev(range(c(y2_def[1], y2_def[2])))}
+bars_width <- 1
 
-  #Adjust title
-  if (no!="") {title <- paste("Fig. ", no, ": ", title, sep="")}
-
-  x_min <- min(index(data))
-  x_max <- max(index(data))
-
-  # Set TS that shoud be bars:
-  d1 <- data[,d1]
-
-  # Set what TS should be line plot
-  if(d2!="none")  {
-    d2 <- data[,d2]
+#Set dt_format defaults (if user provides none)
+if (missing(dt_format))   
+  {
+  day_diff <- as.numeric(tail(index(df),1) - index(df)[1])
+  if(day_diff <= 1.5*365) 				                 {dt_format <- c("3 mon", "%b-%Y")}
+  if((day_diff > 1.5*365) & (day_diff <=3*365)) 	 {dt_format <- c("6 mon", "%b-%Y")}
+  if((day_diff > 3  *365) & (day_diff <=5*365)) 	 {dt_format <- c("1 years", "%Y") }
+  if((day_diff > 5  *365) & (day_diff <=12*365)) 	 {dt_format <- c("2 years", "%Y") }
+  if((day_diff > 12  *365) & (day_diff <=20*365))  {dt_format <- c("3 years", "%Y") }
+  if(day_diff > 20*365)                            {dt_format <- c("5 years", "%Y") }
   }
 
-  #Set color Palette
-  palette(c("#428bce", "#595959", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667"))
+#Load recession data & reset recession indicator if necessary
+# nber <- NBER_Recessions
+# if (index(data)[1] > as.Date(tail(nber$Rec_End, 1))) {rec <- FALSE}
+nber <- read.xlsx("C:/Users/Kyle/Dropbox/R/My_Programs/Usable_Tools/Chartbook/Functions/NBER_Recession_Dates.xlsx", sheetIndex=1)[1:2]
 
-  if (is.null(ncol(d1))) {d1L <- 1} else {d1L <- ncol(d1)}
-  if (d2!="none") {if(is.null(ncol(d2))) {d2L <- 1} else {d2L <- ncol(d2)}} else {d2L <-0}
+#Adjust title
+if (no!="") {title <- paste("Fig. ", no, ": ", title, sep="")}
 
-  #Create plot, first y-axis, and content
-  par(mar = c(5,5,5,5))
-  if (y1_def!="none") {barplot(d1, beside = side, names.arg=format(index(data), dt_format[2]), ann=FALSE, bty="n", tck=-0, col=1:d1L, yaxt="n", ylim=c(y1_def[1], y1_def[2]), border=NA, space=spc); title(main=title, ylab=y1)
-  #axis(1, at=match(seq(as.Date(x_min), x_max, dt_format[1]),index(df))*(1+date_spc),labels = format(seq(as.Date(x_min), x_max, dt_format[1]),dt_format[2]),lwd=0)
-    #Code to draw x-axis labels!
-    index_y <- format(index(data), dt_format[2])
-    index_u <- !duplicated(index_y)
-    at_tick <- which(index_u)
-    labels <- index_y[index_u]
-    #bp <- barplot(df[,2], xaxt = "n", yaxt="n", ylab= "y-axis")
-    #axis(side = 1, at = bp[at_tick], labels = labels, tck=-0, lwd = 0)
+#Set color Palette (only if currently standard)
+if (palette()==c("#428BCE", "gray35", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667")) {palette(c("#428bce", "#595959", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667"))}
+if (palette()==c("black", "red", "green3", "blue", "cyan", "magenta")) {palette(c("#428bce", "#595959", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667"))}
 
+#Create data vectors and data column vectors
+data1 <- as.data.frame(data[,d1])
+colnames(data1) <- colnames(data)[d1]
+data1 <- as.zoo(data1)
+
+if(d2!="none")  {
+  data2 <- as.data.frame(data[,d2])
+  colnames(data2) <- colnames(data)[d2]
+  data2 <- as.zoo(data2)
+}
+
+if(d2!="none")  {d3 <- c(d1, d2)} else {d3 <- d1}
+if(d2!="none")  {data3 <- data[,d3]} else {data3 <- data1}
+
+#Create labels and tick vectors
+bp_param <- Barplot_param(data=data, d1=d1, stacked=stacked, dt_format=dt_format)
+
+#Create plot, first y-axis, and content
+par(mar = c(5,5,5,5))
+
+if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_def[2]), space=space, ann=FALSE, xaxt = "n", yaxt="n", tck=0, las=1, lwd=3, col=1:length(d1), border=NA); title(main=title, ylab=y1)
+  axis(side=1, at=bp[as.integer(bp_param[1,])], labels=bp_param[2,], las=1, tck=0)
   axis(2, seq(y1_def[1], y1_def[2], y1_def[3]), las=1, tck=-0)
+  title(sub=fn, font.sub=3, line = 3)
 
-  } else {barplot(d1, beside = side, names.arg=format(index(data), dt_format[2]), ann=FALSE, bty="n", las=1, tck=-0, col=1:d1L, border=NA, space=spc)
-    title(main=title, ylab=y1)
-    #axis(1, at=match(seq(as.Date(x_min), x_max, dt_format[1]),index(d1))*(date_spc), labels = format(seq(as.Date(x_min), x_max, dt_format[1]),dt_format[2]),lwd=0)
+    # Add ablines
+    if(h!="none") {abline(h=h, lty=2, lwd=1, col="black")}
+    if(v!="none") {abline(v=as.Date(v), lty=5, lwd=1)}
+
+    #Prepare recession shading
+    if (rec!=FALSE){
+
+    #Load recession data & create date vectors
+    rec_start <- as.Date(nber$Rec_Start)
+    rec_end   <- as.Date(nber$Rec_End)
+
+    #Create limits for rects
+    mymax <- function(x) ifelse(!all(is.na(x)), max(x, na.rm=T), NA)
+    mymin <- function(x) ifelse(!all(is.na(x)), min(x, na.rm=T), NA)
+
+    if (mymax(data1) > 0) {rect_max <- mymax(data1)*2} else {rect_max <- mymax(data1)*0.5}
+    if (mymin(data1) > 0) {rect_min <- mymin(data1)*0.5} else {rect_min <- mymin(data1)*2}
+
+    #Trim date vectors
+    rec_start <- subset(rec_start, rec_start>=as.Date(rec_start_dt))
+    items <- length(rec_start)
+    rec_end <- rec_end[(length(rec_end)-items+1):length(rec_end)]
+
+    #Convert date vectors to ticks
+    rec_start <- match.closest(rec_start, index(df))
+    rec_end <- match.closest(rec_end, index(df))
+    
+    #Set bars_width
+    if (stacked==FALSE) {bars_width <- length(d1)}
+    
+    #Add recession shading
+    rect(rec_start*(1+space)*bars_width, rect_min, rec_end*(1+space)*bars_width, rect_max, density=NULL, border=NA, lwd=0, col= rgb(0,0,0.1, alpha=0.15))
+    #rect(as.Date(rec_start), rect_min, as.Date(rec_end), rect_max, density=NULL, border=NA, lwd=0, col= rgb(0,0,0.1, alpha=0.15))
     }
 
-  #Create second y-axis, and content (if available)
-  if (d2!="none") {par(new = T)
-    if (y2_def!="none") {plot(d2, plot.type="s", bty="n", ylim=c(y2_def[1], y2_def[2]), col=(d1L+1):(d1L+d2L), axes=F, lwd=3, ann=FALSE)
-      axis(4, seq(y2_def[1], y2_def[2], y2_def[3]), las=1, tck=-0)
-    } else {plot(d2, plot.type="s", bty="n", col=(d1L+1):(d1L+d2L), axes=F, lwd=3, las=1, ann=FALSE)
-      axis(4, las=1, tck=-0)}
+    if (grid!=FALSE) {
+    if (y1_def=="none") {grid(NA, ny=NULL, lty=3, lwd=1, col="#424447")}
+    else {seq <- seq(y1_def[1], y1_def[2], y1_def[3])
+    abline(h=seq, lty=3, lwd=1, col="#424447")}}
+  
+  } else {bp <- barplot(data1, beside=!stacked, ann=FALSE, bty="n", xaxt = "n", space=rep(space, times=length(d1)), tck=0, las=1, lwd=1, col=1:length(d1), border=NA); title(main=title, ylab=y1)
+  axis(side=1, at=bp[as.integer(bp_param[1,])], labels=bp_param[2,], las=1, tck=0)
+
+    # Add ablines
+    if(h!="none") {abline(h=h, lty=2, lwd=1, col="black")}
+    if(v!="none") {abline(v=as.Date(v), lty=5, lwd=1)}
+
+    #ADD RECESSION SHADING
+    if (rec!=FALSE){
+
+    #Load recession data & create date vectors
+    rec_start <- as.Date(nber$Rec_Start)
+    rec_end   <- as.Date(nber$Rec_End)
+
+    #Create limits for rects
+    mymax <- function(x) ifelse( !all(is.na(x)), max(x, na.rm=T), NA)
+    mymin <- function(x) ifelse( !all(is.na(x)), min(x, na.rm=T), NA)
+
+    if (mymax(data1) > 0) {rect_max <- mymax(data1)*2} else {rect_max <- mymax(data1)*0.5}
+    if (mymin(data1) > 0) {rect_min <- mymin(data1)*0.5} else {rect_min <- mymin(data1)*2}
+
+    #Trim date vectors
+    rec_start <- subset(rec_start, rec_start>=as.Date(rec_start_dt))
+    items <- length(rec_start)
+    rec_end <- rec_end[(length(rec_end)-items+1):length(rec_end)]
+  
+    #Convert date vectors to ticks
+    rec_start <- match.closest(rec_start, index(df))
+    rec_end <- match.closest(rec_end, index(df))
+    
+    #Set bars_width
+    if (stacked==FALSE) {bars_width <- length(d1)}
+    
+    #Add recession shading
+    rect(rec_start*(1+space)*bars_width, rect_min, rec_end*(1+space)*bars_width, rect_max, density=NULL, border=NA, lwd=0, col= rgb(0,0,0.1, alpha=0.15))
+    #rect(as.Date(rec_start), rect_min, as.Date(rec_end), rect_max, density=NULL, border=NA, lwd=0, col= rgb(0,0,0.1, alpha=0.15))
+    }
+
+  title(sub=fn, font.sub=3, line = 3)
+
+  if (grid!=FALSE) {
+    if (y1_def=="none") {grid(NA, ny=NULL, lty=3, lwd=1, col="#424447")}
+    else {seq <- seq(y1_def[1], y1_def[2], y1_def[3])
+    abline(h=seq, lty=3, lwd=1, col="#424447")}}
+}
+
+### THIS PART MAY NEED TO BE REDONE!!!
+
+#Create second y-axis, and content (if available)
+if (d2!="none") {par(new = T)
+
+  if (y2_def!="none") {plot(data2, plot.type="s", bty="n", ylim=ylim_input, col=(length(d1)+1):(length(d3)), axes=F, lwd=3, ann=FALSE)
+    axis(4, seq(y2_def[1], y2_def[2], y2_def[3]), las=1, lwd=0, tck=-0)
+    } else {plot(data2, plot.type="s", bty="n", col=(length(d1)+1):(length(d3)), axes=F, lwd=3, las=1, ann=FALSE, tck=-0)
+    axis(4, las=1, lwd=0, tck=-0)}
     mtext(side = 4, line = 3, y2)
 
-    legend(leg, bty=lgb, box.lty=0, bg="#FFFFFF", legend=colnames(data)[1:(d1L+d2L)], pch=15, col=1:(d1L+d2L), ncol=1)
-  } else {legend(leg, bty=lgb, box.lty=0, bg="#FFFFFF", legend=colnames(data)[1:d1L], pch=15, col=1:d1L, ncol=1)}
+    legend(leg, box.lty=0, bg="#FFFFFF", legend=colnames(data3), pch=15, col=1:length(d3), ncol=1)
+    } else {legend(leg, box.lty=0, bg="#FFFFFF", legend=colnames(data3), pch=15, col=1:length(d3), ncol=1)}
 
-  if (d2=="none") {box(which = "plot", bty = "l")} else {box(which = "plot", bty = "u")}
+if (d2=="none") {box(which = "plot", bty = "l")} else {box(which = "plot", bty = "u")}
+
 }
