@@ -4,10 +4,8 @@ BarChart <- function(no, title, data, stacked, d1, d2, y1, y2, y1_def, y2_def, y
 options(warn=-1)
   
 #Load libraries
-#library(xlsx)
 library(MALDIquant)
 lapply(c("quantmod", "zoo", "stringr"), library, character.only = TRUE)
-source("C:/Users/Kyle/Dropbox/R/My_Programs/Usable_Tools/Chartbook/Functions/Barplot_param.R")
 
 # DONT CONFUSE DATA AND DF!!!
 
@@ -46,9 +44,8 @@ if (missing(dt_format))
   }
 
 #Load recession data & reset recession indicator if necessary
-# nber <- NBER_Recessions
-# if (index(data)[1] > as.Date(tail(nber$Rec_End, 1))) {rec <- FALSE}
-nber <- read.xlsx("C:/Users/Kyle/Dropbox/R/My_Programs/Usable_Tools/Chartbook/Functions/NBER_Recession_Dates.xlsx", sheetIndex=1)[1:2]
+nber <- NBER_Recessions
+if (index(data)[1] > as.Date(tail(nber$Rec_End, 1))) {rec <- FALSE}
 
 #Adjust title
 if (no!="") {title <- paste("Fig. ", no, ": ", title, sep="")}
