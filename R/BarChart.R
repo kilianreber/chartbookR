@@ -82,11 +82,6 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     #Add horizontal abline
     if(h!="none") {abline(h=h, lty=2, lwd=1, col="black")}
     
-    v <- "31/01/2017"
-    bars_width <- 1
-    d1 <- c(1,2,3)
-    space <- c(0.1, 1)
-    
     #Add vertical abline
     if(v!="none") {
     v <- as.Date(v, "%d/%m/%Y")
