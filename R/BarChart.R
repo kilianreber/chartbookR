@@ -25,8 +25,10 @@ if (missing(leg))         {leg  <- "topleft"}
 if (missing(h))           {h       <- "none"}
 if (missing(v))           {v       <- "none"}
 if (missing(y2_rev))      {y2_rev  <- FALSE }
-if(missing(space) & stacked==TRUE)  {space <- 0.25}
-if(missing(space) & stacked==FALSE) {space <- c(0.25, 0.1)}
+if (missing(space) & stacked==TRUE)  {space <- 0.25}
+if (missing(space) & stacked==FALSE) {space <- c(0.25, 0.1)}
+if (stacked==TRUE)        {space <- space[1]}
+if (stacked==FALSE &  length(space)==1) {space <- c(space[1], 1)}
 if (y2_def!="none")       {ylim_input=c(y2_def[1], y2_def[2])}
 if (y2_def!="none" & y2_rev==TRUE) {ylim_input=rev(range(c(y2_def[1], y2_def[2])))}
 bars_width <- 1
@@ -86,7 +88,8 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     if(v!="none") {
     v <- as.Date(v, "%d/%m/%Y")
     v_tick <- match.closest(v, index(df))
-    v_tick <- (v_tick*((length((d1))*bars_width)+((length(d1)-1)*space[1])+space[2]))+(0.5*space[2])
+    if (stacked==FALSE) {v_tick <- (v_tick*((length((d1))*bars_width)+((length(d1)-1)*space[1])+space[2]))+(0.5*space[2])}
+    if (stacked==TRUE)  {v_tick <- (v_tick*bars_width)*(1+space)+0.5*space}
     abline(v=v_tick, lty=1, lwd=2, col="black")}
     
     #Prepare recession shading
@@ -122,11 +125,11 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     if (grid!=FALSE) {
     if (y1_def=="none") {grid(NA, ny=NULL, lty=3, lwd=1, col="#424447")}
     else {seq <- seq(y1_def[1], y1_def[2], y1_def[3])
-    abline(h=seq, lty=3, lwd=1, col="#424447")}}
+    #abline(h=seq, lty=3, lwd=1, col="#424447")
+    }}
   
   } else {bp <- barplot(data1, beside=!stacked, ann=FALSE, bty="n", xaxt = "n", space=space, tck=0, las=1, lwd=1, col=1:length(d1), border=NA); title(main=title, ylab=y1)
-  #bp <- barplot(data1, beside=!stacked, ann=FALSE, bty="n", xaxt = "n", space=rep(space, times=length(d1)), tck=0, las=1, lwd=1, col=1:length(d1), border=NA); title(main=title, ylab=y1)
-  axis(side=1, at=bp[as.integer(bp_param[1,])], labels=bp_param[2,], las=1, tck=0)
+    axis(side=1, at=bp[as.integer(bp_param[1,])], labels=bp_param[2,], las=1, tck=0)
 
     #Add horizontal abline
     if(h!="none") {abline(h=h, lty=2, lwd=1, col="black")}
@@ -135,7 +138,8 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     if(v!="none") {
     v <- as.Date(v, "%d/%m/%Y")
     v_tick <- match.closest(v, index(df))
-    v_tick <- (v_tick*((length((d1))*bars_width)+((length(d1)-1)*space[1])+space[2]))+(0.5*space[2])
+    if (stacked==FALSE) {v_tick <- (v_tick*((length((d1))*bars_width)+((length(d1)-1)*space[1])+space[2]))+(0.5*space[2])}
+    if (stacked==TRUE)  {v_tick <- (v_tick*bars_width)*(1+space)+0.5*space}
     abline(v=v_tick, lty=1, lwd=2, col="black")}
 
     #ADD RECESSION SHADING
@@ -173,7 +177,8 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
   if (grid!=FALSE) {
     if (y1_def=="none") {grid(NA, ny=NULL, lty=3, lwd=1, col="#424447")}
     else {seq <- seq(y1_def[1], y1_def[2], y1_def[3])
-    abline(h=seq, lty=3, lwd=1, col="#424447")}}
+    #abline(h=seq, lty=3, lwd=1, col="#424447")
+    }}
 }
 
 #Create second y-axis, and content (if available)
