@@ -1,3 +1,7 @@
+####### DOWNLOAD BBG DATA BASED ON INPUTS ########
+##################################################
+
+
 getBBG <- function(tickers, field, names, time, start, end, freq, na){
 
   #Turn off warnings
@@ -5,9 +9,11 @@ getBBG <- function(tickers, field, names, time, start, end, freq, na){
   
   #Load libraries
   library(Rblpapi)
-  library(bsts)
   library(lubridate)
-
+  
+  ### TO DELETE IF NOT NEEDED!
+  #library(bsts)
+  
   #Open Bloomberg connection
   blpConnect()
 
@@ -16,14 +22,14 @@ getBBG <- function(tickers, field, names, time, start, end, freq, na){
   start_ytd <- last_day_prev_year(Sys.Date())
 
   #Set defaults
-  if(missing(freq))  {freq <- "MONTHLY"}
+  if(missing(freq))  {freq <- "MONTHLY" }
   if(missing(field)) {field <- "PX_LAST"}
-  if(missing(time))  {time <- "none"}
+  if(missing(time))  {time <- "none"    }
   if(missing(start)) {start <- (LastDayInMonth(Sys.Date())-3*365)}
   if(missing(end))   {end <- as.Date(Sys.Date()-1)}
   if(time=="ytd")    {start <- start_ytd}
   if(time!="none" & time!="ytd") {start <- as.Date(Sys.Date()-(365*as.numeric((gsub("Y", "", time)))))}
-  if(missing(na))    {na <- TRUE}
+  if(missing(na))    {na <- TRUE        }
 
   # Complete tickers list
   for (i in 1:length(tickers))
@@ -108,7 +114,8 @@ getBBG <- function(tickers, field, names, time, start, end, freq, na){
   for(i in 1:ncol(bbg_trans)) {bbg_trans[min[i]:max[i],i] <- na.locf(bbg_trans[min[i]:max[i],i])}
   }
 
-  if (na==FALSE) {bbg_trans <- na.locf(bbg_trans)} # TO GET RID OF NAs IN FRONT
+  #Replace preceding NAs (default)
+  if (na==FALSE) {bbg_trans <- na.locf(bbg_trans)}
   return(bbg_trans)
 
 }
