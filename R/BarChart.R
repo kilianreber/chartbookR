@@ -6,11 +6,9 @@ options(warn=-1)
 #Load libraries
 lapply(c("quantmod", "zoo", "stringr", "MALDIquant"), library, character.only = TRUE)
 
-#DONT CONFUSE DATA AND DF!!!
-
 #Set default values
 if (missing(title))       {title   <- ""    }
-if (missing(d1))          {d1 <- c(1:ncol(df))}
+if (missing(d1))          {d1 <- c(1:ncol(data))}
 if (missing(stacked))     {stacked <- TRUE  }
 if (missing(y1))          {y1      <- ""    }
 if (missing(y1_def))      {y1_def  <- "none"}
@@ -36,7 +34,7 @@ bars_width <- 1
 #Set dt_format defaults (if user provides none)
 if (missing(dt_format))   
   {
-  day_diff <- as.numeric(tail(index(df),1) - index(df)[1])
+  day_diff <- as.numeric(tail(index(data),1) - index(data)[1])
   if(day_diff <= 1.5*365) 				                 {dt_format <- c("3 mon", "%b-%Y")}
   if((day_diff > 1.5*365) & (day_diff <=3*365)) 	 {dt_format <- c("6 mon", "%b-%Y")}
   if((day_diff > 3  *365) & (day_diff <=5*365)) 	 {dt_format <- c("1 years", "%Y") }
@@ -87,7 +85,7 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     #Add vertical abline
     if(v!="none") {
     v <- as.Date(v, "%d/%m/%Y")
-    v_tick <- match.closest(v, index(df))
+    v_tick <- match.closest(v, index(data))
     if (stacked==FALSE) {v_tick <- (v_tick*((length((d1))*bars_width)+((length(d1)-1)*space[1])+space[2]))+(0.5*space[2])}
     if (stacked==TRUE)  {v_tick <- (v_tick*bars_width)*(1+space)+0.5*space}
     abline(v=v_tick, lty=1, lwd=2, col="black")}
@@ -112,8 +110,8 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     rec_end <- rec_end[(length(rec_end)-items+1):length(rec_end)]
 
     #Convert date vectors to ticks
-    rec_start <- match.closest(rec_start, index(df))
-    rec_end <- match.closest(rec_end, index(df))
+    rec_start <- match.closest(rec_start, index(data))
+    rec_end <- match.closest(rec_end, index(data))
     
     #Set bars_width
     if (stacked==FALSE) {bars_width <- length(d1)}
@@ -137,7 +135,7 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     #Add vertical abline
     if(v!="none") {
     v <- as.Date(v, "%d/%m/%Y")
-    v_tick <- match.closest(v, index(df))
+    v_tick <- match.closest(v, index(data))
     if (stacked==FALSE) {v_tick <- (v_tick*((length((d1))*bars_width)+((length(d1)-1)*space[1])+space[2]))+(0.5*space[2])}
     if (stacked==TRUE)  {v_tick <- (v_tick*bars_width)*(1+space)+0.5*space}
     abline(v=v_tick, lty=1, lwd=2, col="black")}
@@ -162,8 +160,8 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     rec_end <- rec_end[(length(rec_end)-items+1):length(rec_end)]
   
     #Convert date vectors to ticks
-    rec_start <- match.closest(rec_start, index(df))
-    rec_end <- match.closest(rec_end, index(df))
+    rec_start <- match.closest(rec_start, index(data))
+    rec_end <- match.closest(rec_end, index(data))
     
     #Set bars_width
     if (stacked==FALSE) {bars_width <- length(d1)}

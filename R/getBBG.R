@@ -8,11 +8,10 @@ getBBG <- function(tickers, field, names, time, start, end, freq, na){
   options(warn=-1)
   
   #Load libraries
+  library(zoo)
   library(Rblpapi)
   library(lubridate)
-  
-  ### TO DELETE IF NOT NEEDED!
-  #library(bsts)
+  library(bsts)
   
   #Open Bloomberg connection
   blpConnect()
@@ -22,14 +21,22 @@ getBBG <- function(tickers, field, names, time, start, end, freq, na){
   start_ytd <- last_day_prev_year(Sys.Date())
 
   #Set defaults
-  if(missing(freq))  {freq <- "MONTHLY" }
-  if(missing(field)) {field <- "PX_LAST"}
-  if(missing(time))  {time <- "none"    }
-  if(missing(start)) {start <- (LastDayInMonth(Sys.Date())-3*365)}
-  if(missing(end))   {end <- as.Date(Sys.Date()-1)}
-  if(time=="ytd")    {start <- start_ytd}
-  if(time!="none" & time!="ytd") {start <- as.Date(Sys.Date()-(365*as.numeric((gsub("Y", "", time)))))}
-  if(missing(na))    {na <- TRUE        }
+  if(missing(names))         {names          <- tickers                   }
+  if(length(tickers)==1)     {one_tickr_fix  <- TRUE} else {one_tickr_fix <- FALSE}
+  if(length(tickers)==1)     {tickers        <- rep(tickers, 2 )
+                              names          <- rep(names, 2)             }
+  if(missing(freq))          {freq           <- "MONTHLY"                 }
+  if(missing(field))         {field          <- "PX_LAST"                 }
+  if(missing(time))          {time           <- "none"                    }
+                              tf             <- "none"
+  if(time!="none")           {tf             <- gsub('[[:digit:]]+', '', time)}
+  if(missing(start))         {start <- (LastDayInMonth(Sys.Date())-3*365)}
+  if(missing(end))           {end            <- as.Date(Sys.Date()-1)     }
+  if(time=="ytd")            {start          <- start_ytd                 }
+  if(time!="none" & time!="ytd" & tf=="Y") {start <- as.Date(Sys.Date()-(365*as.numeric((gsub("Y", "", time)))))}
+  if(time!="none" & time!="ytd" & tf=="M") {start <- as.Date(Sys.Date()-(30*as.numeric((gsub("M", "", time)))))}
+  if(time!="none" & time!="ytd" & tf=="D") {start <- as.Date(Sys.Date()-(as.numeric((gsub("D", "", time)))))}
+  if(missing(na))            {na             <- TRUE                      }
 
   # Complete tickers list
   for (i in 1:length(tickers))
@@ -97,12 +104,8 @@ getBBG <- function(tickers, field, names, time, start, end, freq, na){
   bbg_trans <- bbg_trans[keep]
 
   #Clean and replace column names
-  #colnames(bbg_trans) <- sub('\\..*', '', colnames(bbg_trans))
   colnames(bbg_trans) <- db$names[match(colnames(bbg_trans), db$tickers)]
   colnames(bbg_trans)[1] <- "Dates"
-
-  #Sort output alphabetically by column name
-  #bbg_trans <- bbg_trans[,order(colnames(bbg_trans))]
 
   #Output dataframe
   bbg_trans <- read.zoo(bbg_trans, format = "%Y-%m-%d")
@@ -116,6 +119,11 @@ getBBG <- function(tickers, field, names, time, start, end, freq, na){
 
   #Replace preceding NAs (default)
   if (na==FALSE) {bbg_trans <- na.locf(bbg_trans)}
+  
+  #Apply one_ticker_fix if necessary
+  if (one_tickr_fix==TRUE) {bbg_trans <- bbg_trans[,1]}
+  
+  #Return results
   return(bbg_trans)
 
 }

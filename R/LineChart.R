@@ -9,7 +9,9 @@ lapply(c("quantmod", "zoo", "stringr"), library, character.only = TRUE)
 
 #Set default values
 if (missing(title))       {title   <- ""    }
-if (missing(d1))          {d1 <- c(1:ncol(df))}
+#if (missing(d1))          {d1 <- c(1:ncol(data))}
+if (missing(d1) &  is.null(ncol(data)))  {d1 <- 1}
+if (missing(d1) & !is.null(ncol(data)))  {d1 <- c(1:ncol(data))}
 if (missing(y1))          {y1 <- ""         }
 if (missing(y1_def))      {y1_def  <- "none"}
 if (missing(y2_def))      {y2_def  <- "none"}
@@ -30,7 +32,7 @@ if (y2_def!="none" & y2_rev==TRUE) {ylim_input=rev(range(c(y2_def[1], y2_def[2])
 #Set dt_format defaults (if user provides none)
 if (missing(dt_format))   
   {
-  day_diff <- as.numeric(tail(index(df),1) - index(df)[1])
+  day_diff <- as.numeric(tail(index(data),1) - index(data)[1])
   if(day_diff <= 1.5*365) 				                 {dt_format <- c("3 mon", "%b-%Y")}
   if((day_diff > 1.5*365) & (day_diff <=3*365)) 	 {dt_format <- c("6 mon", "%b-%Y")}
   if((day_diff > 3  *365) & (day_diff <=5*365)) 	 {dt_format <- c("1 years", "%Y") }
@@ -50,6 +52,10 @@ if (no!="") {title <- paste("Fig. ", no, ": ", title, sep="")}
 if (palette()==c("#428BCE", "gray35", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667")) {palette(c("#428bce", "#595959", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667"))}
 if (palette()==c("black", "red", "green3", "blue", "cyan", "magenta")) {palette(c("#428bce", "#595959", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667"))}
 
+#Fix data when it has only one column
+if (is.null(ncol(data)))  {data <- cbind(data, data)
+colnames(data) <- c("Series", "Series")}
+
 #Create data vectors and data column vectors
 data1 <- as.data.frame(data[,d1])
 colnames(data1) <- colnames(data)[d1]
@@ -61,8 +67,9 @@ if(d2!="none")  {
   data2 <- as.zoo(data2)
 }
 
+#Create d1, d2, d3
 if(d2!="none")  {d3 <- c(d1, d2)} else {d3 <- d1}
-if(d2!="none")  {data3 <- data[,d3]} else {data3 <- data1}
+if(d2!="none")  {data3 <- data[,d3]} else  {data3 <- data1}
 
 # Getting min, max date points & date formats
 x_min_dt  <-  min(index(data1))

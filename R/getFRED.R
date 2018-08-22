@@ -9,22 +9,29 @@ getFRED <- function(tickers, names, time, start, end, na){
   #Load packages
   library(zoo)
   library(lubridate)
-  
-  ### TO DELETE IF NOT NEEDED!
-  #library(quantmod)
-  #library(bsts)
+  library(quantmod)
+  library(bsts)
   
   #Calculate last day of previous year
   last_day_prev_year <- function(x) floor_date(x, "year") - days(1)
   start_ytd <- last_day_prev_year(Sys.Date())
   
   #Set defaults
-  if(missing(start))       {start     <- "01/01/1666"   }
-  if(missing(end))         {end       <- "01/01/1666"   }
-  if(missing(time))        {time      <- "none"         }
-  if(time=="ytd")          {start     <- start_ytd      }
+  if(missing(names))         {names          <- tickers        }
+  if(length(tickers)==1)     {one_tickr_fix  <- TRUE} else {one_tickr_fix <- FALSE}
+  if(length(tickers)==1)     {tickers        <- rep(tickers, 2 )
+                              names          <- rep(names, 2)  }
+  if(missing(time))          {time           <- "none"         }
+                              tf             <- "none"
+  if(time!="none")           {tf             <- gsub('[[:digit:]]+', '', time)}
+  if(missing(start))         {start          <- "01/01/1666"   }
+  if(missing(end))           {end            <- "01/01/1666"   }
+  if(time=="ytd")            {start          <- start_ytd      }
   if(time!="none" & time!="ytd") {start <- as.Date(Sys.Date()-(365*as.numeric((gsub("Y", "", time)))))}
-  if(missing(na))          {na <- TRUE                  }
+  if(time!="none" & time!="ytd" & tf=="Y") {start <- as.Date(Sys.Date()-(365*as.numeric((gsub("Y", "", time)))))}
+  if(time!="none" & time!="ytd" & tf=="M") {start <- as.Date(Sys.Date()-(30*as.numeric((gsub("M", "", time)))))}
+  if(time!="none" & time!="ytd" & tf=="D") {start <- as.Date(Sys.Date()-(as.numeric((gsub("D", "", time)))))}
+  if(missing(na))            {na             <- TRUE           }
   
   #Prepare data
   if (start!="01/01/1666") {start <- as.Date(start, "%d/%m/%Y")}
@@ -56,8 +63,9 @@ getFRED <- function(tickers, names, time, start, end, na){
   
   #Replace preceding NAs (default)
   if (na==FALSE) {df <- na.locf(df)}
-  return(df)
   
+  #Apply one_ticker_fix if necessary
+  if (one_tickr_fix==TRUE) {df <- df[,1]}
   
   #Return results
   return(df)

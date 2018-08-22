@@ -5,13 +5,13 @@
 options(warn=-1)
 
 #(Un)load libraries
+unloadNamespace("dplyr")
 library(zoo)
 library(xts)
 library(stringr)
 library(quantmod)
 library(scales)
 library(roll)
-unloadNamespace("dplyr")
 
 #Define function
 Transform <- function(data, start, tf, typ, pma, pms, lag, lead, rebase, Z){
