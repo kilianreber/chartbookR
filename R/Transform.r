@@ -27,8 +27,7 @@ if (missing(lead))       {lead       <- "none"       }
 if (missing(rebase))     {rebase     <- FALSE        }
 if (missing(Z))          {Z          <- "none"       }
 
-# typ can take on 'perc' or 'delta' or 'net'
-# they will be called % or D -> so that means 'YOY' will now be called either 'YOY%' or 'YOYD'
+#Typ can take on 'perc', 'delta' or 'net'
 
 #Prepare data
 periodicity <- periodicity(data)$scale
@@ -37,7 +36,7 @@ if (start!="01/01/1666") {start <- as.Date(start, "%d/%m/%Y")}
 
 #Apply lags
 if (lag!="none") {lag <- lag*-1}
-if (lag!="none") {temp <- lag(data, lag, na.pad = TRUE)
+if (lag!="none") {temp <- stats::lag(data, lag, na.pad = TRUE)
 
 #Rename temp & merge original data with transformed data
 colnames(temp) <- paste(colnames(temp), ", lag", lag*-1, MovPer, sep="")
@@ -49,40 +48,40 @@ if(tf!="none") {
   if (typ == "perc") {
     if (periodicity == "monthly") {
       if (tf == "YOY") {
-        temp <- 100 * ((data / lag(data, k = -12)) - 1)
+        temp <- 100 * ((data / stats::lag(data, k = -12)) - 1)
       } else if (tf == "QOQ") {
-        temp <- 100 * ((data / lag(data, k = -4)) - 1)
+        temp <- 100 * ((data / stats::lag(data, k = -4)) - 1)
       } else if (tf == "MOM") {
-        temp <- 100 * ((data / lag(data, k = -1)) - 1)
+        temp <- 100 * ((data / stats::lag(data, k = -1)) - 1)
       }
 
     } else if (periodicity == "weekly") {
       if (tf == "YOY") {
-        temp <- 100 * ((data / lag(data, k = -52)) - 1)
+        temp <- 100 * ((data / stats::lag(data, k = -52)) - 1)
       } else if (tf == "QOQ") {
-        temp <- 100 * ((data / lag(data, k = -16)) - 1)
+        temp <- 100 * ((data / stats::lag(data, k = -16)) - 1)
       } else if (tf == "MOM") {
-        temp <- 100 * ((data / lag(data, k = -4)) - 1)
+        temp <- 100 * ((data / stats::lag(data, k = -4)) - 1)
       }
 
     } else if (periodicity == "daily") {
       if (tf == "YOY") {
-        temp <- 100 * ((data / lag(data, k = -252)) - 1)
+        temp <- 100 * ((data / stats::lag(data, k = -252)) - 1)
       } else if (tf == "QOQ") {
-        temp <- 100 * ((data / lag(data, k = -80)) - 1)
+        temp <- 100 * ((data / stats::lag(data, k = -80)) - 1)
       } else if (tf == "MOM") {
-        temp <- 100 * ((data / lag(data, k = -20)) - 1)
+        temp <- 100 * ((data / stats::lag(data, k = -20)) - 1)
       }
 
     } else if (periodicity == "quarterly") {
       if (tf == "YOY") {
-        temp <- 100 * ((data / lag(data, k = -4)) - 1)
+        temp <- 100 * ((data / stats::lag(data, k = -4)) - 1)
       } else if (tf == "QOQ") {
-        temp <- 100 * ((data / lag(data, k = -1)) - 1)
+        temp <- 100 * ((data / stats::lag(data, k = -1)) - 1)
       }
 
     } else if (periodicity == "yearly") {
-      temp <- 100 * ((data / lag(data, k = -1)) - 1)
+      temp <- 100 * ((data / stats::lag(data, k = -1)) - 1)
 
 
     } else{
@@ -96,40 +95,40 @@ if(tf!="none") {
   if (typ == "delta") {
     if (periodicity == "monthly") {
       if (tf == "YOY") {
-        temp <- (data - lag(data, k = -12))
+        temp <- (data - stats::lag(data, k = -12))
       } else if (tf == "QOQ") {
-        temp <- (data - lag(data, k = -4))
+        temp <- (data - stats::lag(data, k = -4))
       } else if (tf == "MOM") {
-        temp <- (data - lag(data, k = -1))
+        temp <- (data - stats::lag(data, k = -1))
       }
 
     } else if (periodicity == "weekly") {
       if (tf == "YOY") {
-        temp <- (data - lag(data, k = -52))
+        temp <- (data - stats::lag(data, k = -52))
       } else if (tf == "QOQ") {
-        temp <- (data - lag(data, k = -16))
+        temp <- (data - stats::lag(data, k = -16))
       } else if (tf == "MOM") {
-        temp <- (data - lag(data, k = -4))
+        temp <- (data - stats::lag(data, k = -4))
       }
 
     } else if (periodicity == "daily") {
       if (tf == "YOY") {
-        temp <- (data - lag(data, k = -252))
+        temp <- (data - stats::lag(data, k = -252))
       } else if (tf == "QOQ") {
-        temp <- (data - lag(data, k = -80))
+        temp <- (data - stats::lag(data, k = -80))
       } else if (tf == "MOM") {
-        temp <- (data - lag(data, k = -20))
+        temp <- (data - stats::lag(data, k = -20))
       }
 
     } else if (periodicity == "quarterly") {
       if (tf == "YOY") {
-        temp <- (data - lag(data, k = -4))
+        temp <- (data - stats::lag(data, k = -4))
       } else if (tf == "QOQ") {
-        temp <- (data - lag(data, k = -1))
+        temp <- (data - stats::lag(data, k = -1))
       }
 
     } else if (periodicity == "yearly") {
-      temp <- (data - lag(data, k = -1))
+      temp <- (data - stats::lag(data, k = -1))
 
 
     } else{
