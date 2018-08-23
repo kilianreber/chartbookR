@@ -89,7 +89,7 @@ getBBG <- function(tickers, field, names, time, start, end, freq, na){
       next
     }
     else {
-      bbg[[i]][m,2] <- NA
+      #bbg[[i]][m,2] <- NA
       bbg[[i]][m,1] <- bbg[[lc]][m,1]
     }
   }

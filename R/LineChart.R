@@ -12,20 +12,19 @@ if (missing(title))       {title   <- ""    }
 #if (missing(d1))          {d1 <- c(1:ncol(data))}
 if (missing(d1) &  is.null(ncol(data)))  {d1 <- 1}
 if (missing(d1) & !is.null(ncol(data)))  {d1 <- c(1:ncol(data))}
-if (missing(y1))          {y1 <- ""         }
-if (missing(y1_def))      {y1_def  <- "none"}
-if (missing(y2_def))      {y2_def  <- "none"}
-if (missing(y2))          {y2      <- ""    }
-if (missing(d2))          {d2      <- "none"}
-if (missing(fn))          {fn      <-  ""   }
-if (missing(no))          {no      <-  ""   }
-if (missing(grid))        {grid    <-  FALSE}
-if (missing(rec))         {rec     <-  FALSE}
-if (missing(leg))         {leg <- "topleft" }
-if (missing(h))           {h <- "none"      }
-if (missing(v))           {v <- "none"      }
-if (v !="none")           {v <- as.Date(v, "%d/%m/%Y")}
-if (missing(y2_rev))      {y2_rev=FALSE     }
+if (missing(y1))          {y1 <- ""               }
+if (missing(y1_def))      {y1_def  <- "none"      }
+if (missing(y2_def))      {y2_def  <- "none"      }
+if (missing(y2))          {y2      <- ""          }
+if (missing(d2))          {d2      <- "none"      }
+if (missing(fn))          {fn      <-  ""         }
+if (missing(no))          {no      <-  ""         }
+if (missing(grid))        {grid    <-  FALSE      }
+if (missing(rec))         {rec     <-  FALSE      }
+if (missing(leg))         {leg     <- "topleft"   }
+if (missing(h))           {h       <- "none"      }
+if (missing(v))           {v       <- "none"      }
+if (missing(y2_rev))      {y2_rev  <- FALSE       }
 if (y2_def!="none")       {ylim_input=c(y2_def[1], y2_def[2])}
 if (y2_def!="none" & y2_rev==TRUE) {ylim_input=rev(range(c(y2_def[1], y2_def[2])))}
 
@@ -87,7 +86,7 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
 
     # Add ablines
     if(h!="none") {abline(h=h, lty=2, lwd=1, col="black")}
-    if(v!="none") {abline(v=as.Date(v), lty=1, lwd=1)}
+    if(v!="none") {abline(v=as.Date(v, "%d/%m/%Y"), lty=1, lwd=1)}
 
     #Prepare recession shading
     if (rec!=FALSE){
@@ -100,8 +99,6 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
     mymax <- function(x) ifelse(!all(is.na(x)), max(x, na.rm=T), NA)
     mymin <- function(x) ifelse(!all(is.na(x)), min(x, na.rm=T), NA)
 
-    #rect_max <- mymax(data1)*2
-    #rect_min <- mymin(data1)*0.5
     if (mymax(data1) > 0) {rect_max <- mymax(data1)*2} else {rect_max <- mymax(data1)*0.5}
     if (mymin(data1) > 0) {rect_min <- mymin(data1)*0.5} else {rect_min <- mymin(data1)*2}
 
@@ -127,7 +124,7 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
 
     # Add ablines
     if(h!="none") {abline(h=h, lty=2, lwd=1, col="black")}
-    if(v!="none") {abline(v=as.Date(v), lty=1, lwd=1)}
+    if(v!="none") {abline(v=as.Date(v, "%d/%m/%Y"), lty=1, lwd=1)}
 
     #ADD RECESSION SHADING
     if (rec!=FALSE){
