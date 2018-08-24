@@ -9,7 +9,6 @@ lapply(c("quantmod", "zoo", "stringr"), library, character.only = TRUE)
 
 #Set default values
 if (missing(title))       {title   <- ""    }
-#if (missing(d1))          {d1 <- c(1:ncol(data))}
 if (missing(d1) &  is.null(ncol(data)))  {d1 <- 1}
 if (missing(d1) & !is.null(ncol(data)))  {d1 <- c(1:ncol(data))}
 if (missing(y1))          {y1 <- ""               }
@@ -85,7 +84,7 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
   title(sub=fn, font.sub=3, line = 3)
 
     # Add ablines
-    if(h!="none") {abline(h=h, lty=2, lwd=1, col="black")}
+    if(h!="none") {abline(h=h, lty=1, lwd=1, col="black")}
     if(v!="none") {abline(v=as.Date(v, "%d/%m/%Y"), lty=1, lwd=1)}
 
     #Prepare recession shading
@@ -123,7 +122,7 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
   axis.Date(1, at=seq(as.Date(x_min_dt, format="%Y-%m-%d"), as.Date(x_max_dt, format="%Y-%m-%d"), by=by_yrs), tck=0, format=dt_format)
 
     # Add ablines
-    if(h!="none") {abline(h=h, lty=2, lwd=1, col="black")}
+    if(h!="none") {abline(h=h, lty=1, lwd=1, col="black")}
     if(v!="none") {abline(v=as.Date(v, "%d/%m/%Y"), lty=1, lwd=1)}
 
     #ADD RECESSION SHADING

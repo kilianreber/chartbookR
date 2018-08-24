@@ -80,7 +80,7 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
   title(sub=fn, font.sub=3, line = 3)
 
     #Add horizontal abline
-    if(h!="none") {abline(h=h, lty=2, lwd=1, col="black")}
+    if(h!="none") {abline(h=h, lty=1, lwd=1, col="black")}
     
     #Add vertical abline
     if(v!="none") {
@@ -101,9 +101,20 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     mymax <- function(x) ifelse(!all(is.na(x)), max(x, na.rm=T), NA)
     mymin <- function(x) ifelse(!all(is.na(x)), min(x, na.rm=T), NA)
 
-    if (mymax(data1) > 0) {rect_max <- mymax(data1)*2} else {rect_max <- mymax(data1)*0.5}
-    if (mymin(data1) > 0) {rect_min <- mymin(data1)*0.5} else {rect_min <- mymin(data1)*2}
-
+    if (stacked==FALSE) {
+      if (mymax(data1) > 0) {rect_max <- mymax(data1)*2} else {rect_max <- mymax(data1)*0.5}
+      if (mymin(data1) > 0) {rect_min <- mymin(data1)*0.5} else {rect_min <- mymin(data1)*2}
+    }
+    
+    if (stacked==TRUE) {
+      if (max(rowSums(data1, na.rm=TRUE)) > 0) {rect_max <- max(rowSums(data1, na.rm=TRUE))*2} else {rect_max <- max(rowSums(data1, na.rm=TRUE))*0.5}
+      if (min(rowSums(data1, na.rm=TRUE)) > 0) {rect_min <- min(rowSums(data1, na.rm=TRUE))*0.5} else {rect_min <- min(rowSums(data1, na.rm=TRUE))*2}
+    }
+      
+      
+    rec_start_dt <- min(index(data1))
+    rec_end_dt <- max(index(data1))
+    
     #Trim date vectors
     rec_start <- subset(rec_start, rec_start>=as.Date(rec_start_dt))
     items <- length(rec_start)
@@ -117,20 +128,21 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     if (stacked==FALSE) {bars_width <- length(d1)}
     
     #Add recession shading
-    rect(rec_start*(1+space)*bars_width, rect_min, rec_end*(1+space)*bars_width, rect_max, density=NULL, border=NA, lwd=0, col= rgb(0,0,0.1, alpha=0.15))
+    rec_start <- (rec_start*bars_width)*(1+space)
+    rec_end <- (rec_end*bars_width)*(1+space)
+    rect(rec_start, rect_min, rec_end, rect_max, density=NULL, border=NA, lwd=0, col= rgb(0,0,0.1, alpha=0.1))
     }
 
     if (grid!=FALSE) {
     if (y1_def=="none") {grid(NA, ny=NULL, lty=3, lwd=1, col="#424447")}
     else {seq <- seq(y1_def[1], y1_def[2], y1_def[3])
-    #abline(h=seq, lty=3, lwd=1, col="#424447")
     }}
   
   } else {bp <- barplot(data1, beside=!stacked, ann=FALSE, bty="n", xaxt = "n", space=space, tck=0, las=1, lwd=1, col=1:length(d1), border=NA); title(main=title, ylab=y1)
     axis(side=1, at=bp[as.integer(bp_param[1,])], labels=bp_param[2,], las=1, tck=0)
 
     #Add horizontal abline
-    if(h!="none") {abline(h=h, lty=2, lwd=1, col="black")}
+    if(h!="none") {abline(h=h, lty=1, lwd=1, col="black")}
   
     #Add vertical abline
     if(v!="none") {
@@ -151,9 +163,19 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     mymax <- function(x) ifelse( !all(is.na(x)), max(x, na.rm=T), NA)
     mymin <- function(x) ifelse( !all(is.na(x)), min(x, na.rm=T), NA)
 
-    if (mymax(data1) > 0) {rect_max <- mymax(data1)*2} else {rect_max <- mymax(data1)*0.5}
-    if (mymin(data1) > 0) {rect_min <- mymin(data1)*0.5} else {rect_min <- mymin(data1)*2}
+    if (stacked==FALSE) {
+      if (mymax(data1) > 0) {rect_max <- mymax(data1)*2} else {rect_max <- mymax(data1)*0.5}
+      if (mymin(data1) > 0) {rect_min <- mymin(data1)*0.5} else {rect_min <- mymin(data1)*2}
+    }
+    
+    if (stacked==TRUE) {
+      if (max(rowSums(data1, na.rm=TRUE)) > 0) {rect_max <- max(rowSums(data1, na.rm=TRUE))*2} else {rect_max <- max(rowSums(data1, na.rm=TRUE))*0.5}
+      if (min(rowSums(data1, na.rm=TRUE)) > 0) {rect_min <- min(rowSums(data1, na.rm=TRUE))*0.5} else {rect_min <- min(rowSums(data1, na.rm=TRUE))*2}
+    }
 
+    rec_start_dt <- min(index(data1))
+    rec_end_dt <- max(index(data1))
+    
     #Trim date vectors
     rec_start <- subset(rec_start, rec_start>=as.Date(rec_start_dt))
     items <- length(rec_start)
@@ -167,7 +189,9 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     if (stacked==FALSE) {bars_width <- length(d1)}
     
     #Add recession shading
-    rect(rec_start*(1+space)*bars_width, rect_min, rec_end*(1+space)*bars_width, rect_max, density=NULL, border=NA, lwd=0, col= rgb(0,0,0.1, alpha=0.15))
+    rec_start <- (rec_start*bars_width)*(1+space)
+    rec_end   <- (rec_end*bars_width)*(1+space)
+    rect(rec_start, rect_min, rec_end, rect_max, density=NULL, border=NA, lwd=0, col=rgb(0,0,0.1, alpha=0.1))
     }
 
   title(sub=fn, font.sub=3, line = 3)
@@ -175,7 +199,7 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
   if (grid!=FALSE) {
     if (y1_def=="none") {grid(NA, ny=NULL, lty=3, lwd=1, col="#424447")}
     else {seq <- seq(y1_def[1], y1_def[2], y1_def[3])
-    #abline(h=seq, lty=3, lwd=1, col="#424447")
+    abline(h=seq, lty=3, lwd=1, col="#424447")
     }}
 }
 

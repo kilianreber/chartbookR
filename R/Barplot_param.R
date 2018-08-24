@@ -8,12 +8,11 @@ interval_type <- str_replace_all(string=interval_type, pattern=" ", repl="")
 interval_type <- substring(interval_type, 1, 1)
 interval <- as.numeric(gsub("[^0-9]", "", dt_format[1]))
 
-interval <- gsub(interval, "y", "Y")
-interval <- gsub(interval, "m", "M")
+interval_type <- gsub(interval, "y", "Y")
+interval_type <- gsub(interval, "m", "M")
 
 if(dt_format[2]=="%m-%Y" & interval_type=="Y") {interval <- interval*12}
 if(dt_format[2]=="%b-%Y" & interval_type=="Y") {interval <- interval*12}
-if (dt_format[2]=="%Y") {interval <- 1}
 
 if (missing(stacked)) {stacked <- TRUE}
 
