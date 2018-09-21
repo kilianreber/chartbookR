@@ -120,6 +120,9 @@ getBBG <- function(tickers, field, names, time, start, end, freq, na){
   #Replace preceding NAs (default)
   if (na==FALSE) {bbg_trans <- na.locf(bbg_trans)}
   
+  #Remove NAs in front & end
+  bbg_trans <- na.trim(bbg_trans, sides="both", is.na="all")
+  
   #Apply one_ticker_fix if necessary
   if (one_tickr_fix==TRUE) {bbg_trans <- bbg_trans[,1]}
   

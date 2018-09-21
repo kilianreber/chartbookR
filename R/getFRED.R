@@ -64,6 +64,9 @@ getFRED <- function(tickers, names, time, start, end, na){
   #Replace preceding NAs (default)
   if (na==FALSE) {df <- na.locf(df)}
   
+  #Remove NAs in front & end
+  df <- na.trim(df, sides="both", is.na="all")
+  
   #Apply one_ticker_fix if necessary
   if (one_tickr_fix==TRUE) {df <- df[,1]}
   

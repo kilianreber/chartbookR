@@ -5,7 +5,7 @@ options(warn=-1)
   
 #Load libraries
 library(xlsx)
-lapply(c("quantmod", "zoo", "stringr"), library, character.only = TRUE)
+lapply(c("quantmod", "zoo", "stringr", "MALDIquant"), library, character.only = TRUE)
 
 #Set default values
 if (missing(title))       {title   <- ""    }
@@ -65,21 +65,41 @@ if(d2!="none")  {
   data2 <- as.zoo(data2)
 }
 
+#Trim data block
+if (d2!="none") {
+  d11 <- length(d1)
+  d22 <- length(d2)
+  
+  block <- cbind(data1, data2)
+  block <- na.trim(block, sides="both", is.na="all")
+  data1 <- block[,c(1:d11)]
+  data2 <- block[,c((d11+1):(d11+d22))]
+  }
+
+if (d2=="none") {data1 <- na.trim(data1, sides="both", is.na="all")}
+
 #Create d1, d2, d3
 if(d2!="none")  {d3 <- c(d1, d2)} else {d3 <- d1}
-if(d2!="none")  {data3 <- data[,d3]} else  {data3 <- data1}
+if(d2!="none")  {data3 <- data[,d3]} else {data3 <- data1}
 
 # Getting min, max date points & date formats
-x_min_dt  <-  min(index(data1))
-x_max_dt  <-  max(index(data1))
-by_yrs    <-  dt_format[1]
-dt_format <-  dt_format[2]
+# x_min_dt  <-  min(index(data1))
+# x_max_dt  <-  max(index(data1))
+# by_yrs    <-  dt_format[1]
+# dt_format <-  dt_format[2]
+
+### THIS IS NEW ###
+#Create labels and tick vectors
+bp_param <- Barplot_param(data=data1, stacked=TRUE, dt_format=dt_format)
+
+
 
 #Create plot, first y-axis, and content
 par(mar = c(5,5,5,5))
 
 if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_def[1], y1_def[2]), xaxt="n", yaxt="n", tck=0, las=1, lwd=3, col=1:length(d1), border=0.1, space=0); title(main = title, ylab = y1)
-  axis.Date(1, at=seq(as.Date(x_min_dt, format="%Y-%m-%d"), as.Date(x_max_dt, format="%Y-%m-%d"), by=by_yrs), tck=0, format=dt_format)
+  
+  axis(side=1, at=bp_param[,3], labels=format(bp_param[,3], dt_format[2]), las=1, tck=0)
   axis(2, seq(y1_def[1], y1_def[2], y1_def[3]), las=1, tck=-0)
   title(sub=fn, font.sub=3, line = 3)
 
@@ -119,8 +139,9 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
     abline(h=seq, lty=3, lwd=1, col="#424447")}}
 
 } else {plot(data1, plot.type="s", ann=FALSE, bty="n", xaxt="n", tck=0, las=1, las=1, lwd=3, col=1:length(d1), border=0.1, space=0); title(main=title, ylab=y1)
-  axis.Date(1, at=seq(as.Date(x_min_dt, format="%Y-%m-%d"), as.Date(x_max_dt, format="%Y-%m-%d"), by=by_yrs), tck=0, format=dt_format)
-
+  
+  axis(side=1, at=bp_param[,3], labels=format(bp_param[,3], dt_format[2]), las=1, tck=0)
+  
     # Add ablines
     if(h!="none") {abline(h=h, lty=1, lwd=1, col="black")}
     if(v!="none") {abline(v=as.Date(v, "%d/%m/%Y"), lty=1, lwd=1)}
@@ -156,7 +177,8 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
   if (grid!=FALSE) {
     if (y1_def=="none") {grid(NA, ny=NULL, lty=3, lwd=1, col="#424447")}
     else {seq <- seq(y1_def[1], y1_def[2], y1_def[3])
-    abline(h=seq, lty=3, lwd=1, col="#424447")}}
+    abline(h=seq, lty=3, lwd=1, col="#424447")
+    }}
 }
 
 #Create second y-axis, and content (if available)
