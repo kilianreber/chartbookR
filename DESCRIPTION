@@ -1,7 +1,7 @@
 Package: chartbookR
-Title: Chartbook creation
-Description: Functions to easily download data and create chartbooks. For economists and financial analysts.
-Version: 1.0.0
+Title: Creation of chartbooks
+Description: Easily download time series data and create chartbooks - For economists and financial analysts
+Version: 1.0.2
 Author: Kilian Reber <kilian.d.reber@gmail.com>
 Maintainer: Kilian Reber <kilian.d.reber@gmail.com>
 URL: https://github.com/kilianreber/chartbookR.git
@@ -10,5 +10,5 @@ Depends: R (>= 2.15)
 License: MIT + file LICENSE
 LazyData: true
 NeedsCompilation: no
-Packaged: 2017-04-15 23:48:11 UTC; wilson
-Date/Publication: 2017-05-03 08:50:07 UTC
+Packaged: 2018-09-04 11:37:11 UTC; wilson
+Date/Publication: 2018-09-04 11:37:11 UTC
