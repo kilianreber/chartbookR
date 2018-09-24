@@ -92,7 +92,7 @@ if (palette()==c("#428BCE", "gray35", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667"
 if (palette()==c("black", "red", "green3", "blue", "cyan", "magenta")) {palette(c("#428bce", "#595959", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667"))}
 
 #Create labels and tick vectors
-bp_param <- Barplot_param(data=data1, stacked=stacked, dt_format=dt_format)
+bp_param <- Barplot_param(data=data1, stacked=stacked, dt_format=dt_format, type="B")
 
 #Create plot, first y-axis, and content
 par(mar = c(5,5,5,5))
@@ -159,9 +159,9 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     }
 
     if (grid!=FALSE) {
-    if (y1_def=="none") {grid(NA, ny=NULL, lty=3, lwd=1, col="#424447")}
+    if (y1_def=="none") {grid(NA, ny=NULL, lty=1, lwd=1, col="grey")}
     else {seq <- seq(y1_def[1], y1_def[2], y1_def[3])
-    }}
+    abline(h=seq, lty=1, lwd=1, col="grey")}}
   
   } else {bp <- barplot(data1, beside=!stacked, ann=FALSE, bty="n", xaxt = "n", space=space, tck=0, las=1, lwd=1, col=1:length(d1), border=NA); title(main=title, ylab=y1)
     
@@ -225,9 +225,9 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
   title(sub=fn, font.sub=3, line = 3)
 
   if (grid!=FALSE) {
-    if (y1_def=="none") {grid(NA, ny=NULL, lty=3, lwd=1, col="#424447")}
+    if (y1_def=="none") {grid(NA, ny=NULL, lty=1, lwd=1, col="grey")}
     else {seq <- seq(y1_def[1], y1_def[2], y1_def[3])
-    abline(h=seq, lty=3, lwd=1, col="#424447")
+    abline(h=seq, lty=1, lwd=1, col="grey")
     }}
 }
 

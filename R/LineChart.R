@@ -27,29 +27,6 @@ if (missing(y2_rev))      {y2_rev  <- FALSE       }
 if (y2_def!="none")       {ylim_input=c(y2_def[1], y2_def[2])}
 if (y2_def!="none" & y2_rev==TRUE) {ylim_input=rev(range(c(y2_def[1], y2_def[2])))}
 
-#Set dt_format defaults (if user provides none)
-if (missing(dt_format))   
-  {
-  day_diff <- as.numeric(tail(index(data),1) - index(data)[1])
-  if(day_diff <= 1.5*365) 				                 {dt_format <- c("3 mon", "%b-%Y")}
-  if((day_diff > 1.5*365) & (day_diff <=3*365)) 	 {dt_format <- c("6 mon", "%b-%Y")}
-  if((day_diff > 3  *365) & (day_diff <=5*365)) 	 {dt_format <- c("1 years", "%Y") }
-  if((day_diff > 5  *365) & (day_diff <=12*365)) 	 {dt_format <- c("2 years", "%Y") }
-  if((day_diff > 12  *365) & (day_diff <=20*365))  {dt_format <- c("3 years", "%Y") }
-  if(day_diff > 20*365)                            {dt_format <- c("5 years", "%Y") }
-  }
-
-#Load recession data & reset recession indicator if necessary
-nber <- NBER_Recessions
-if (index(data)[1] > as.Date(tail(nber$Rec_End, 1))) {rec <- FALSE}
-
-#Adjust title
-if (no!="") {title <- paste("Fig. ", no, ": ", title, sep="")}
-
-#Set color Palette (only if currently standard)
-if (palette()==c("#428BCE", "gray35", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667")) {palette(c("#428bce", "#595959", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667"))}
-if (palette()==c("black", "red", "green3", "blue", "cyan", "magenta")) {palette(c("#428bce", "#595959", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667"))}
-
 #Fix data when it has only one column
 if (is.null(ncol(data)))  {data <- cbind(data, data)
 colnames(data) <- c("Series", "Series")}
@@ -74,7 +51,7 @@ if (d2!="none") {
   block <- na.trim(block, sides="both", is.na="all")
   data1 <- block[,c(1:d11)]
   data2 <- block[,c((d11+1):(d11+d22))]
-  }
+}
 
 if (d2=="none") {data1 <- na.trim(data1, sides="both", is.na="all")}
 
@@ -82,24 +59,38 @@ if (d2=="none") {data1 <- na.trim(data1, sides="both", is.na="all")}
 if(d2!="none")  {d3 <- c(d1, d2)} else {d3 <- d1}
 if(d2!="none")  {data3 <- data[,d3]} else {data3 <- data1}
 
-# Getting min, max date points & date formats
-# x_min_dt  <-  min(index(data1))
-# x_max_dt  <-  max(index(data1))
-# by_yrs    <-  dt_format[1]
-# dt_format <-  dt_format[2]
+#Set dt_format defaults (if user provides none)
+if (missing(dt_format))   
+  {
+  day_diff <- as.numeric(tail(index(data),1) - index(data)[1])
+  if(day_diff <= 1.5*365) 				                 {dt_format <- c("3 mos", "%b-%Y")}
+  if((day_diff > 1.5*365) & (day_diff <=3*365)) 	 {dt_format <- c("6 mos", "%b-%Y")}
+  if((day_diff > 3  *365) & (day_diff <=5*365)) 	 {dt_format <- c("1 years", "%Y") }
+  if((day_diff > 5  *365) & (day_diff <=12*365)) 	 {dt_format <- c("2 years", "%Y") }
+  if((day_diff > 12  *365) & (day_diff <=20*365))  {dt_format <- c("3 years", "%Y") }
+  if(day_diff > 20*365)                            {dt_format <- c("5 years", "%Y") }
+  }
 
-### THIS IS NEW ###
+#Load recession data & reset recession indicator if necessary
+nber <- NBER_Recessions
+if (index(data1)[1] > as.Date(tail(nber$Rec_End, 1))) {rec <- FALSE}
+
+#Adjust title
+if (no!="") {title <- paste("Fig. ", no, ": ", title, sep="")}
+
+#Set color Palette (only if currently standard)
+if (palette()==c("#428BCE", "gray35", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667")) {palette(c("#428bce", "#595959", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667"))}
+if (palette()==c("black", "red", "green3", "blue", "cyan", "magenta")) {palette(c("#428bce", "#595959", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667"))}
+
 #Create labels and tick vectors
-bp_param <- Barplot_param(data=data1, stacked=TRUE, dt_format=dt_format)
-
-
+bp_param <- Barplot_param(data=data1, stacked=TRUE, dt_format=dt_format, type="L")
 
 #Create plot, first y-axis, and content
 par(mar = c(5,5,5,5))
 
 if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_def[1], y1_def[2]), xaxt="n", yaxt="n", tck=0, las=1, lwd=3, col=1:length(d1), border=0.1, space=0); title(main = title, ylab = y1)
   
-  axis(side=1, at=bp_param[,3], labels=format(bp_param[,3], dt_format[2]), las=1, tck=0)
+  axis(side=1, at=bp_param[,1], labels=format(bp_param[,1], dt_format[2]), las=1, tck=0)
   axis(2, seq(y1_def[1], y1_def[2], y1_def[3]), las=1, tck=-0)
   title(sub=fn, font.sub=3, line = 3)
 
@@ -134,13 +125,13 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
     }
 
     if (grid!=FALSE) {
-    if (y1_def=="none") {grid(NA, ny=NULL, lty=3, lwd=1, col="#424447")}
+    if (y1_def=="none") {grid(NA, ny=NULL, lty=1, lwd=1, col="grey")}
     else {seq <- seq(y1_def[1], y1_def[2], y1_def[3])
-    abline(h=seq, lty=3, lwd=1, col="#424447")}}
+    abline(h=seq, lty=1, lwd=1, col="grey")}}
 
 } else {plot(data1, plot.type="s", ann=FALSE, bty="n", xaxt="n", tck=0, las=1, las=1, lwd=3, col=1:length(d1), border=0.1, space=0); title(main=title, ylab=y1)
   
-  axis(side=1, at=bp_param[,3], labels=format(bp_param[,3], dt_format[2]), las=1, tck=0)
+  axis(side=1, at=bp_param[,1], labels=format(bp_param[,1], dt_format[2]), las=1, tck=0)
   
     # Add ablines
     if(h!="none") {abline(h=h, lty=1, lwd=1, col="black")}
@@ -175,9 +166,9 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
   title(sub=fn, font.sub=3, line = 3)
 
   if (grid!=FALSE) {
-    if (y1_def=="none") {grid(NA, ny=NULL, lty=3, lwd=1, col="#424447")}
+    if (y1_def=="none") {grid(NA, ny=NULL, lty=1, lwd=1, col="grey")}
     else {seq <- seq(y1_def[1], y1_def[2], y1_def[3])
-    abline(h=seq, lty=3, lwd=1, col="#424447")
+    abline(h=seq, lty=1, lwd=1, col="grey")
     }}
 }
 
