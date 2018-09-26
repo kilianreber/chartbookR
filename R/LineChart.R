@@ -1,4 +1,4 @@
-LineChart <- function(no, title, data, d1, d2, y1, y2, y1_def, y2_def, y2_rev, fn, leg, grid, rec, dt_format, h, v) {
+LineChart <- function(start, no, title, data, d1, d2, y1, y2, y1_def, y2_def, y2_rev, fn, leg, grid, rec, dt_format, h, v) {
 
 #Turn off warnings
 options(warn=-1)
@@ -26,6 +26,8 @@ if (missing(v))           {v       <- "none"      }
 if (missing(y2_rev))      {y2_rev  <- FALSE       }
 if (y2_def!="none")       {ylim_input=c(y2_def[1], y2_def[2])}
 if (y2_def!="none" & y2_rev==TRUE) {ylim_input=rev(range(c(y2_def[1], y2_def[2])))}
+if (missing(start)) {start <- "show"}
+dt_format_override <- FALSE
 
 #Fix data when it has only one column
 if (is.null(ncol(data)))  {data <- cbind(data, data)
@@ -59,12 +61,31 @@ if (d2=="none") {data1 <- na.trim(data1, sides="both", is.na="all")}
 if(d2!="none")  {d3 <- c(d1, d2)} else {d3 <- d1}
 if(d2!="none")  {data3 <- data[,d3]} else {data3 <- data1}
 
+if (!missing(dt_format)){
+#Override unforunate dt_format inputs by user
+dt_format[1] <- gsub("y", "Y", dt_format[1])
+dt_format[1] <- gsub("m", "M", dt_format[1])
+years     <- gsub("Y.*","\\1",dt_format[1])
+months    <- gsub("M.*","\\1",dt_format[1])
+
+if (months==dt_format[1]) {months <- 12} else {months <- as.numeric(months)}
+if (years==dt_format[1])  {years  <- 1} else  {years <- as.numeric(years)}
+
+days <- last(index(df)) - first(index(df))
+intervals <- days / (years*months*30)
+
+if (intervals > 5.5 & dt_format[2]=="%b-%Y") {dt_format_override <- TRUE}
+if (intervals > 5.5 & dt_format[2]=="%m-%Y") {dt_format_override <- TRUE}
+if (intervals > 8.5 & dt_format[2]=="%Y")    {dt_format_override <- TRUE}
+}
+
 #Set dt_format defaults (if user provides none)
-if (missing(dt_format))   
+if (missing(dt_format) || dt_format_override==TRUE)   
   {
   day_diff <- as.numeric(tail(index(data),1) - index(data)[1])
-  if(day_diff <= 1.5*365) 				                 {dt_format <- c("3 mos", "%b-%Y")}
-  if((day_diff > 1.5*365) & (day_diff <=3*365)) 	 {dt_format <- c("6 mos", "%b-%Y")}
+  if(day_diff <= 1.5*365) 			                   {dt_format <- c("2 mos", "%b-%Y")}
+  if((day_diff > 1.5*365) & (day_diff <=2*365)) 	 {dt_format <- c("3 mos", "%b-%Y")}
+  if((day_diff >   2*365) & (day_diff <=3*365)) 	 {dt_format <- c("6 mos", "%b-%Y")}
   if((day_diff > 3  *365) & (day_diff <=5*365)) 	 {dt_format <- c("1 years", "%Y") }
   if((day_diff > 5  *365) & (day_diff <=12*365)) 	 {dt_format <- c("2 years", "%Y") }
   if((day_diff > 12  *365) & (day_diff <=20*365))  {dt_format <- c("3 years", "%Y") }
@@ -83,7 +104,7 @@ if (palette()==c("#428BCE", "gray35", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667"
 if (palette()==c("black", "red", "green3", "blue", "cyan", "magenta")) {palette(c("#428bce", "#595959", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667"))}
 
 #Create labels and tick vectors
-bp_param <- Barplot_param(data=data1, stacked=TRUE, dt_format=dt_format, type="L")
+bp_param <- Barplot_param(start=start, data=data1, stacked=TRUE, dt_format=dt_format, type="L")
 
 #Create plot, first y-axis, and content
 par(mar = c(5,5,5,5))

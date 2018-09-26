@@ -1,10 +1,11 @@
 # FUNCTION TO CREATE TICKS AND LABELS FOR R BARPLOTS
 
-Barplot_param <- function(data1, stacked, dt_format, type){
+Barplot_param <- function(start, data1, stacked, dt_format, type){
 
 #Prepare variables & set defaults
-data1 <- as.zoo(data1)
 if (missing(stacked)) {stacked <- TRUE}
+if (missing(start))   {start <- "show"}
+data1 <- as.zoo(data1)
 if (is.null(ncol(data1))) {length_d1 <- 1} else {length_d1 <- ncol(data1)}
 
 interval_type <- gsub('[[:digit:]]+', '', dt_format[1])
@@ -38,11 +39,13 @@ at_tick <- at_tick[seq(1, length(at_tick), interval)]
 labels <- index_y[index_u]
 labels <- labels[seq(1, length(labels), interval)]
 date_labels <- date_labels[seq(1, length(date_labels), interval)]
-#if (dt_format[2]=="%Y" & ((at_tick[2] - at_tick[1])/length_d1 <12)) {labels[1] <- ""}
 
 ### Combine output into one vector
 if (type=="L") {bp_param <- data.frame(date_labels)}
 if (type=="B") {bp_param <- data.frame(at_tick, labels)}
+
+if (start=="hide") {bp_param <- as.data.frame(bp_param[-1,])}
+if (start=="hide" & type=="L") {colnames(bp_param) <- "date_labels"}
 
 return(bp_param)
 
