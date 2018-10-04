@@ -4,34 +4,35 @@
 \alias{getBBG}
 \title{Bloomberg data as zoo object}
 \usage{
-getBBG(tickers, field, names, time, start, end, freq, na)
+getBBG(tickers, field, names, start, end, time, freq, na)
 }
 \arguments{
-\item{tickers}{character vector of Bloomberg tickers}
+\item{tickers}{character vector of Bloomberg ticker(s)}
 
-\item{field}{optional character vector of one or several Bloomberg fields; default is 'PX_LAST'}
+\item{field}{optional character vector of Bloomberg field(s); default is 'PX_LAST'}
 
-\item{names}{optional character vector of column names for zoo object; default uses 'tickers' vector}
-
-\item{time}{optional string indicating the lookback from today; options are 'D' (Days), 'W' (Weeks), 'M' (Months), 'Q' (Quarters), 'Y' (Years), or 'YTD' (Year-to-Date), e.g. '3M', '4Q', '5Y', 'YTD'; default is none}
+\item{names}{optional character vector of column name(s) for zoo object; default uses 'tickers' vector}
 
 \item{start}{optional start date for data download; default is Sys.Date() - 3*365}
 
 \item{end}{optional end date for data download; default is Sys.Date() -1}
 
+\item{time}{optional string to specify start date; options are 'D' (Days), 'W' (Weeks), 'M' (Months), 'Q' (Quarters), 'Y' (Years), or 'YTD' (Year-to-Date), e.g. '3M', '4Q', '5Y', 'YTD'; default is none}
+
 \item{freq}{optional frequency for data download; options are 'DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'YEARLY'; default is 'MONTHLY'}
 
-\item{na}{optional boolean which will fill intermittent NAs if set to TRUE; default is FALSE}
+\item{na}{optional boolean to fill intermittent NAs if set to FALSE; default is TRUE}
 }
 \value{
 returns a zoo object with the downloaded Bloomberg data
 }
 \description{
-Returns Bloomberg data as zoo object
+Returns Bloomberg data as zoo object; it relies on Rblpapi package but simplifies download and output
 }
 \examples{
-df <- getBBG(tickers="VIX Index", time="YTD")
-df <- getBBG(tickers="VIX Index", names="VIX", freq="D", time="30Y", na=FALSE)
-df <- getBBG(tickers=c("CPI YOY Index", "PPI YOY Index"), names=c("CPI", "PPI"), start=as.Date("2000-01-01"))
-df <- getBBG(tickers=c("NAPMPMI", "MPMIEZMA", "MPMIEMMA"), names=c("United States (ISM)", "Eurozone", "Emerging Markets"), time="3Y")
+df <- getBBG(tickers='VIX Index', time='YTD')
+df <- getBBG(tickers='VIX Index', names='VIX', freq='D', time='30Y', na=FALSE)
+df <- getBBG(tickers=c('CPI YOY Index', 'PPI YOY Index'), names=c('CPI', 'PPI'), start='2000-01-01')
+df <- getBBG(tickers=c('CPI YOY Index', 'PPI YOY Index'), names=c('CPI', 'PPI'), start='2000-01-01', end='2018-01-01')
+df <- getBBG(tickers=c('NAPMPMI', 'MPMIEZMA', 'MPMIEMMA'), names=c('United States (ISM)', 'Eurozone', 'Emerging Markets'), time='3Y')
 }

@@ -3,25 +3,26 @@
 
 #' Bloomberg data as zoo object
 #' 
-#' Returns Bloomberg data as zoo object
+#' Returns Bloomberg data as zoo object; it relies on Rblpapi package but simplifies download and output
 #' 
-#' @param tickers character vector of Bloomberg tickers
-#' @param field optional character vector of one or several Bloomberg fields; default is 'PX_LAST'
-#' @param names optional character vector of column names for zoo object; default uses 'tickers' vector
+#' @param tickers character vector of Bloomberg ticker(s)
+#' @param field optional character vector of Bloomberg field(s); default is 'PX_LAST'
+#' @param names optional character vector of column name(s) for zoo object; default uses 'tickers' vector
 #' @param start optional start date for data download; default is Sys.Date() - 3*365
 #' @param end optional end date for data download; default is Sys.Date() -1
 #' @param freq optional frequency for data download; options are 'DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'YEARLY'; default is 'MONTHLY'
-#' @param time optional string indicating the lookback from today; options are 'D' (Days), 'W' (Weeks), 'M' (Months), 'Q' (Quarters), 'Y' (Years), or 'YTD' (Year-to-Date), e.g. '3M', '4Q', '5Y', 'YTD'; default is none
-#' @param na optional boolean which will fill intermittent NAs if set to TRUE; default is FALSE
+#' @param time optional string to specify start date; options are 'D' (Days), 'W' (Weeks), 'M' (Months), 'Q' (Quarters), 'Y' (Years), or 'YTD' (Year-to-Date), e.g. '3M', '4Q', '5Y', 'YTD'; default is none
+#' @param na optional boolean to fill intermittent NAs if set to FALSE; default is TRUE
 #' @return returns a zoo object with the downloaded Bloomberg data
 #' 
 #' @examples
-#' df <- getBBG(tickers="VIX Index", time="YTD")
-#' df <- getBBG(tickers="VIX Index", names="VIX", freq="D", time="30Y", na=FALSE)
-#' df <- getBBG(tickers=c("CPI YOY Index", "PPI YOY Index"), names=c("CPI", "PPI"), start=as.Date("2000-01-01"))
-#' df <- getBBG(tickers=c("NAPMPMI", "MPMIEZMA", "MPMIEMMA"), names=c("United States (ISM)", "Eurozone", "Emerging Markets"), time="3Y")
+#' df <- getBBG(tickers='VIX Index', time='YTD')
+#' df <- getBBG(tickers='VIX Index', names='VIX', freq='D', time='30Y', na=FALSE)
+#' df <- getBBG(tickers=c('CPI YOY Index', 'PPI YOY Index'), names=c('CPI', 'PPI'), start='2000-01-01')
+#' df <- getBBG(tickers=c('CPI YOY Index', 'PPI YOY Index'), names=c('CPI', 'PPI'), start='2000-01-01', end='2018-01-01')
+#' df <- getBBG(tickers=c('NAPMPMI', 'MPMIEZMA', 'MPMIEMMA'), names=c('United States (ISM)', 'Eurozone', 'Emerging Markets'), time='3Y')
 
-getBBG <- function(tickers, field, names, time, start, end, freq, na){
+getBBG <- function(tickers, field, names, start, end, time, freq, na){
 
   #Turn off warnings
   options(warn=-1)
@@ -53,12 +54,15 @@ getBBG <- function(tickers, field, names, time, start, end, freq, na){
   if(missing(end))           {end            <- as.Date(Sys.Date()-1)     }
   if(time=="YTD")            {start          <- start_ytd                 }
   if(time!="none" & time!="YTD" & tf=="Y") {start <- as.Date(Sys.Date()-(365*as.numeric((gsub("Y", "", time)))))}
-  if(time!="none" & time!="YTD" & tf=="Q") {start <- as.Date(Sys.Date()-(30*4*as.numeric((gsub("Q", "", time)))))}
+  if(time!="none" & time!="YTD" & tf=="Q") {start <- as.Date(Sys.Date()-(30*3*as.numeric((gsub("Q", "", time)))))}
   if(time!="none" & time!="YTD" & tf=="M") {start <- as.Date(Sys.Date()-(30*as.numeric((gsub("M", "", time)))))}
   if(time!="none" & time!="YTD" & tf=="W") {start <- as.Date(Sys.Date()-(7*as.numeric((gsub("W", "", time)))))}                          
   if(time!="none" & time!="YTD" & tf=="D") {start <- as.Date(Sys.Date()-(as.numeric((gsub("D", "", time)))))}
   if(missing(na))            {na             <- TRUE                      }
 
+  start <- as.Date(start)
+  end   <- as.Date(end)
+                              
   # Complete tickers list
   for (i in 1:length(tickers))
   {if (length(unlist(strsplit(tickers[i], " "))) == 1) {tickers[i] <- paste(tickers[i], " Index")} else {next}}

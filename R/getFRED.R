@@ -1,7 +1,26 @@
 ####### DOWNLOAD FRED DATA BASED ON INPUTS #######
 ##################################################
 
-getFRED <- function(tickers, names, time, start, end, na){
+#' FRED data as zoo object
+#' 
+#' Returns FRED data as zoo object; it relies on quantmod::getSymbols but simplifies download and output
+#' 
+#' @param tickers character vector of FRED ticker(s)
+#' @param names optional character vector of column name(s) for zoo object; default uses 'tickers' vector
+#' @param start optional start date for data download; default is Sys.Date() - 3*365
+#' @param end optional end date for data download; default is Sys.Date() -1
+#' @param time optional string to specify start date; options are 'D' (Days), 'W' (Weeks), 'M' (Months), 'Q' (Quarters), 'Y' (Years), or 'YTD' (Year-to-Date), e.g. '3M', '4Q', '5Y', 'YTD'; default is none
+#' @param na optional boolean to fill intermittent NAs if set to FALSE; default is TRUE
+#' @return returns a zoo object with the downloaded FRED data
+#' 
+#' @examples
+#' df <- getFRED(tickers='CPIAUCSL', time='CPI')
+#' df <- getFRED(tickers='CPIAUCSL', names='CPI', time='30Y', na=FALSE)
+#' df <- getFRED(tickers=c("CPIAUCSL", "PCEPILFE"), names=c("CPI", "Core PCE"), start='2000-01-01')
+#' df <- getFRED(tickers=c("CPIAUCSL", "PCEPILFE"), names=c("CPI", "Core PCE"), start='2000-01-01', end='2018-01-01')
+#' df <- getFRED(tickers=c("UNRATE", "PCEPILFE"), names=c("Unemployment Rate", "Core PCE"), time='3Y')
+
+getFRED <- function(tickers, names, start, end, time, na){
 
   #Turn off warnings
   options(warn=-1)
@@ -27,9 +46,10 @@ getFRED <- function(tickers, names, time, start, end, na){
   if(missing(start))         {start          <- "01/01/1666"   }
   if(missing(end))           {end            <- "01/01/1666"   }
   if(time=="YTD")            {start          <- start_ytd      }
-  if(time!="none" & time!="YTD") {start <- as.Date(Sys.Date()-(365*as.numeric((gsub("Y", "", time)))))}
   if(time!="none" & time!="YTD" & tf=="Y") {start <- as.Date(Sys.Date()-(365*as.numeric((gsub("Y", "", time)))))}
+  if(time!="none" & time!="YTD" & tf=="Q") {start <- as.Date(Sys.Date()-(30*3*as.numeric((gsub("Q", "", time)))))}
   if(time!="none" & time!="YTD" & tf=="M") {start <- as.Date(Sys.Date()-(30*as.numeric((gsub("M", "", time)))))}
+  if(time!="none" & time!="YTD" & tf=="W") {start <- as.Date(Sys.Date()-(7*as.numeric((gsub("W", "", time)))))}                                                        
   if(time!="none" & time!="YTD" & tf=="D") {start <- as.Date(Sys.Date()-(as.numeric((gsub("D", "", time)))))}
   if(missing(na))            {na             <- TRUE           }
   
