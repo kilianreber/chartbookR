@@ -12,3 +12,4 @@ LazyData: true
 NeedsCompilation: no
 Packaged: 2018-09-04 11:37:11 UTC; wilson
 Date/Publication: 2018-09-04 11:37:11 UTC
+RoxygenNote: 6.1.0

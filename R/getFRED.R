@@ -26,11 +26,11 @@ getFRED <- function(tickers, names, time, start, end, na){
   if(time!="none")           {tf             <- gsub('[[:digit:]]+', '', time)}
   if(missing(start))         {start          <- "01/01/1666"   }
   if(missing(end))           {end            <- "01/01/1666"   }
-  if(time=="ytd")            {start          <- start_ytd      }
-  if(time!="none" & time!="ytd") {start <- as.Date(Sys.Date()-(365*as.numeric((gsub("Y", "", time)))))}
-  if(time!="none" & time!="ytd" & tf=="Y") {start <- as.Date(Sys.Date()-(365*as.numeric((gsub("Y", "", time)))))}
-  if(time!="none" & time!="ytd" & tf=="M") {start <- as.Date(Sys.Date()-(30*as.numeric((gsub("M", "", time)))))}
-  if(time!="none" & time!="ytd" & tf=="D") {start <- as.Date(Sys.Date()-(as.numeric((gsub("D", "", time)))))}
+  if(time=="YTD")            {start          <- start_ytd      }
+  if(time!="none" & time!="YTD") {start <- as.Date(Sys.Date()-(365*as.numeric((gsub("Y", "", time)))))}
+  if(time!="none" & time!="YTD" & tf=="Y") {start <- as.Date(Sys.Date()-(365*as.numeric((gsub("Y", "", time)))))}
+  if(time!="none" & time!="YTD" & tf=="M") {start <- as.Date(Sys.Date()-(30*as.numeric((gsub("M", "", time)))))}
+  if(time!="none" & time!="YTD" & tf=="D") {start <- as.Date(Sys.Date()-(as.numeric((gsub("D", "", time)))))}
   if(missing(na))            {na             <- TRUE           }
   
   #Prepare data
