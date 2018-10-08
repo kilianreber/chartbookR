@@ -1,4 +1,35 @@
-BarChart <- function(start, no, title, data, stacked, d1, d2, y1, y2, y1_def, y2_def, y2_rev, space, fn, leg, grid, rec, dt_format, h, v) {
+########## CREATE CUSTOM BAR/LINE PLOT ###########
+##################################################
+
+#' Create custom bar/line plot
+#' 
+#' Create custom bar/line plot based on user inputs
+#' 
+#' @param data specification of zoo object
+#' @param start optional start date to trim 'data'
+#' @param title optional character to add chart title
+#' @param no optional integer to add chart number
+#' @param stacked optional boolean to unstack bars when set to FALSE; default is TRUE
+#' @param space optional integer to specify space between bars and data groups, e.g. space=c(0.5, 1); default is space=c(0.1, 0.25)
+#' @param d1 optional number vector to specify which columns to plot on primary y-axis
+#' @param d2 optional number vector to specify which columns to plot on secondary y-axis
+#' @param y1 optional character to specify description of primary y-axis
+#' @param y2 optional character to specify description of secondary y-axis
+#' @param y1_def optional number vector to specify start, end, and intervals of primary y-axis, e.g. c(0, 10, 2)
+#' @param y2_def optional number vector to specify start, end, and intervals of secondary y-axis, e.g. c(0, 10, 2)
+#' @param y2 optional number vector to specify start, end, and intervals of secondary y-axis, e.g. c(0, 10, 2)
+#' @param y1_rev optional boolean to invert secondary y-axis; y2_def needs to be supplied
+#' @param fn optional character to add footnote to plot
+#' @param optional character to place position of legend; options are 'topleft', 'center', 'topright', 'left', 'center', 'right', 'bottomleft', 'bottom', 'bottomright'
+#' @param grid optional boolean to show grid when set to TRUE
+#' @param rec optional boolean to shade recessions when set to TRUE
+#' @param dt_format optional character vector to specify date interval and date format, e..g dt_format=c('3 months','\%b-\%Y')
+#' @param h optional integer to specify horizontal line
+#' @param h optional integer to specify vertical date line, e.g. v='31/12/2012'
+#' @return plots R base plot
+#' @export
+
+BarChart <- function(data, start, title, no, stacked, space, d1, d2, y1, y2, y1_def, y2_def, y2_rev, fn, leg, grid, rec, dt_format, h, v) {
 
 #Turn off warnings
 options(warn=-1)

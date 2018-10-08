@@ -1,9 +1,29 @@
 ################# FCT TRANSFORM DATA #################
 #######################################################
 
+#' Calculate transformation of zoo object
+#' 
+#' Transforms a zoo object and appends results
+#' 
+#' @param data specification of zoo object
+#' @param start optional start date to trim 'data'
+#' @param chg optional string to calculate periodical changes; options are 'YOY' (Year-on-Year), 'QOQ' (Quarter-on-Quarter), 'MOM' (Month-on-Month); is appended for all columns
+#' @param chg_type optional string to specify calculation of changes; options are 'perc' (percentage change) or 'delta' (absolute change); default is 'perc'
+#' @param pma optional integer to specify calculation of period-moving-averages; is appended for all columns
+#' @param pms optional integer to specify calculation of period-moving-sums; is appended for all columns
+#' @param lag optional integer to lag the data; is appended for all columns
+#' @param lead optional integer to lead the data; is appended for all columns
+#' @param rebase optional boolean to rebase the data to 100 at first observation; is appended for all columns
+#' @param Z optional integer to specify the rolling number of periods over which the data is normalized; is appended for all columns
+#' @return returns a zoo object with transformations appended
+#' @export
+
+#Define function
+Transform <- function(data, start, chg, chg_type, pma, pms, lag, lead, rebase, Z){
+
 #Turn off warnings
 options(warn=-1)
-
+  
 #(Un)load libraries
 unloadNamespace("dplyr")
 library(zoo)
@@ -11,23 +31,18 @@ library(xts)
 library(stringr)
 library(quantmod)
 library(scales)
-library(roll)
-
-#Define function
-Transform <- function(data, start, tf, typ, pma, pms, lag, lead, rebase, Z){
-
+library(roll)  
+  
 #Set missing values
 if (missing(start))      {start      <- "01/01/1666" }
-if (missing(tf))         {tf         <- "none"       }
-if (missing(typ))        {typ        <- "perc"       }
+if (missing(chg))        {chg        <- "none"       }
+if (missing(chg_type))   {chg_type   <- "perc"       }
 if (missing(pma))        {pma        <- "none"       }
 if (missing(pms))        {pms        <- "none"       }
 if (missing(lag))        {lag        <- "none"       }
 if (missing(lead))       {lead       <- "none"       }
 if (missing(rebase))     {rebase     <- FALSE        }
 if (missing(Z))          {Z          <- "none"       }
-
-#Typ can take on 'perc', 'delta' or 'net'
 
 #Prepare data
 periodicity <- periodicity(data)$scale
@@ -44,39 +59,39 @@ data <- cbind(data, temp)
 }
 
 #Apply transformation
-if(tf!="none") {
-  if (typ == "perc") {
+if(chg!="none") {
+  if (chg_type == "perc") {
     if (periodicity == "monthly") {
-      if (tf == "YOY") {
+      if (chg == "YOY") {
         temp <- 100 * ((data / stats::lag(data, k = -12)) - 1)
-      } else if (tf == "QOQ") {
+      } else if (chg == "QOQ") {
         temp <- 100 * ((data / stats::lag(data, k = -4)) - 1)
-      } else if (tf == "MOM") {
+      } else if (chg == "MOM") {
         temp <- 100 * ((data / stats::lag(data, k = -1)) - 1)
       }
 
     } else if (periodicity == "weekly") {
-      if (tf == "YOY") {
+      if (chg == "YOY") {
         temp <- 100 * ((data / stats::lag(data, k = -52)) - 1)
-      } else if (tf == "QOQ") {
+      } else if (chg == "QOQ") {
         temp <- 100 * ((data / stats::lag(data, k = -16)) - 1)
-      } else if (tf == "MOM") {
+      } else if (chg == "MOM") {
         temp <- 100 * ((data / stats::lag(data, k = -4)) - 1)
       }
 
     } else if (periodicity == "daily") {
-      if (tf == "YOY") {
+      if (chg == "YOY") {
         temp <- 100 * ((data / stats::lag(data, k = -252)) - 1)
-      } else if (tf == "QOQ") {
+      } else if (chg == "QOQ") {
         temp <- 100 * ((data / stats::lag(data, k = -80)) - 1)
-      } else if (tf == "MOM") {
+      } else if (chg == "MOM") {
         temp <- 100 * ((data / stats::lag(data, k = -20)) - 1)
       }
 
     } else if (periodicity == "quarterly") {
-      if (tf == "YOY") {
+      if (chg == "YOY") {
         temp <- 100 * ((data / stats::lag(data, k = -4)) - 1)
-      } else if (tf == "QOQ") {
+      } else if (chg == "QOQ") {
         temp <- 100 * ((data / stats::lag(data, k = -1)) - 1)
       }
 
@@ -89,41 +104,41 @@ if(tf!="none") {
     }
 
     #Rename & merge with original
-    colnames(temp) <- paste(colnames(temp), ", ", tf, "%", sep = "")
+    colnames(temp) <- paste(colnames(temp), ", ", chg, "%", sep = "")
     data <- cbind(data, temp)
   }
-  if (typ == "delta") {
+  if (chg_type == "delta") {
     if (periodicity == "monthly") {
-      if (tf == "YOY") {
+      if (chg == "YOY") {
         temp <- (data - stats::lag(data, k = -12))
-      } else if (tf == "QOQ") {
+      } else if (chg == "QOQ") {
         temp <- (data - stats::lag(data, k = -4))
-      } else if (tf == "MOM") {
+      } else if (chg == "MOM") {
         temp <- (data - stats::lag(data, k = -1))
       }
 
     } else if (periodicity == "weekly") {
-      if (tf == "YOY") {
+      if (chg == "YOY") {
         temp <- (data - stats::lag(data, k = -52))
-      } else if (tf == "QOQ") {
+      } else if (chg == "QOQ") {
         temp <- (data - stats::lag(data, k = -16))
-      } else if (tf == "MOM") {
+      } else if (chg == "MOM") {
         temp <- (data - stats::lag(data, k = -4))
       }
 
     } else if (periodicity == "daily") {
-      if (tf == "YOY") {
+      if (chg == "YOY") {
         temp <- (data - stats::lag(data, k = -252))
-      } else if (tf == "QOQ") {
+      } else if (chg == "QOQ") {
         temp <- (data - stats::lag(data, k = -80))
-      } else if (tf == "MOM") {
+      } else if (chg == "MOM") {
         temp <- (data - stats::lag(data, k = -20))
       }
 
     } else if (periodicity == "quarterly") {
-      if (tf == "YOY") {
+      if (chg == "YOY") {
         temp <- (data - stats::lag(data, k = -4))
-      } else if (tf == "QOQ") {
+      } else if (chg == "QOQ") {
         temp <- (data - stats::lag(data, k = -1))
       }
 
@@ -136,14 +151,14 @@ if(tf!="none") {
     }
 
     #Rename & merge with original
-    colnames(temp) <- paste(colnames(temp), ", ", tf, "-D", sep = "")
+    colnames(temp) <- paste(colnames(temp), ", ", chg, "-D", sep = "")
     data <- cbind(data, temp)
   }
 
 }
 
 # Apply net transformation
-  if(typ=="net") {
+  if(chg_type=="net") {
   temp <- sweep(data,2,coredata(data[1]))
   colnames(temp) <- paste(colnames(temp), ", net chg", sep = "")
   data <- cbind(data, temp)

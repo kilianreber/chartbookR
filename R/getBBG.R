@@ -14,6 +14,7 @@
 #' @param time optional string to specify start date; options are 'D' (Days), 'W' (Weeks), 'M' (Months), 'Q' (Quarters), 'Y' (Years), or 'YTD' (Year-to-Date), e.g. '3M', '4Q', '5Y', 'YTD'; default is none
 #' @param na optional boolean to fill intermittent NAs if set to FALSE; default is TRUE
 #' @return returns a zoo object with the downloaded Bloomberg data
+#' @export
 #' 
 #' @examples
 #' df <- getBBG(tickers='VIX Index', time='YTD')
