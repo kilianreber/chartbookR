@@ -2,7 +2,7 @@
 % Please edit documentation in R/BarChart.r
 \name{BarChart}
 \alias{BarChart}
-\title{Create custom bar/line plot}
+\title{Create custom bar(s)/line(s) plot}
 \usage{
 BarChart(data, start, title, no, stacked, space, d1, d2, y1, y2, y1_def,
   y2_def, y2_rev, fn, leg, grid, rec, dt_format, h, v)
@@ -54,5 +54,5 @@ BarChart(data, start, title, no, stacked, space, d1, d2, y1, y2, y1_def,
 plots R base plot
 }
 \description{
-Create custom bar/line plot based on user inputs
+Create custom bar(s)/line(s) plot based on user inputs
 }

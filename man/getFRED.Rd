@@ -23,7 +23,7 @@ getFRED(tickers, names, start, end, time, na)
 returns a zoo object with the downloaded FRED data
 }
 \description{
-Returns FRED data as zoo object; it relies on quantmod::getSymbols but simplifies download and output
+Returns FRED data as zoo object; it relies on the quantmod::getSymbols function but simplifies download and output
 }
 \examples{
 df <- getFRED(tickers='CPIAUCSL', time='CPI')

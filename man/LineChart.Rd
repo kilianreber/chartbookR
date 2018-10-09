@@ -2,7 +2,7 @@
 % Please edit documentation in R/LineChart.R
 \name{LineChart}
 \alias{LineChart}
-\title{Create custom line plot}
+\title{Create custom line(s) plot}
 \usage{
 LineChart(data, start, title, no, d1, d2, y1, y2, y1_def, y2_def, y2_rev,
   fn, leg, grid, rec, dt_format, h, v)
@@ -50,5 +50,5 @@ LineChart(data, start, title, no, d1, d2, y1, y2, y1_def, y2_def, y2_rev,
 plots R base plot
 }
 \description{
-Create custom line plot based on user inputs
+Create custom line(s) plot based on user inputs
 }

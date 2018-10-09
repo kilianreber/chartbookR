@@ -1,15 +1,31 @@
 Package: chartbookR
 Title: Creation of chartbooks
-Description: Easily download time series data and create chartbooks - For economists and financial analysts
 Version: 1.0.2
 Author: Kilian Reber <kilian.d.reber@gmail.com>
 Maintainer: Kilian Reber <kilian.d.reber@gmail.com>
-URL: https://github.com/kilianreber/chartbookR.git
-VignetteBuilder: none
-Depends: R (>= 2.15)
+Description: Allows users to easily download and transform time
+    series data from Bloomberg and FRED (St. Louis Fed), to produce
+    customized charts, and to save them to Powerpoint.
 License: MIT + file LICENSE
+Encoding: UTF-8
+URL: https://github.com/kilianreber/chartbookR.git
+Depends: 
+    R (>= 2.15)
+Imports: 
+    Rblpapi,
+    zoo,
+    lubridate,
+    quantmod,
+    bsts,
+    stringr,
+    scales,
+    roll,
+    MALDIquant,
+    officer,
+    devEMF
+VignetteBuilder: knitr
+Date/Publication: 2018-09-04 11:37:11 UTC
 LazyData: true
 NeedsCompilation: no
 Packaged: 2018-09-04 11:37:11 UTC; wilson
-Date/Publication: 2018-09-04 11:37:11 UTC
 RoxygenNote: 6.1.0

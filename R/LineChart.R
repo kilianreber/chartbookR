@@ -1,9 +1,14 @@
 ############ CREATE CUSTOM LINE PLOT #############
 ##################################################
 
-#' Create custom line plot
+#' Create custom line(s) plot
 #' 
-#' Create custom line plot based on user inputs
+#' Create custom line(s) plot based on user inputs
+#' 
+#' @import zoo
+#' @import quantmod
+#' @import stringr
+#' @import MALDIquant
 #' 
 #' @param data specification of zoo object
 #' @param start optional start date to trim 'data'
@@ -24,7 +29,9 @@
 #' @param dt_format optional character vector to specify date interval and date format, e..g dt_format=c('3 months', '\%b-\%Y')
 #' @param h optional integer to specify horizontal line
 #' @param h optional integer to specify vertical date line, e.g. v='31/12/2012'
+#' 
 #' @return plots R base plot
+#' 
 #' @export
 
 LineChart <- function(data, start, title, no, d1, d2, y1, y2, y1_def, y2_def, y2_rev, fn, leg, grid, rec, dt_format, h, v) {
@@ -33,7 +40,7 @@ LineChart <- function(data, start, title, no, d1, d2, y1, y2, y1_def, y2_def, y2
 options(warn=-1)
   
 #Load libraries
-library(xlsx)
+#library(xlsx)
 lapply(c("quantmod", "zoo", "stringr", "MALDIquant"), library, character.only = TRUE)
 
 #Set default values

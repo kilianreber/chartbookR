@@ -5,6 +5,12 @@
 #' 
 #' Transforms a zoo object and appends results
 #' 
+#' @import zoo
+#' @import stringr
+#' @import quantmod
+#' @import scales
+#' @import roll
+#' 
 #' @param data specification of zoo object
 #' @param start optional start date to trim 'data'
 #' @param chg optional string to calculate periodical changes; options are 'YOY' (Year-on-Year), 'QOQ' (Quarter-on-Quarter), 'MOM' (Month-on-Month); is appended for all columns
@@ -15,7 +21,9 @@
 #' @param lead optional integer to lead the data; is appended for all columns
 #' @param rebase optional boolean to rebase the data to 100 at first observation; is appended for all columns
 #' @param Z optional integer to specify the rolling number of periods over which the data is normalized; is appended for all columns
+#' 
 #' @return returns a zoo object with transformations appended
+#' 
 #' @export
 
 #Define function
@@ -27,7 +35,7 @@ options(warn=-1)
 #(Un)load libraries
 unloadNamespace("dplyr")
 library(zoo)
-library(xts)
+#library(xts)
 library(stringr)
 library(quantmod)
 library(scales)

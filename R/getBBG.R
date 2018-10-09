@@ -5,6 +5,10 @@
 #' 
 #' Returns Bloomberg data as zoo object; it relies on Rblpapi package but simplifies download and output
 #' 
+#' @import zoo
+#' @import Rblpapi
+#' @import lubridate
+#' 
 #' @param tickers character vector of Bloomberg ticker(s)
 #' @param field optional character vector of Bloomberg field(s); default is 'PX_LAST'
 #' @param names optional character vector of column name(s) for zoo object; default uses 'tickers' vector
@@ -13,7 +17,9 @@
 #' @param freq optional frequency for data download; options are 'DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'YEARLY'; default is 'MONTHLY'
 #' @param time optional string to specify start date; options are 'D' (Days), 'W' (Weeks), 'M' (Months), 'Q' (Quarters), 'Y' (Years), or 'YTD' (Year-to-Date), e.g. '3M', '4Q', '5Y', 'YTD'; default is none
 #' @param na optional boolean to fill intermittent NAs if set to FALSE; default is TRUE
+#' 
 #' @return returns a zoo object with the downloaded Bloomberg data
+#' 
 #' @export
 #' 
 #' @examples

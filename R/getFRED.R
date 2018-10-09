@@ -3,7 +3,12 @@
 
 #' FRED data as zoo object
 #' 
-#' Returns FRED data as zoo object; it relies on quantmod::getSymbols but simplifies download and output
+#' Returns FRED data as zoo object; it relies on the quantmod::getSymbols function but simplifies download and output
+#' 
+#' @import zoo
+#' @import lubridate
+#' @import quantmod
+#' @import bsts
 #' 
 #' @param tickers character vector of FRED ticker(s)
 #' @param names optional character vector of column name(s) for zoo object; default uses 'tickers' vector
@@ -11,7 +16,9 @@
 #' @param end optional end date for data download; default is Sys.Date() -1
 #' @param time optional string to specify start date; options are 'D' (Days), 'W' (Weeks), 'M' (Months), 'Q' (Quarters), 'Y' (Years), or 'YTD' (Year-to-Date), e.g. '3M', '4Q', '5Y', 'YTD'; default is none
 #' @param na optional boolean to fill intermittent NAs if set to FALSE; default is TRUE
+#' 
 #' @return returns a zoo object with the downloaded FRED data
+#' 
 #' @export
 #' 
 #' @examples

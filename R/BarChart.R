@@ -1,10 +1,15 @@
 ########## CREATE CUSTOM BAR/LINE PLOT ###########
 ##################################################
 
-#' Create custom bar/line plot
+#' Create custom bar(s)/line(s) plot
 #' 
-#' Create custom bar/line plot based on user inputs
-#' 
+#' Create custom bar(s)/line(s) plot based on user inputs
+#'
+#' @import zoo
+#' @import quantmod
+#' @import stringr
+#' @import MALDIquant
+#'   
 #' @param data specification of zoo object
 #' @param start optional start date to trim 'data'
 #' @param title optional character to add chart title
@@ -26,7 +31,9 @@
 #' @param dt_format optional character vector to specify date interval and date format, e..g dt_format=c('3 months','\%b-\%Y')
 #' @param h optional integer to specify horizontal line
 #' @param h optional integer to specify vertical date line, e.g. v='31/12/2012'
+#' 
 #' @return plots R base plot
+#' 
 #' @export
 
 BarChart <- function(data, start, title, no, stacked, space, d1, d2, y1, y2, y1_def, y2_def, y2_rev, fn, leg, grid, rec, dt_format, h, v) {
