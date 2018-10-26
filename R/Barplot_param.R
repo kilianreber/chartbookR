@@ -1,10 +1,12 @@
 # FUNCTION TO CREATE TICKS AND LABELS FOR R BARPLOTS
 
-Barplot_param <- function(start, data1, stacked, dt_format, type){
+library(stringr)
+
+Barplot_param <- function(inception, data1, stacked, dt_format, type){
 
 #Prepare variables & set defaults
 if (missing(stacked)) {stacked <- TRUE}
-if (missing(start))   {start <- "show"}
+if (missing(inception))   {inception <- FALSE}
 data1 <- as.zoo(data1)
 if (is.null(ncol(data1))) {length_d1 <- 1} else {length_d1 <- ncol(data1)}
 
@@ -44,8 +46,9 @@ date_labels <- date_labels[seq(1, length(date_labels), interval)]
 if (type=="L") {bp_param <- data.frame(date_labels)}
 if (type=="B") {bp_param <- data.frame(at_tick, labels)}
 
-if (start=="hide") {bp_param <- as.data.frame(bp_param[-1,])}
-if (start=="hide" & type=="L") {colnames(bp_param) <- "date_labels"}
+### Cut inception if distance too big and no user override
+if (type=="L") {if (dt_format[2]=="%Y" & (as.numeric(bp_param[2,] - bp_param[1,])/365/interval) < 0.75 & inception!=TRUE) {bp_param <- as.data.frame(bp_param[-1,])}}
+if (type=="B") {if (dt_format[2]=="%Y" & ((as.numeric(as.character(bp_param[2,2])) - as.numeric(as.character(bp_param[1,2])))/interval) < 0.75 & inception!=TRUE) {bp_param <- as.data.frame(bp_param[-1,])}}
 
 return(bp_param)
 

@@ -10,38 +10,33 @@
 #' @import stringr
 #' @import MALDIquant
 #' 
-#' @param data specification of zoo object
-#' @param start optional start date to trim 'data'
+#' @param data specification of zoo dataset to use for plot
+#' @param inception optional boolean to show inception date when set to 'TRUE'; default is 'FALSE'
 #' @param title optional character to add chart title
 #' @param no optional integer to add chart number
-#' @param d1 optional number vector to specify which columns to plot on primary y-axis
-#' @param d2 optional number vector to specify which columns to plot on secondary y-axis
+#' @param d1 optional integer vector to specify which columns to plot on primary y-axis
+#' @param d2 optional integer vector to specify which columns to plot on secondary y-axis
 #' @param y1 optional character to specify description of primary y-axis
 #' @param y2 optional character to specify description of secondary y-axis
 #' @param y1_def optional number vector to specify start, end, and intervals of primary y-axis, e.g. c(0, 10, 2)
 #' @param y2_def optional number vector to specify start, end, and intervals of secondary y-axis, e.g. c(0, 10, 2)
-#' @param y2 optional number vector to specify start, end, and intervals of secondary y-axis, e.g. c(0, 10, 2)
 #' @param y1_rev optional boolean to invert secondary y-axis; y2_def needs to be supplied
 #' @param fn optional character to add footnote to plot
 #' @param optional character to place position of legend; options are 'topleft', 'center', 'topright', 'left', 'center', 'right', 'bottomleft', 'bottom', 'bottomright'
 #' @param grid optional boolean to show grid when set to TRUE
 #' @param rec optional boolean to shade recessions when set to TRUE
-#' @param dt_format optional character vector to specify date interval and date format, e..g dt_format=c('3 months', '\%b-\%Y')
-#' @param h optional integer to specify horizontal line
-#' @param h optional integer to specify vertical date line, e.g. v='31/12/2012'
+#' @param dt_format optional character vector to specify date interval and date format of x-axis, e..g dt_format=c('3 months', '\%b-\%Y')
+#' @param h optional argument to specify horizontal line at specific height
+#' @param v optional date to specify vertical date line, e.g. v='31/12/2012'
 #' 
 #' @return plots R base plot
 #' 
 #' @export
 
-LineChart <- function(data, start, title, no, d1, d2, y1, y2, y1_def, y2_def, y2_rev, fn, leg, grid, rec, dt_format, h, v) {
+LineChart <- function(data, inception, title, no, d1, d2, y1, y2, y1_def, y2_def, y2_rev, fn, leg, grid, rec, dt_format, h, v) {
 
 #Turn off warnings
 options(warn=-1)
-  
-#Load libraries
-#library(xlsx)
-lapply(c("quantmod", "zoo", "stringr", "MALDIquant"), library, character.only = TRUE)
 
 #Set default values
 if (missing(title))       {title   <- ""    }
@@ -62,7 +57,7 @@ if (missing(v))           {v       <- "none"      }
 if (missing(y2_rev))      {y2_rev  <- FALSE       }
 if (y2_def!="none")       {ylim_input=c(y2_def[1], y2_def[2])}
 if (y2_def!="none" & y2_rev==TRUE) {ylim_input=rev(range(c(y2_def[1], y2_def[2])))}
-if (missing(start)) {start <- "show"}
+if (missing(inception)) {inception <- FALSE}
 dt_format_override <- FALSE
 
 #Fix data when it has only one column
@@ -107,7 +102,7 @@ months    <- gsub("M.*","\\1",dt_format[1])
 if (months==dt_format[1]) {months <- 12} else {months <- as.numeric(months)}
 if (years==dt_format[1])  {years  <- 1} else  {years <- as.numeric(years)}
 
-days <- last(index(df)) - first(index(df))
+days <- last(index(data)) - first(index(data))
 intervals <- days / (years*months*30)
 
 if (intervals > 5.5 & dt_format[2]=="%b-%Y") {dt_format_override <- TRUE}
@@ -140,7 +135,7 @@ if (palette()==c("#428BCE", "gray35", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667"
 if (palette()==c("black", "red", "green3", "blue", "cyan", "magenta")) {palette(c("#428bce", "#595959", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667"))}
 
 #Create labels and tick vectors
-bp_param <- Barplot_param(start=start, data=data1, stacked=TRUE, dt_format=dt_format, type="L")
+bp_param <- Barplot_param(inception=inception, data=data1, stacked=TRUE, dt_format=dt_format, type="L")
 
 #Create plot, first y-axis, and content
 par(mar = c(5,5,5,5))
@@ -238,8 +233,8 @@ if (d2!="none") {par(new = T)
     axis(4, las=1, lwd=0, tck=-0)}
     mtext(side = 4, line = 3, y2)
 
-    legend(leg, box.lty=0, bg="#FFFFFF", legend=colnames(data3), pch=15, col=1:length(d3), ncol=1)
-    } else {legend(leg, box.lty=0, bg="#FFFFFF", legend=colnames(data3), pch=15, col=1:length(d3), ncol=1)}
+  legend(leg, box.lty=0, bg="#FFFFFF", legend=colnames(data3), pch=15, col=1:length(d3), ncol=1)
+  } else {legend(leg, box.lty=0, bg="#FFFFFF", legend=colnames(data3), pch=15, col=1:length(d3), ncol=1)}
 
 if (d2=="none") {box(which = "plot", bty = "l")} else {box(which = "plot", bty = "u")}
 

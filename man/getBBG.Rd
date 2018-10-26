@@ -21,7 +21,7 @@ getBBG(tickers, field, names, start, end, time, freq, na)
 
 \item{freq}{optional frequency for data download; options are 'DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'YEARLY'; default is 'MONTHLY'}
 
-\item{na}{optional boolean to fill intermittent NAs if set to FALSE; default is TRUE}
+\item{na}{optional boolean to replace NAs with the last observation if set to FALSE; default is TRUE}
 }
 \value{
 returns a zoo object with the downloaded Bloomberg data

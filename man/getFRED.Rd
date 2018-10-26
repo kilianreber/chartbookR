@@ -17,7 +17,7 @@ getFRED(tickers, names, start, end, time, na)
 
 \item{time}{optional string to specify start date; options are 'D' (Days), 'W' (Weeks), 'M' (Months), 'Q' (Quarters), 'Y' (Years), or 'YTD' (Year-to-Date), e.g. '3M', '4Q', '5Y', 'YTD'; default is none}
 
-\item{na}{optional boolean to fill intermittent NAs if set to FALSE; default is TRUE}
+\item{na}{optional boolean to replace NAs with the last observation if set to FALSE; default is TRUE}
 }
 \value{
 returns a zoo object with the downloaded FRED data

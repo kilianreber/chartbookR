@@ -2,7 +2,7 @@
 % Please edit documentation in R/Transform.r
 \name{Transform}
 \alias{Transform}
-\title{Calculate transformation of zoo object}
+\title{Transformation of zoo object}
 \usage{
 Transform(data, start, chg, chg_type, pma, pms, lag, lead, rebase, Z)
 }
@@ -11,25 +11,36 @@ Transform(data, start, chg, chg_type, pma, pms, lag, lead, rebase, Z)
 
 \item{start}{optional start date to trim 'data'}
 
-\item{chg}{optional string to calculate periodical changes; options are 'YOY' (Year-on-Year), 'QOQ' (Quarter-on-Quarter), 'MOM' (Month-on-Month); is appended for all columns}
+\item{chg}{optional string to calculate periodical changes; options are 'YoY' (Year-on-Year), 'QoQ' (Quarter-on-Quarter), 'MoM' (Month-on-Month), 'WoW' (Week-on-Week), 'DoD' (Day-on-Day)}
 
-\item{chg_type}{optional string to specify calculation of changes; options are 'perc' (percentage change) or 'delta' (absolute change); default is 'perc'}
+\item{chg_type}{optional string to specify calculation of changes; options are 'perc' (percentage change) or 'delta' (difference); default is 'perc'}
 
-\item{pma}{optional integer to specify calculation of period-moving-averages; is appended for all columns}
+\item{pma}{optional integer to specify number of data points for calculation of period-moving-averages}
 
-\item{pms}{optional integer to specify calculation of period-moving-sums; is appended for all columns}
+\item{pms}{optional integer to specify number of data points for calculation of period-moving-sums}
 
-\item{lag}{optional integer to lag the data; is appended for all columns}
+\item{lag}{optional integer to lag the data by a number of periods}
 
-\item{lead}{optional integer to lead the data; is appended for all columns}
+\item{lead}{optional integer to lead the data by a number of periods}
 
-\item{rebase}{optional boolean to rebase the data to 100 at first observation; is appended for all columns}
+\item{rebase}{optional boolean to rebase the data to 100 at first observation}
 
-\item{Z}{optional integer to specify the rolling number of periods over which the data is normalized; is appended for all columns}
+\item{Z}{optional integer (or character) to specify the rolling number of periods over which the data is normalized; use 'all' to compute z-scores over all available periods}
 }
 \value{
-returns a zoo object with transformations appended
+returns a zoo object with original and transformed data
 }
 \description{
-Transforms a zoo object and appends results
+Adds new columns to zoo object with transformed data; applies for all columns in 'data'
+}
+\examples{
+df <- Transform(data=df, chg="YoY")
+df <- Transform(data=df, chg="MoM", chg_type="delta")
+df <- Transform(data=df, start="31/10/2010", pma=12)
+df <- Transform(data=df, pma=3)
+
+
+df <- getFRED(tickers=c("CPIAUCSL", "PCEPILFE"), names=c("CPI", "Core PCE"), start='2000-01-01')
+df <- getFRED(tickers=c("CPIAUCSL", "PCEPILFE"), names=c("CPI", "Core PCE"), start='2000-01-01', end='2018-01-01')
+df <- getFRED(tickers=c("UNRATE", "PCEPILFE"), names=c("Unemployment Rate", "Core PCE"), time='3Y')
 }

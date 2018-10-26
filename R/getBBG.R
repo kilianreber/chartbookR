@@ -16,7 +16,7 @@
 #' @param end optional end date for data download; default is Sys.Date() -1
 #' @param freq optional frequency for data download; options are 'DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'YEARLY'; default is 'MONTHLY'
 #' @param time optional string to specify start date; options are 'D' (Days), 'W' (Weeks), 'M' (Months), 'Q' (Quarters), 'Y' (Years), or 'YTD' (Year-to-Date), e.g. '3M', '4Q', '5Y', 'YTD'; default is none
-#' @param na optional boolean to fill intermittent NAs if set to FALSE; default is TRUE
+#' @param na optional boolean to replace NAs with the last observation if set to FALSE; default is TRUE
 #' 
 #' @return returns a zoo object with the downloaded Bloomberg data
 #' 
@@ -33,13 +33,7 @@ getBBG <- function(tickers, field, names, start, end, time, freq, na){
 
   #Turn off warnings
   options(warn=-1)
-  
-  #Load libraries
-  library(zoo)
-  library(Rblpapi)
-  library(lubridate)
-  library(bsts)
-  
+
   #Open Bloomberg connection
   blpConnect()
 
@@ -59,6 +53,7 @@ getBBG <- function(tickers, field, names, start, end, time, freq, na){
   if(time!="none")           {tf             <- gsub('[[:digit:]]+', '', time)}
   if(missing(start))         {start <- (LastDayInMonth(Sys.Date())-3*365)}
   if(missing(end))           {end            <- as.Date(Sys.Date()-1)     }
+  if(time=="ytd") {time <- "YTD"}
   if(time=="YTD")            {start          <- start_ytd                 }
   if(time!="none" & time!="YTD" & tf=="Y") {start <- as.Date(Sys.Date()-(365*as.numeric((gsub("Y", "", time)))))}
   if(time!="none" & time!="YTD" & tf=="Q") {start <- as.Date(Sys.Date()-(30*3*as.numeric((gsub("Q", "", time)))))}

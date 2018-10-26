@@ -15,7 +15,7 @@
 #' @param start optional start date for data download; default is Sys.Date() - 3*365
 #' @param end optional end date for data download; default is Sys.Date() -1
 #' @param time optional string to specify start date; options are 'D' (Days), 'W' (Weeks), 'M' (Months), 'Q' (Quarters), 'Y' (Years), or 'YTD' (Year-to-Date), e.g. '3M', '4Q', '5Y', 'YTD'; default is none
-#' @param na optional boolean to fill intermittent NAs if set to FALSE; default is TRUE
+#' @param na optional boolean to replace NAs with the last observation if set to FALSE; default is TRUE
 #' 
 #' @return returns a zoo object with the downloaded FRED data
 #' 
@@ -33,12 +33,6 @@ getFRED <- function(tickers, names, start, end, time, na){
   #Turn off warnings
   options(warn=-1)
   
-  #Load packages
-  library(zoo)
-  library(lubridate)
-  library(quantmod)
-  library(bsts)
-  
   #Calculate last day of previous year
   last_day_prev_year <- function(x) floor_date(x, "year") - days(1)
   start_ytd <- last_day_prev_year(Sys.Date())
@@ -53,6 +47,7 @@ getFRED <- function(tickers, names, start, end, time, na){
   if(time!="none")           {tf             <- gsub('[[:digit:]]+', '', time)}
   if(missing(start))         {start          <- "01/01/1666"   }
   if(missing(end))           {end            <- "01/01/1666"   }
+  if(time=="ytd") {time <- "YTD"}
   if(time=="YTD")            {start          <- start_ytd      }
   if(time!="none" & time!="YTD" & tf=="Y") {start <- as.Date(Sys.Date()-(365*as.numeric((gsub("Y", "", time)))))}
   if(time!="none" & time!="YTD" & tf=="Q") {start <- as.Date(Sys.Date()-(30*3*as.numeric((gsub("Q", "", time)))))}

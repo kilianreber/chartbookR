@@ -1,11 +1,12 @@
 ################# FCT TRANSFORM DATA #################
 #######################################################
 
-#' Calculate transformation of zoo object
+#' Transformation of zoo object
 #' 
-#' Transforms a zoo object and appends results
+#' Adds new columns to zoo object with transformed data; applies for all columns in 'data'
 #' 
 #' @import zoo
+#' @import xts
 #' @import stringr
 #' @import quantmod
 #' @import scales
@@ -13,18 +14,30 @@
 #' 
 #' @param data specification of zoo object
 #' @param start optional start date to trim 'data'
-#' @param chg optional string to calculate periodical changes; options are 'YOY' (Year-on-Year), 'QOQ' (Quarter-on-Quarter), 'MOM' (Month-on-Month); is appended for all columns
-#' @param chg_type optional string to specify calculation of changes; options are 'perc' (percentage change) or 'delta' (absolute change); default is 'perc'
-#' @param pma optional integer to specify calculation of period-moving-averages; is appended for all columns
-#' @param pms optional integer to specify calculation of period-moving-sums; is appended for all columns
-#' @param lag optional integer to lag the data; is appended for all columns
-#' @param lead optional integer to lead the data; is appended for all columns
-#' @param rebase optional boolean to rebase the data to 100 at first observation; is appended for all columns
-#' @param Z optional integer to specify the rolling number of periods over which the data is normalized; is appended for all columns
+#' @param chg optional string to calculate periodical changes; options are 'YoY' (Year-on-Year), 'QoQ' (Quarter-on-Quarter), 'MoM' (Month-on-Month), 'WoW' (Week-on-Week), 'DoD' (Day-on-Day)
+#' @param chg_type optional string to specify calculation of changes; options are 'perc' (percentage change) or 'delta' (difference); default is 'perc'
+#' @param pma optional integer to specify number of data points for calculation of period-moving-averages
+#' @param pms optional integer to specify number of data points for calculation of period-moving-sums
+#' @param lag optional integer to lag the data by a number of periods
+#' @param lead optional integer to lead the data by a number of periods
+#' @param rebase optional boolean to rebase the data to 100 at first observation
+#' @param Z optional integer (or character) to specify the rolling number of periods over which the data is normalized; use 'all' to compute z-scores over all available periods
 #' 
-#' @return returns a zoo object with transformations appended
+#' @return returns a zoo object with original and transformed data
 #' 
 #' @export
+#' 
+#' @examples
+#' df <- Transform(data=df, chg="YoY")
+#' df <- Transform(data=df, chg="MoM", chg_type="delta")
+#' df <- Transform(data=df, start="31/10/2010", pma=12)
+#' df <- Transform(data=df, pma=3)
+#' 
+#' 
+#' df <- getFRED(tickers=c("CPIAUCSL", "PCEPILFE"), names=c("CPI", "Core PCE"), start='2000-01-01')
+#' df <- getFRED(tickers=c("CPIAUCSL", "PCEPILFE"), names=c("CPI", "Core PCE"), start='2000-01-01', end='2018-01-01')
+#' df <- getFRED(tickers=c("UNRATE", "PCEPILFE"), names=c("Unemployment Rate", "Core PCE"), time='3Y')
+
 
 #Define function
 Transform <- function(data, start, chg, chg_type, pma, pms, lag, lead, rebase, Z){
@@ -33,14 +46,8 @@ Transform <- function(data, start, chg, chg_type, pma, pms, lag, lead, rebase, Z
 options(warn=-1)
   
 #(Un)load libraries
-unloadNamespace("dplyr")
-library(zoo)
-#library(xts)
-library(stringr)
-library(quantmod)
-library(scales)
-library(roll)  
-  
+#unloadNamespace("dplyr")
+
 #Set missing values
 if (missing(start))      {start      <- "01/01/1666" }
 if (missing(chg))        {chg        <- "none"       }
@@ -56,6 +63,7 @@ if (missing(Z))          {Z          <- "none"       }
 periodicity <- periodicity(data)$scale
 MovPer <- substring(periodicity(data)$scale, 1, 1)
 if (start!="01/01/1666") {start <- as.Date(start, "%d/%m/%Y")}
+delta <- intToUtf8(916)
 
 #Apply lags
 if (lag!="none") {lag <- lag*-1}
@@ -68,38 +76,44 @@ data <- cbind(data, temp)
 
 #Apply transformation
 if(chg!="none") {
-  if (chg_type == "perc") {
+  if (chg!="Overall" & chg_type == "perc") {
     if (periodicity == "monthly") {
-      if (chg == "YOY") {
+        if (chg == "YoY") {
         temp <- 100 * ((data / stats::lag(data, k = -12)) - 1)
-      } else if (chg == "QOQ") {
+      } else if (chg == "QoQ") {
         temp <- 100 * ((data / stats::lag(data, k = -4)) - 1)
-      } else if (chg == "MOM") {
+      } else if (chg == "MoM") {
         temp <- 100 * ((data / stats::lag(data, k = -1)) - 1)
       }
 
     } else if (periodicity == "weekly") {
-      if (chg == "YOY") {
+        if (chg == "YoY") {
         temp <- 100 * ((data / stats::lag(data, k = -52)) - 1)
-      } else if (chg == "QOQ") {
+      } else if (chg == "QoQ") {
         temp <- 100 * ((data / stats::lag(data, k = -16)) - 1)
-      } else if (chg == "MOM") {
+      } else if (chg == "MoM") {
         temp <- 100 * ((data / stats::lag(data, k = -4)) - 1)
+      } else if (chg == "WoW") {
+        temp <- 100 * ((data / stats::lag(data, k = -1)) - 1)
       }
 
     } else if (periodicity == "daily") {
-      if (chg == "YOY") {
+        if (chg == "YoY") {
         temp <- 100 * ((data / stats::lag(data, k = -252)) - 1)
-      } else if (chg == "QOQ") {
+      } else if (chg == "QoQ") {
         temp <- 100 * ((data / stats::lag(data, k = -80)) - 1)
-      } else if (chg == "MOM") {
+      } else if (chg == "MoM") {
         temp <- 100 * ((data / stats::lag(data, k = -20)) - 1)
+      } else if (chg == "WoW") {
+        temp <- 100 * ((data / stats::lag(data, k = -7)) - 1)
+      } else if (chg == "DoD") {
+        temp <- 100 * ((data / stats::lag(data, k = -1)) - 1)
       }
 
     } else if (periodicity == "quarterly") {
-      if (chg == "YOY") {
+        if (chg == "YoY") {
         temp <- 100 * ((data / stats::lag(data, k = -4)) - 1)
-      } else if (chg == "QOQ") {
+      } else if (chg == "QoQ") {
         temp <- 100 * ((data / stats::lag(data, k = -1)) - 1)
       }
 
@@ -112,41 +126,47 @@ if(chg!="none") {
     }
 
     #Rename & merge with original
-    colnames(temp) <- paste(colnames(temp), ", ", chg, "%", sep = "")
+    colnames(temp) <- paste(colnames(temp), ", ", chg, " %", sep = "")
     data <- cbind(data, temp)
   }
-  if (chg_type == "delta") {
+  if (chg!="Overall" & chg_type == "delta") {
     if (periodicity == "monthly") {
-      if (chg == "YOY") {
+      if (chg == "YoY") {
         temp <- (data - stats::lag(data, k = -12))
-      } else if (chg == "QOQ") {
+      } else if (chg == "QoQ") {
         temp <- (data - stats::lag(data, k = -4))
-      } else if (chg == "MOM") {
+      } else if (chg == "MoM") {
         temp <- (data - stats::lag(data, k = -1))
       }
 
     } else if (periodicity == "weekly") {
-      if (chg == "YOY") {
+      if (chg == "YoY") {
         temp <- (data - stats::lag(data, k = -52))
-      } else if (chg == "QOQ") {
+      } else if (chg == "QoQ") {
         temp <- (data - stats::lag(data, k = -16))
-      } else if (chg == "MOM") {
+      } else if (chg == "MoM") {
         temp <- (data - stats::lag(data, k = -4))
+      } else if (chg == "WoW") {
+        temp <- (data - stats::lag(data, k = -1))
       }
 
     } else if (periodicity == "daily") {
       if (chg == "YOY") {
         temp <- (data - stats::lag(data, k = -252))
-      } else if (chg == "QOQ") {
+      } else if (chg == "QoQ") {
         temp <- (data - stats::lag(data, k = -80))
-      } else if (chg == "MOM") {
+      } else if (chg == "MoM") {
         temp <- (data - stats::lag(data, k = -20))
+      } else if (chg == "WoW") {
+        temp <- (data - stats::lag(data, k = -7))
+      } else if (chg == "DoD") {
+        temp <- (data - stats::lag(data, k = -1))
       }
 
     } else if (periodicity == "quarterly") {
-      if (chg == "YOY") {
+      if (chg == "YoY") {
         temp <- (data - stats::lag(data, k = -4))
-      } else if (chg == "QOQ") {
+      } else if (chg == "QoQ") {
         temp <- (data - stats::lag(data, k = -1))
       }
 
@@ -159,18 +179,25 @@ if(chg!="none") {
     }
 
     #Rename & merge with original
-    colnames(temp) <- paste(colnames(temp), ", ", chg, "-D", sep = "")
+    colnames(temp) <- paste(colnames(temp), ", ", chg, " ", delta, sep = "")
     data <- cbind(data, temp)
   }
 
 }
 
-# Apply net transformation
-  if(chg_type=="net") {
-  temp <- sweep(data,2,coredata(data[1]))
-  colnames(temp) <- paste(colnames(temp), ", net chg", sep = "")
+# Apply OVerall delta transformation
+if(chg=="Overall" & chg_type=="delta") {
+  temp <- sweep(data, MARGIN=2, STATS=coredata(data[1]))
+  colnames(temp) <- paste(colnames(temp), ", ", delta, " Chg", sep = "")
   data <- cbind(data, temp)
   }
+
+# Apply OVerall percent transformation
+if(chg=="Overall" & chg_type=="perc") {
+  temp <- 100*(sweep(data, MARGIN=2, FUN="/", STATS=coredata(data[1]))-1)
+  colnames(temp) <- paste(colnames(temp), ", % Chg", sep = "")
+  data <- cbind(data, temp)
+}
 
 #Apply period-moving-averages
 if (pma!="none"){
@@ -200,14 +227,17 @@ if (rebase==TRUE) {
   }
 
 #Apply Z-Scores
-if (Z!="none") {
+if (Z!="none" & Z!="all") {
   mean <- roll_mean(data, Z)
   sd <- roll_sd(data, Z)
   temp <- (data - mean)/sd
   colnames(temp) <- paste(colnames(temp), ", ", Z, MovPer, "-Z", sep="")
-  data <- cbind(data, temp)
+  data <- cbind(data, temp) }
 
-}
+if (Z=="all") {
+  temp <- scale(data)
+  colnames(temp) <- paste(colnames(temp), ", ", "Z-Scr", sep="")
+  data <- cbind(data, temp) }
 
 return(data)
 

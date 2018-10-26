@@ -4,21 +4,21 @@
 \alias{LineChart}
 \title{Create custom line(s) plot}
 \usage{
-LineChart(data, start, title, no, d1, d2, y1, y2, y1_def, y2_def, y2_rev,
-  fn, leg, grid, rec, dt_format, h, v)
+LineChart(data, inception, title, no, d1, d2, y1, y2, y1_def, y2_def,
+  y2_rev, fn, leg, grid, rec, dt_format, h, v)
 }
 \arguments{
-\item{data}{specification of zoo object}
+\item{data}{specification of zoo dataset to use for plot}
 
-\item{start}{optional start date to trim 'data'}
+\item{inception}{optional boolean to show inception date when set to 'TRUE'; default is 'FALSE'}
 
 \item{title}{optional character to add chart title}
 
 \item{no}{optional integer to add chart number}
 
-\item{d1}{optional number vector to specify which columns to plot on primary y-axis}
+\item{d1}{optional integer vector to specify which columns to plot on primary y-axis}
 
-\item{d2}{optional number vector to specify which columns to plot on secondary y-axis}
+\item{d2}{optional integer vector to specify which columns to plot on secondary y-axis}
 
 \item{y1}{optional character to specify description of primary y-axis}
 
@@ -34,17 +34,15 @@ LineChart(data, start, title, no, d1, d2, y1, y2, y1_def, y2_def, y2_rev,
 
 \item{rec}{optional boolean to shade recessions when set to TRUE}
 
-\item{dt_format}{optional character vector to specify date interval and date format, e..g dt_format=c('3 months', '\%b-\%Y')}
+\item{dt_format}{optional character vector to specify date interval and date format of x-axis, e..g dt_format=c('3 months', '\%b-\%Y')}
 
-\item{h}{optional integer to specify horizontal line}
+\item{h}{optional argument to specify horizontal line at specific height}
 
-\item{y2}{optional number vector to specify start, end, and intervals of secondary y-axis, e.g. c(0, 10, 2)}
+\item{v}{optional date to specify vertical date line, e.g. v='31/12/2012'}
 
 \item{y1_rev}{optional boolean to invert secondary y-axis; y2_def needs to be supplied}
 
 \item{optional}{character to place position of legend; options are 'topleft', 'center', 'topright', 'left', 'center', 'right', 'bottomleft', 'bottom', 'bottomright'}
-
-\item{h}{optional integer to specify vertical date line, e.g. v='31/12/2012'}
 }
 \value{
 plots R base plot
