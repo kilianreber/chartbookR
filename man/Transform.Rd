@@ -34,13 +34,14 @@ returns a zoo object with original and transformed data
 Adds new columns to zoo object with transformed data; applies for all columns in 'data'
 }
 \examples{
-df <- Transform(data=df, chg="YoY")
-df <- Transform(data=df, chg="MoM", chg_type="delta")
-df <- Transform(data=df, start="31/10/2010", pma=12)
-df <- Transform(data=df, pma=3)
-
-
-df <- getFRED(tickers=c("CPIAUCSL", "PCEPILFE"), names=c("CPI", "Core PCE"), start='2000-01-01')
-df <- getFRED(tickers=c("CPIAUCSL", "PCEPILFE"), names=c("CPI", "Core PCE"), start='2000-01-01', end='2018-01-01')
-df <- getFRED(tickers=c("UNRATE", "PCEPILFE"), names=c("Unemployment Rate", "Core PCE"), time='3Y')
+zoo <- Transform(data=zoo, chg="YoY")
+zoo <- Transform(data=zoo, chg="MoM", chg_type="delta")
+zoo <- Transform(data=zoo, start="31/10/2010", pma=12)
+zoo <- Transform(data=zoo, pma=3)
+zoo <- Transform(data=zoo, pms=6)
+zoo <- Transform(data=zoo, lag=3)
+zoo <- Transform(data=zoo, lead=3)
+zoo <- Transform(data=zoo, rebase=TRUE)
+zoo <- Transform(data=zoo, Z=12)
+zoo <- Transform(data=zoo, Z=all)
 }

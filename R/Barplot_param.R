@@ -2,6 +2,13 @@
 
 library(stringr)
 
+library(zoo)
+data1 <- df
+stacked <- TRUE
+dt_format <- c("3 years", "%Y")
+type <- "B"
+inception <- FALSE
+
 Barplot_param <- function(inception, data1, stacked, dt_format, type){
 
 #Prepare variables & set defaults
@@ -48,7 +55,7 @@ if (type=="B") {bp_param <- data.frame(at_tick, labels)}
 
 ### Cut inception if distance too big and no user override
 if (type=="L") {if (dt_format[2]=="%Y" & (as.numeric(bp_param[2,] - bp_param[1,])/365/interval) < 0.75 & inception!=TRUE) {bp_param <- as.data.frame(bp_param[-1,])}}
-if (type=="B") {if (dt_format[2]=="%Y" & ((as.numeric(as.character(bp_param[2,2])) - as.numeric(as.character(bp_param[1,2])))/interval) < 0.75 & inception!=TRUE) {bp_param <- as.data.frame(bp_param[-1,])}}
+if (type=="B") {if (dt_format[2]=="%Y" & (((bp_param[2,1] - bp_param[1,1]) /  (bp_param[3,1] - bp_param[2,1])) < 0.75)  & inception!=TRUE)  {bp_param <- as.data.frame(bp_param[-1,])}}
 
 return(bp_param)
 

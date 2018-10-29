@@ -54,3 +54,12 @@ plots R base plot
 \description{
 Create custom bar(s)/line(s) plot based on user inputs
 }
+\examples{
+
+BarChart(data=zoo, d1=1:3, leg="topleft", fn="This is a footnote.", stacked=TRUE, space=0)
+BarChart(data=zoo, d1=1:3, leg="topleft", fn="This is a footnote.", stacked=FALSE, space=c(0.5, 1))
+BarChart(data=zoo, title="Example Chart", no="1.1", d1=1:3, y1="Index", leg="topleft", dt_format=c("5 years", "\%Y"), v="01/01/2018")
+BarChart(data=zoo, title="Example Chart", d1=1:3, y1="Index", leg="topleft", grid=TRUE, h=0)
+BarChart(data=zoo, title="Example Chart", d1=4:5, d2=6, y1="in \%", y2="in USD mln", rec=TRUE)
+BarChart(data=zoo, title="Example Chart", d1=1, d2=2, y1="Unemployment (\%)", y2="Budget Balance (\%GDP)", y1_def=c(0, 10, 2), y2_def=c(-10,2,2), y2_rev=TRUE, leg="top", rec=TRUE)
+}

@@ -26,9 +26,9 @@ returns a zoo object with the downloaded FRED data
 Returns FRED data as zoo object; it relies on the quantmod::getSymbols function but simplifies download and output
 }
 \examples{
-df <- getFRED(tickers='CPIAUCSL', time='CPI')
-df <- getFRED(tickers='CPIAUCSL', names='CPI', time='30Y', na=FALSE)
-df <- getFRED(tickers=c("CPIAUCSL", "PCEPILFE"), names=c("CPI", "Core PCE"), start='2000-01-01')
-df <- getFRED(tickers=c("CPIAUCSL", "PCEPILFE"), names=c("CPI", "Core PCE"), start='2000-01-01', end='2018-01-01')
-df <- getFRED(tickers=c("UNRATE", "PCEPILFE"), names=c("Unemployment Rate", "Core PCE"), time='3Y')
+zoo <- getFRED(tickers='CPIAUCSL', time='CPI')
+zoo <- getFRED(tickers='CPIAUCSL', names='CPI', time='30Y', na=FALSE)
+zoo <- getFRED(tickers=c("CPIAUCSL", "PCEPILFE"), names=c("CPI", "Core PCE"), start='2000-01-01')
+zoo <- getFRED(tickers=c("CPIAUCSL", "PCEPILFE"), names=c("CPI", "Core PCE"), start='2000-01-01', end='2018-01-01')
+zoo <- getFRED(tickers=c("UNRATE", "PCEPILFE"), names=c("Unemployment Rate", "Core PCE"), time='3Y')
 }

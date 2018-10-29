@@ -10,7 +10,7 @@ LineChart(data, inception, title, no, d1, d2, y1, y2, y1_def, y2_def,
 \arguments{
 \item{data}{specification of zoo dataset to use for plot}
 
-\item{inception}{optional boolean to show inception date when set to 'TRUE'; default is 'FALSE'}
+\item{inception}{optional boolean to show clipped inception date when set to 'TRUE'; default is 'FALSE'}
 
 \item{title}{optional character to add chart title}
 
@@ -49,4 +49,12 @@ plots R base plot
 }
 \description{
 Create custom line(s) plot based on user inputs
+}
+\examples{
+
+LineChart(data=zoo, d1=1:3, leg="topleft", fn="This is a footnote.")
+LineChart(data=zoo, title="Example Chart", no="1.1", d1=1:3, y1="Index", leg="topleft", dt_format=c("5 years", "\%Y"), v="01/01/2018")
+LineChart(data=zoo, title="Example Chart", d1=1:3, y1="Index", leg="topleft", grid=TRUE, h=0)
+LineChart(data=zoo, title="Example Chart", d1=4:5, d2=6, y1="in \%", y2="in USD mln", rec=TRUE)
+LineChart(data=zoo, title="Example Chart", d1=1, d2=2, y1="Unemployment (\%)", y2="Budget Balance (\%GDP)", y1_def=c(0, 10, 2), y2_def=c(-10,2,2), y2_rev=TRUE, leg="top", rec=TRUE)
 }

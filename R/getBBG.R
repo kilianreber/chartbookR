@@ -23,11 +23,11 @@
 #' @export
 #' 
 #' @examples
-#' df <- getBBG(tickers='VIX Index', time='YTD')
-#' df <- getBBG(tickers='VIX Index', names='VIX', freq='D', time='30Y', na=FALSE)
-#' df <- getBBG(tickers=c('CPI YOY Index', 'PPI YOY Index'), names=c('CPI', 'PPI'), start='2000-01-01')
-#' df <- getBBG(tickers=c('CPI YOY Index', 'PPI YOY Index'), names=c('CPI', 'PPI'), start='2000-01-01', end='2018-01-01')
-#' df <- getBBG(tickers=c('NAPMPMI', 'MPMIEZMA', 'MPMIEMMA'), names=c('United States (ISM)', 'Eurozone', 'Emerging Markets'), time='3Y')
+#' zoo <- getBBG(tickers='VIX Index', time='YTD')
+#' zoo <- getBBG(tickers='VIX Index', names='VIX', freq='D', time='30Y', na=FALSE)
+#' zoo <- getBBG(tickers=c('CPI YOY Index', 'PPI YOY Index'), names=c('CPI', 'PPI'), start='2000-01-01')
+#' zoo <- getBBG(tickers=c('CPI YOY Index', 'PPI YOY Index'), names=c('CPI', 'PPI'), start='2000-01-01', end='2018-01-01')
+#' zoo <- getBBG(tickers=c('NAPMPMI', 'MPMIEZMA', 'MPMIEMMA'), names=c('United States (ISM)', 'Eurozone', 'Emerging Markets'), time='3Y')
 
 getBBG <- function(tickers, field, names, start, end, time, freq, na){
 
