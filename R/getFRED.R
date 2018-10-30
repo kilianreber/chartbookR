@@ -12,8 +12,8 @@
 #' 
 #' @param tickers character vector of FRED ticker(s)
 #' @param names optional character vector of column name(s) for zoo object; default uses 'tickers' vector
-#' @param start optional start date for data download; default is Sys.Date() - 3*365
-#' @param end optional end date for data download; default is Sys.Date() -1
+#' @param start optional start date for data download; format is 'dd/mm/yyyy'; default is Sys.Date() - 3*365
+#' @param end optional end date for data download; format is 'dd/mm/yyyy'; default is Sys.Date() -1
 #' @param time optional string to specify start date; options are 'D' (Days), 'W' (Weeks), 'M' (Months), 'Q' (Quarters), 'Y' (Years), or 'YTD' (Year-to-Date), e.g. '3M', '4Q', '5Y', 'YTD'; default is none
 #' @param na optional boolean to replace NAs with the last observation if set to FALSE; default is TRUE
 #' 
@@ -22,16 +22,16 @@
 #' @export
 #' 
 #' @examples
-#' zoo <- getFRED(tickers='CPIAUCSL', time='CPI')
-#' zoo <- getFRED(tickers='CPIAUCSL', names='CPI', time='30Y', na=FALSE)
-#' zoo <- getFRED(tickers=c("CPIAUCSL", "PCEPILFE"), names=c("CPI", "Core PCE"), start='2000-01-01')
-#' zoo <- getFRED(tickers=c("CPIAUCSL", "PCEPILFE"), names=c("CPI", "Core PCE"), start='2000-01-01', end='2018-01-01')
-#' zoo <- getFRED(tickers=c("UNRATE", "PCEPILFE"), names=c("Unemployment Rate", "Core PCE"), time='3Y')
+#' zoo <- getFRED(tickers=c('UNRATE', 'NROU'), names=c('US Unemployment', 'Natural Unemployment'))
+#' zoo <- getFRED(tickers=c('UNRATE', 'NROU'), names=c('US Unemployment', 'Natural Unemployment'), time='15Y', na=FALSE)
+#' zoo <- getFRED(tickers=c("T10YIE", "T5YIE"), names=c("10Y Breakeven", "5Y Breakeven"), start='01/01/2015')
+#' zoo <- getFRED(tickers=c("CPIAUCSL", "PCEPILFE"), names=c("CPI", "Core PCE"), start='2000-01-01', end='01/01/2018')
 
 getFRED <- function(tickers, names, start, end, time, na){
 
   #Turn off warnings
   options(warn=-1)
+  suppressPackageStartupMessages(library(quantmod))
   
   #Calculate last day of previous year
   last_day_prev_year <- function(x) floor_date(x, "year") - days(1)

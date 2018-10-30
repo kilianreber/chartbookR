@@ -9,7 +9,7 @@ Transform(data, start, chg, chg_type, pma, pms, lag, lead, rebase, Z)
 \arguments{
 \item{data}{specification of zoo object}
 
-\item{start}{optional start date to trim 'data'}
+\item{start}{optional start date to trim 'data'; format is 'dd/mm/yyyy'}
 
 \item{chg}{optional string to calculate periodical changes; options are 'YoY' (Year-on-Year), 'QoQ' (Quarter-on-Quarter), 'MoM' (Month-on-Month), 'WoW' (Week-on-Week), 'DoD' (Day-on-Day)}
 
@@ -36,7 +36,7 @@ Adds new columns to zoo object with transformed data; applies for all columns in
 \examples{
 zoo <- Transform(data=zoo, chg="YoY")
 zoo <- Transform(data=zoo, chg="MoM", chg_type="delta")
-zoo <- Transform(data=zoo, start="31/10/2010", pma=12)
+zoo <- Transform(data=zoo, start="01/01/2010", pma=12)
 zoo <- Transform(data=zoo, pma=3)
 zoo <- Transform(data=zoo, pms=6)
 zoo <- Transform(data=zoo, lag=3)

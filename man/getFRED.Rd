@@ -11,9 +11,9 @@ getFRED(tickers, names, start, end, time, na)
 
 \item{names}{optional character vector of column name(s) for zoo object; default uses 'tickers' vector}
 
-\item{start}{optional start date for data download; default is Sys.Date() - 3*365}
+\item{start}{optional start date for data download; format is 'dd/mm/yyyy'; default is Sys.Date() - 3*365}
 
-\item{end}{optional end date for data download; default is Sys.Date() -1}
+\item{end}{optional end date for data download; format is 'dd/mm/yyyy'; default is Sys.Date() -1}
 
 \item{time}{optional string to specify start date; options are 'D' (Days), 'W' (Weeks), 'M' (Months), 'Q' (Quarters), 'Y' (Years), or 'YTD' (Year-to-Date), e.g. '3M', '4Q', '5Y', 'YTD'; default is none}
 
@@ -26,9 +26,8 @@ returns a zoo object with the downloaded FRED data
 Returns FRED data as zoo object; it relies on the quantmod::getSymbols function but simplifies download and output
 }
 \examples{
-zoo <- getFRED(tickers='CPIAUCSL', time='CPI')
-zoo <- getFRED(tickers='CPIAUCSL', names='CPI', time='30Y', na=FALSE)
-zoo <- getFRED(tickers=c("CPIAUCSL", "PCEPILFE"), names=c("CPI", "Core PCE"), start='2000-01-01')
-zoo <- getFRED(tickers=c("CPIAUCSL", "PCEPILFE"), names=c("CPI", "Core PCE"), start='2000-01-01', end='2018-01-01')
-zoo <- getFRED(tickers=c("UNRATE", "PCEPILFE"), names=c("Unemployment Rate", "Core PCE"), time='3Y')
+zoo <- getFRED(tickers=c('UNRATE', 'NROU'), names=c('US Unemployment', 'Natural Unemployment'))
+zoo <- getFRED(tickers=c('UNRATE', 'NROU'), names=c('US Unemployment', 'Natural Unemployment'), time='15Y', na=FALSE)
+zoo <- getFRED(tickers=c("T10YIE", "T5YIE"), names=c("10Y Breakeven", "5Y Breakeven"), start='01/01/2015')
+zoo <- getFRED(tickers=c("CPIAUCSL", "PCEPILFE"), names=c("CPI", "Core PCE"), start='2000-01-01', end='01/01/2018')
 }
