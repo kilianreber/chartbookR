@@ -63,6 +63,11 @@ MovPer <- substring(periodicity(data)$scale, 1, 1)
 if (start!="01/01/1666") {start <- as.Date(start, "%d/%m/%Y")}
 delta <- intToUtf8(916)
 
+#Fix data if only one column
+if(is.null(nrow(data))) {one_row_fix <- "YES"} else {one_row_fix <- "NO"}
+if(one_row_fix=="YES") {data <- cbind(data, data)}
+if(one_row_fix=="YES") {colnames(data) <- c("Series", "Series2")}
+
 #Apply lags
 if (lag!="none") {lag <- lag*-1}
 if (lag!="none") {temp <- stats::lag(data, lag, na.pad = TRUE)
@@ -126,6 +131,8 @@ if(chg!="none") {
     #Rename & merge with original
     colnames(temp) <- paste(colnames(temp), ", ", chg, " %", sep = "")
     data <- cbind(data, temp)
+    if (one_row_fix=="YES") {data <- data[,c(-2, -4)]}
+    
   }
   if (chg!="Overall" & chg_type == "delta") {
     if (periodicity == "monthly") {
@@ -179,6 +186,7 @@ if(chg!="none") {
     #Rename & merge with original
     colnames(temp) <- paste(colnames(temp), ", ", chg, " ", delta, sep = "")
     data <- cbind(data, temp)
+    if (one_row_fix=="YES") {data <- data[,c(-2, -4)]}
   }
 
 }
@@ -188,6 +196,7 @@ if(chg=="Overall" & chg_type=="delta") {
   temp <- sweep(data, MARGIN=2, STATS=coredata(data[1]))
   colnames(temp) <- paste(colnames(temp), ", ", delta, " Chg", sep = "")
   data <- cbind(data, temp)
+  if (one_row_fix=="YES") {data <- data[,c(-2, -4)]}
   }
 
 # Apply OVerall percent transformation
@@ -195,6 +204,7 @@ if(chg=="Overall" & chg_type=="perc") {
   temp <- 100*(sweep(data, MARGIN=2, FUN="/", STATS=coredata(data[1]))-1)
   colnames(temp) <- paste(colnames(temp), ", % Chg", sep = "")
   data <- cbind(data, temp)
+  if (one_row_fix=="YES") {data <- data[,c(-2, -4)]}
 }
 
 #Apply period-moving-averages
@@ -202,6 +212,7 @@ if (pma!="none"){
   temp <- rollapply(data, pma, mean, align='right')
   colnames(temp) <- paste(colnames(temp), ", ", pma, MovPer, "ma", sep="")
   data <- cbind(data, temp)
+  if (one_row_fix=="YES") {data <- data[,c(-2, -4)]}
 }
 
 #Apply period-moving-sums
@@ -209,6 +220,7 @@ if (pms!="none"){
   temp <- rollapply(data, pms, sum, align='right')
   colnames(temp) <- paste(colnames(temp), ", ", pms, MovPer, "ms", sep="")
   data <- cbind(data, temp)
+  if (one_row_fix=="YES") {data <- data[,c(-2, -4)]}
 }
 
 #Subset data according to start date provided
@@ -222,6 +234,7 @@ if (rebase==TRUE) {
   temp <- as.zoo(temp, order.by = index(data))
   colnames(temp) <- paste(colnames(temp), ", rebased", sep="")
   data <- cbind(data, temp)
+  if (one_row_fix=="YES") {data <- data[,c(-2, -4)]}
   }
 
 #Apply Z-Scores
@@ -230,12 +243,16 @@ if (Z!="none" & Z!="all") {
   sd <- roll_sd(data, Z)
   temp <- (data - mean)/sd
   colnames(temp) <- paste(colnames(temp), ", ", Z, MovPer, "-Z", sep="")
-  data <- cbind(data, temp) }
+  data <- cbind(data, temp)
+  if (one_row_fix=="YES") {data <- data[,c(-2, -4)]}
+  }
 
 if (Z=="all") {
   temp <- scale(data)
   colnames(temp) <- paste(colnames(temp), ", ", "Z-Scr", sep="")
-  data <- cbind(data, temp) }
+  data <- cbind(data, temp) 
+  if (one_row_fix=="YES") {data <- data[,c(-2, -4)]}
+  }
 
 return(data)
 
