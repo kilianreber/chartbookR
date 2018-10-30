@@ -51,7 +51,7 @@ LineChart(title="US Unemployment", data=zoo, y1='in percent', rec=TRUE)
 zoo <- getBBG(tickers=c("EHUPUS", "EHUPEU", "EHUPGB", "EHUPJP Index"), names=c("United States", "Eurozone", "United Kingdom", "Japan"), freq="QUARTERLY", time="30Y")
 LineChart(title="Global Unemployment Rates", data=zoo, d1=1:4, y1="in \%", y1_def=c(2,15,2), grid=TRUE, rec=TRUE)
 
-#US Budget Balance vs. UE Rate (requires Bloomberg)
+#US Budget Balance vs. Unemployment Rate (requires Bloomberg)
 zoo <- getBBG(tickers=c("EHUPUS", "EHBBUS"), na=FALSE, names=c("Unemployment", "Budget Balance"), start=as.Date("1969-01-01"))
 LineChart(title="US Budget Balance vs. Unemployment Rate", data=zoo, d1=1, d2=2, y1="Unemployment (\%)", y2="Budget Balance (\%GDP)", y2_def=c(-10,2,2), y2_rev=TRUE, leg="top", rec=TRUE)
 
