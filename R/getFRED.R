@@ -25,7 +25,7 @@
 #' zoo <- getFRED(tickers=c('UNRATE', 'NROU'), names=c('US Unemployment', 'Natural Unemployment'))
 #' zoo <- getFRED(tickers=c('UNRATE', 'NROU'), names=c('US Unemployment', 'Natural Unemployment'), time='15Y', na=FALSE)
 #' zoo <- getFRED(tickers=c("T10YIE", "T5YIE"), names=c("10Y Breakeven", "5Y Breakeven"), start='01/01/2015')
-#' zoo <- getFRED(tickers=c("CPIAUCSL", "PCEPILFE"), names=c("CPI", "Core PCE"), start='2000-01-01', end='01/01/2018')
+#' zoo <- getFRED(tickers=c("CPIAUCSL", "PCEPILFE"), names=c("CPI", "Core PCE"), start='01/01/2000', end='01/01/2018')
 
 getFRED <- function(tickers, names, start, end, time, na){
 

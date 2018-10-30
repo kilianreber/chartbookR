@@ -13,7 +13,7 @@
 #' @param field optional character vector of Bloomberg field(s); default is 'PX_LAST'
 #' @param names optional character vector of column name(s) for zoo object; default uses 'tickers' vector
 #' @param start optional start date for data download; format is 'dd/mm/yyyy'; default is Sys.Date() - 3*365
-#' @param end optional end date for data download; default is Sys.Date() -1
+#' @param end optional end date for data download; format is 'dd/mm/yyyy'; default is Sys.Date() -1
 #' @param freq optional frequency for data download; options are 'DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'YEARLY'; default is 'MONTHLY'
 #' @param time optional string to specify start date; options are 'D' (Days), 'W' (Weeks), 'M' (Months), 'Q' (Quarters), 'Y' (Years), or 'YTD' (Year-to-Date), e.g. '3M', '4Q', '5Y', 'YTD'; default is none
 #' @param na optional boolean to replace NAs with the last observation if set to FALSE; default is TRUE
@@ -24,7 +24,7 @@
 #' 
 #' @examples
 #' zoo <- getBBG(tickers='VIX Index', time='YTD')
-#' zoo <- getBBG(tickers='VIX Index', names='VIX', freq='D', time='30Y', na=FALSE)
+#' zoo <- getBBG(tickers='VIX Index', names='VIX', freq='DAILY', time='30Y', na=FALSE)
 #' zoo <- getBBG(tickers=c('CPI YOY Index', 'PPI YOY Index'), names=c('CPI', 'PPI'), start='01/01/2000')
 #' zoo <- getBBG(tickers=c('CPI YOY Index', 'PPI YOY Index'), names=c('CPI', 'PPI'), start='01/01/2000', end='01/01/2018')
 #' zoo <- getBBG(tickers=c('NAPMPMI', 'MPMIEZMA', 'MPMIEMMA'), names=c('United States (ISM)', 'Eurozone', 'Emerging Markets'), time='3Y')
@@ -63,7 +63,7 @@ getBBG <- function(tickers, field, names, start, end, time, freq, na){
   if(missing(na))            {na             <- TRUE                      }
 
   start <- as.Date(start, "%d/%m/%Y")
-  end   <- as.Date(end)
+  end   <- as.Date(end, "%d/%m/%Y")
                               
   # Complete tickers list
   for (i in 1:length(tickers))

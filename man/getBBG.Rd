@@ -15,7 +15,7 @@ getBBG(tickers, field, names, start, end, time, freq, na)
 
 \item{start}{optional start date for data download; format is 'dd/mm/yyyy'; default is Sys.Date() - 3*365}
 
-\item{end}{optional end date for data download; default is Sys.Date() -1}
+\item{end}{optional end date for data download; format is 'dd/mm/yyyy'; default is Sys.Date() -1}
 
 \item{time}{optional string to specify start date; options are 'D' (Days), 'W' (Weeks), 'M' (Months), 'Q' (Quarters), 'Y' (Years), or 'YTD' (Year-to-Date), e.g. '3M', '4Q', '5Y', 'YTD'; default is none}
 
@@ -31,7 +31,7 @@ Returns Bloomberg data as zoo object; it relies on Rblpapi package but simplifie
 }
 \examples{
 zoo <- getBBG(tickers='VIX Index', time='YTD')
-zoo <- getBBG(tickers='VIX Index', names='VIX', freq='D', time='30Y', na=FALSE)
+zoo <- getBBG(tickers='VIX Index', names='VIX', freq='DAILY', time='30Y', na=FALSE)
 zoo <- getBBG(tickers=c('CPI YOY Index', 'PPI YOY Index'), names=c('CPI', 'PPI'), start='01/01/2000')
 zoo <- getBBG(tickers=c('CPI YOY Index', 'PPI YOY Index'), names=c('CPI', 'PPI'), start='01/01/2000', end='01/01/2018')
 zoo <- getBBG(tickers=c('NAPMPMI', 'MPMIEZMA', 'MPMIEMMA'), names=c('United States (ISM)', 'Eurozone', 'Emerging Markets'), time='3Y')
