@@ -140,8 +140,8 @@ if (index(data1)[1] > as.Date(tail(nber$Rec_End, 1))) {rec <- FALSE}
 if (no!="") {title <- paste("Fig. ", no, ": ", title, sep="")}
 
 #Set color Palette (only if currently standard)
-if (palette()==c("#428BCE", "gray35", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667")) {palette(c("#4663AC", "#97A4CC", "#CEBC9A", "#gray35", "#BF7057", "#ADAFB2", "#E7C667"))}
-if (palette()==c("black", "red", "green3", "blue", "cyan", "magenta")) {palette(c("#4663AC", "#97A4CC", "#CEBC9A", "#gray35", "#BF7057", "#ADAFB2", "#E7C667"))}
+if (palette()==c("#428BCE", "gray35", "#CEBC9A", "#BF7057", "#ADAFB2", "#E7C667")) {palette(c("#4663AC", "#97A4CC", "#CEBC9A", "gray35", "#BF7057", "#ADAFB2", "#E7C667"))}
+if (palette()==c("black", "red", "green3", "blue", "cyan", "magenta")) {palette(c("#4663AC", "#97A4CC", "#CEBC9A", "gray35", "#BF7057", "#ADAFB2", "#E7C667"))}
 
 #Create labels and tick vectors
 bp_param <- Barplot_param(inception=inception, data=data1, stacked=TRUE, dt_format=dt_format, type="L")
