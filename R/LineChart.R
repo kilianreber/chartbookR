@@ -61,6 +61,7 @@ if (missing(grid))        {grid    <-  FALSE      }
 if (missing(rec))         {rec     <-  FALSE      }
 if (missing(leg))         {leg     <- "topleft"   }
 if (missing(h))           {h       <- "none"      }
+h2 <- h
 if (missing(v))           {v       <- "none"      }
 if (missing(y2_rev))      {y2_rev  <- FALSE       }
 if (y2_def!="none")       {ylim_input=c(y2_def[1], y2_def[2])}
@@ -101,7 +102,8 @@ if(d2!="none")  {d3 <- c(d1, d2)} else {d3 <- d1}
 if(d2!="none")  {data3 <- data[,d3]} else {data3 <- data1}
 
 if (!missing(dt_format)){
-#Override unforunate dt_format inputs by user
+
+#Override unfortunate dt_format inputs by user
 dt_format[1] <- gsub("y", "Y", dt_format[1])
 dt_format[1] <- gsub("m", "M", dt_format[1])
 years     <- gsub("Y.*","\\1",dt_format[1])
@@ -186,7 +188,7 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
     abline(h=seq, lty=1, lwd=1, col="grey")}}
 
   # Add ablines
-  if(h!="none") {abline(h=h, lty=1, lwd=1, col="black")}
+  if(h2!="none") {abline(h=h2, lty=1, lwd=1, col="black")}
   if(v!="none") {abline(v=as.Date(v, "%d/%m/%Y"), lty=1, lwd=1)}
   
 } else {plot(data1, plot.type="s", ann=FALSE, bty="n", xaxt="n", tck=0, las=1, las=1, lwd=3, col=1:length(d1), border=0.1, space=0); title(main=title, ylab=y1)
@@ -228,7 +230,7 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
     }}
 
   # Add ablines
-  if(h!="none") {abline(h=h, lty=1, lwd=1, col="black")}
+  if(h2!="none") {abline(h=h2, lty=1, lwd=1, col="black")}
   if(v!="none") {abline(v=as.Date(v, "%d/%m/%Y"), lty=1, lwd=1)}
   
   }
