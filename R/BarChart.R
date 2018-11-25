@@ -229,17 +229,6 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     
     axis(side=1, at=bp[as.integer(bp_param[,1])], labels=as.character(bp_param[,2]), las=1, tck=0)
 
-    #Add horizontal abline
-    if(h!="none") {abline(h=h, lty=1, lwd=1, col="black")}
-  
-    #Add vertical abline
-    if(v!="none") {
-    v <- as.Date(v, "%d/%m/%Y")
-    v_tick <- match.closest(v, index(data1))
-    if (stacked==FALSE) {v_tick <- (v_tick*((length((d1))*bars_width)+((length(d1)-1)*space[1])+space[2]))+(0.5*space[2])}
-    if (stacked==TRUE)  {v_tick <- (v_tick*bars_width)*(1+space)+0.5*space}
-    abline(v=v_tick, lty=1, lwd=2, col="black")}
-
     #ADD RECESSION SHADING
     if (rec!=FALSE){
       if (length_d1 >1) {data_rec <- data1} else {data_rec <- cbind(data1,data1)}
@@ -291,7 +280,18 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     else {seq <- seq(y1_def[1], y1_def[2], y1_def[3])
     abline(h=seq, lty=1, lwd=1, col="grey")
     }}
-}
+  }
+
+#Add horizontal abline
+if(h!="none") {abline(h=h, lty=1, lwd=1, col="black")}
+
+#Add vertical abline
+if(v!="none") {
+  v <- as.Date(v, "%d/%m/%Y")
+  v_tick <- match.closest(v, index(data1))
+  if (stacked==FALSE) {v_tick <- (v_tick*((length((d1))*bars_width)+((length(d1)-1)*space[1])+space[2]))+(0.5*space[2])}
+  if (stacked==TRUE)  {v_tick <- (v_tick*bars_width)*(1+space)+0.5*space}
+  abline(v=v_tick, lty=1, lwd=2, col="black")}
 
 #Create second y-axis, and content (if available)
 if (d2!="none") {par(new = T)

@@ -193,10 +193,6 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
   
   axis(side=1, at=bp_param[,1], labels=format(bp_param[,1], dt_format[2]), las=1, tck=0)
   
-    # Add ablines
-    if(h!="none") {abline(h=h, lty=1, lwd=1, col="black")}
-    if(v!="none") {abline(v=as.Date(v, "%d/%m/%Y"), lty=1, lwd=1)}
-
     #ADD RECESSION SHADING
     if (rec!=FALSE){
 
@@ -231,6 +227,10 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
     abline(h=seq, lty=1, lwd=1, col="grey")
     }}
 }
+
+# Add ablines
+if(h!="none") {abline(h=h, lty=1, lwd=1, col="black")}
+if(v!="none") {abline(v=as.Date(v, "%d/%m/%Y"), lty=1, lwd=1)}
 
 #Create second y-axis, and content (if available)
 if (d2!="none") {par(new = T)
