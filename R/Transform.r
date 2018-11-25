@@ -62,6 +62,7 @@ periodicity <- periodicity(data)$scale
 MovPer <- substring(periodicity(data)$scale, 1, 1)
 if (start!="01/01/1666") {start <- as.Date(start, "%d/%m/%Y")}
 delta <- intToUtf8(916)
+if (chg!="none" & chg!="Overall") {chg <- gsub("O", "o", chg)}
 
 #Fix data if only one column
 if(is.null(nrow(data))) {one_row_fix <- "YES"} else {one_row_fix <- "NO"}

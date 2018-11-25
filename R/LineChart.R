@@ -20,7 +20,7 @@
 #' @param y2 optional character to specify description of secondary y-axis
 #' @param y1_def optional number vector to specify start, end, and intervals of primary y-axis, e.g. c(0, 10, 2)
 #' @param y2_def optional number vector to specify start, end, and intervals of secondary y-axis, e.g. c(0, 10, 2)
-#' @param y1_rev optional boolean to invert secondary y-axis; y2_def needs to be supplied
+#' @param y2_rev optional boolean to invert secondary y-axis; y2_def needs to be supplied
 #' @param fn optional character to add footnote to plot
 #' @param optional character to place position of legend; options are 'topleft', 'center', 'topright', 'left', 'center', 'right', 'bottomleft', 'bottom', 'bottomright'
 #' @param grid optional boolean to show grid when set to TRUE

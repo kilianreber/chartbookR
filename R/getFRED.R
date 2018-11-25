@@ -9,6 +9,8 @@
 #' @import lubridate
 #' @import quantmod
 #' @import bsts
+#' @import scales
+#' @import xts
 #' 
 #' @param tickers character vector of FRED ticker(s)
 #' @param names optional character vector of column name(s) for zoo object; default uses 'tickers' vector
@@ -31,7 +33,7 @@ getFRED <- function(tickers, names, start, end, time, na){
 
   #Turn off warnings
   options(warn=-1)
-  suppressPackageStartupMessages(library(quantmod))
+  options("getSymbols.warning4.0"=FALSE)
   
   #Calculate last day of previous year
   last_day_prev_year <- function(x) floor_date(x, "year") - days(1)
@@ -73,6 +75,12 @@ getFRED <- function(tickers, names, start, end, time, na){
   #Adjust column headers
   colnames(df) <- names
 
+  #Change index from beginning-of to end-of dates
+  periodicity <- periodicity(df)$scale
+  if (periodicity == "yearly"   )  {index(df) <- index(df) -1}
+  if (periodicity == "quarterly")  {index(df) <- as.Date(as.yearqtr(index(df), format="%Y-%m-%d"), frac = 1)}
+  if (periodicity == "monthly"  )  {index(df) <- as.Date(as.yearmon(index(df), format="%Y-%m-%d"), frac = 1)}
+  
   #Subset data according to start and end dates provided
   if (start!="01/01/1666") {df <- subset(df, index(df)>=start)}
   if (end!="01/01/1666")   {df <- subset(df, index(df)<=end)  }
