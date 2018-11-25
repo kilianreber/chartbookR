@@ -154,10 +154,6 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
   axis(2, seq(y1_def[1], y1_def[2], y1_def[3]), las=1, tck=-0)
   title(sub=fn, font.sub=3, line = 3)
 
-    # Add ablines
-    if(h!="none") {abline(h=h, lty=1, lwd=1, col="black")}
-    if(v!="none") {abline(v=as.Date(v, "%d/%m/%Y"), lty=1, lwd=1)}
-
     #Prepare recession shading
     if (rec!=FALSE){
 
@@ -189,6 +185,10 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
     else {seq <- seq(y1_def[1], y1_def[2], y1_def[3])
     abline(h=seq, lty=1, lwd=1, col="grey")}}
 
+  # Add ablines
+  if(h!="none") {abline(h=h, lty=1, lwd=1, col="black")}
+  if(v!="none") {abline(v=as.Date(v, "%d/%m/%Y"), lty=1, lwd=1)}
+  
 } else {plot(data1, plot.type="s", ann=FALSE, bty="n", xaxt="n", tck=0, las=1, las=1, lwd=3, col=1:length(d1), border=0.1, space=0); title(main=title, ylab=y1)
   
   axis(side=1, at=bp_param[,1], labels=format(bp_param[,1], dt_format[2]), las=1, tck=0)
@@ -226,11 +226,12 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
     else {seq <- seq(y1_def[1], y1_def[2], y1_def[3])
     abline(h=seq, lty=1, lwd=1, col="grey")
     }}
-}
 
-# Add ablines
-if(h!="none") {abline(h=h, lty=1, lwd=1, col="black")}
-if(v!="none") {abline(v=as.Date(v, "%d/%m/%Y"), lty=1, lwd=1)}
+  # Add ablines
+  if(h!="none") {abline(h=h, lty=1, lwd=1, col="black")}
+  if(v!="none") {abline(v=as.Date(v, "%d/%m/%Y"), lty=1, lwd=1)}
+  
+  }
 
 #Create second y-axis, and content (if available)
 if (d2!="none") {par(new = T)
