@@ -152,7 +152,7 @@ par(mar = c(5,5,5,5))
 if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_def[1], y1_def[2]), xaxt="n", yaxt="n", tck=0, las=1, lwd=3, col=1:length(d1), border=0.1, space=0); title(main = title, ylab = y1)
   
   axis(side=1, at=bp_param[,1], labels=format(bp_param[,1], dt_format[2]), las=1, tck=0)
-  axis(2, seq(y1_def[1], y1_def[2], y1_def[3]), las=1, tck=-0)
+  axis(2, seq(y1_def[1], y1_def[2], y1_def[3]), las=1, tck=0)
   title(sub=fn, font.sub=3, line = 3)
 
     #Prepare recession shading
@@ -176,7 +176,7 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
     rec_start <- subset(rec_start, rec_start>=as.Date(rec_start_dt))
     items <- length(rec_start)
     rec_end <- rec_end[(length(rec_end)-items+1):length(rec_end)]
-
+    
     #Add recession shading
     rect(as.Date(rec_start), rect_min, as.Date(rec_end), rect_max, density=NULL, border=NA, lwd=0, col= rgb(0,0,0.1, alpha=0.15))
     }
@@ -238,9 +238,9 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
 if (d2!="none") {par(new = T)
 
   if (y2_def!="none") {plot(data2, plot.type="s", bty="n", ylim=ylim_input, col=(length(d1)+1):(length(d3)), axes=F, lwd=3, ann=FALSE)
-    axis(4, seq(y2_def[1], y2_def[2], y2_def[3]), las=1, lwd=0, tck=-0)
+    axis(4, seq(y2_def[1], y2_def[2], y2_def[3]), las=1, lwd=0, tck=0)
     } else {plot(data2, plot.type="s", bty="n", col=(length(d1)+1):(length(d3)), axes=F, lwd=3, las=1, ann=FALSE, tck=-0)
-    axis(4, las=1, lwd=0, tck=-0)}
+    axis(4, las=1, lwd=0, tck=0)}
     mtext(side = 4, line = 3, y2)
 
   legend(leg, box.lty=0, bg="#FFFFFF", legend=colnames(data3), pch=15, col=1:length(d3), ncol=1)

@@ -8,7 +8,7 @@
 #' @import devEMF
 #' @import officer
 #' 
-#' @param path required string to specify path for plot viewer temp file
+#' @param path optional string to specify path for plot viewer temp file; current working directory is default
 #' @param header optional character string to specify Powerpoint slide header
 #' @param source optional character string to specify Powerpoint slide source note
 #' @param source_dt optional character string to specify Powerpoint slide source date
@@ -34,15 +34,15 @@
 
 makePPT <- function(path, width, height, left, top, header, source, source_dt) {
 
-if (missing(path))       {path        <- ""  }
-if (missing(header))     {header      <- ""  }
-if (missing(source))     {source      <- ""  }
+if (missing(path))       {path        <- getwd()  }
+if (missing(header))     {header      <- ""       }
+if (missing(source))     {source      <- ""       }
 if (missing(source_dt))  {source_dt   <-  paste(format(Sys.Date(), "%d %b %Y")) }
-if (source=="")          {source_dt   <- ""}
-if (missing(width))      {width       <- 8   }
-if (missing(height))     {height      <- 6   }
-if (missing(left))       {left        <- 1   }
-if (missing(top))        {top         <- 1   }
+if (source=="")          {source_dt   <- ""       }
+if (missing(width))      {width       <- 8        }
+if (missing(height))     {height      <- 6        }
+if (missing(left))       {left        <- 1        }
+if (missing(top))        {top         <- 1        }
 
 #Save current plot as enhanced metafile
 emf_file <- paste(path, "temp.emf", sep="")
