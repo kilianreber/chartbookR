@@ -34,6 +34,9 @@ returns a zoo object with original and transformed data
 Adds new columns to zoo object with transformed data; applies for all columns in 'data'
 }
 \examples{
+
+Note that these examples require corresponding zoo objects to create plots
+
 zoo <- Transform(data=zoo, chg="YoY", chg_type='perc')
 zoo <- Transform(data=zoo, chg="MoM", chg_type="delta")
 zoo <- Transform(data=zoo, start="01/01/2010", pma=12)

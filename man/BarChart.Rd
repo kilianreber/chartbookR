@@ -32,7 +32,11 @@ BarChart(data, inception, title, no, stacked, space, d1, d2, y1, y2,
 
 \item{y2_def}{optional number vector to specify start, end, and intervals of secondary y-axis, e.g. c(0, 10, 2)}
 
+\item{y2_rev}{optional boolean to invert secondary y-axis; y2_def needs to be supplied}
+
 \item{fn}{optional character to add footnote to plot}
+
+\item{leg}{optional character to specify legend position; options are 'topleft', 'center', 'topright', 'left', 'center', 'right', 'bottomleft', 'bottom', 'bottomright'}
 
 \item{grid}{optional boolean to show grid when set to TRUE}
 
@@ -43,10 +47,6 @@ BarChart(data, inception, title, no, stacked, space, d1, d2, y1, y2,
 \item{h}{optional argument to specify horizontal line at specific height}
 
 \item{v}{optional date to specify vertical date line, e.g. v='31/12/2012'}
-
-\item{y1_rev}{optional boolean to invert secondary y-axis; y2_def needs to be supplied}
-
-\item{optional}{character to place position of legend; options are 'topleft', 'center', 'topright', 'left', 'center', 'right', 'bottomleft', 'bottom', 'bottomright'}
 }
 \value{
 plots R base plot
@@ -55,6 +55,8 @@ plots R base plot
 Create custom bar(s)/line(s) plot based on user inputs
 }
 \examples{
+
+Note that these examples require corresponding zoo objects to create plots
 
 BarChart(data=zoo, d1=1:3, leg="topleft", fn="This is a footnote.", stacked=TRUE, space=0)
 BarChart(data=zoo, d1=1:3, leg="topleft", fn="This is a footnote.", stacked=FALSE, space=c(0.5, 1))

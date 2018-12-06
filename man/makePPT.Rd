@@ -7,7 +7,7 @@
 makePPT(path, width, height, left, top, header, source, source_dt)
 }
 \arguments{
-\item{path}{required string to specify path for plot viewer temp file}
+\item{path}{optional string to specify path for plot viewer temp file; current working directory is default}
 
 \item{width}{optional integer to specify chart width}
 
