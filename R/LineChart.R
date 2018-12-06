@@ -36,6 +36,8 @@
 #' 
 #' @examples
 #' 
+#' Note that these examples require corresponding zoo objects to create plots
+#' 
 #' LineChart(data=zoo, d1=1:3, leg="topleft", fn="This is a footnote.")
 #' LineChart(data=zoo, title="Example Chart", no="1.1", d1=1:3, y1="Index", leg="topleft", dt_format=c("5 years", "%Y"), v="01/01/2018")
 #' LineChart(data=zoo, title="Example Chart", d1=1:3, y1="Index", leg="topleft", grid=TRUE, h=0)

@@ -28,6 +28,9 @@
 #' @export
 #' 
 #' @examples
+#' 
+#' Note that these examples require corresponding zoo objects to create plots
+#' 
 #' zoo <- Transform(data=zoo, chg="YoY", chg_type='perc')
 #' zoo <- Transform(data=zoo, chg="MoM", chg_type="delta")
 #' zoo <- Transform(data=zoo, start="01/01/2010", pma=12)

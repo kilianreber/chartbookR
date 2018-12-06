@@ -38,6 +38,8 @@
 #' 
 #' @examples
 #' 
+#' Note that these examples require corresponding zoo objects to create plots
+#' 
 #' BarChart(data=zoo, d1=1:3, leg="topleft", fn="This is a footnote.", stacked=TRUE, space=0)
 #' BarChart(data=zoo, d1=1:3, leg="topleft", fn="This is a footnote.", stacked=FALSE, space=c(0.5, 1))
 #' BarChart(data=zoo, title="Example Chart", no="1.1", d1=1:3, y1="Index", leg="topleft", dt_format=c("5 years", "%Y"), v="01/01/2018")
