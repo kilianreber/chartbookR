@@ -9,6 +9,7 @@
 #' @import quantmod
 #' @import stringr
 #' @import MALDIquant
+#' @import Boom
 #' 
 #' @param data specification of zoo dataset to use for plot
 #' @param inception optional boolean to show clipped inception date when set to 'TRUE'; default is 'FALSE'
@@ -22,7 +23,7 @@
 #' @param y2_def optional number vector to specify start, end, and intervals of secondary y-axis, e.g. c(0, 10, 2)
 #' @param y2_rev optional boolean to invert secondary y-axis; y2_def needs to be supplied
 #' @param fn optional character to add footnote to plot
-#' @param optional character to place position of legend; options are 'topleft', 'center', 'topright', 'left', 'center', 'right', 'bottomleft', 'bottom', 'bottomright'
+#' @param leg optional character to place position of legend; options are 'topleft', 'center', 'topright', 'left', 'center', 'right', 'bottomleft', 'bottom', 'bottomright'
 #' @param grid optional boolean to show grid when set to TRUE
 #' @param rec optional boolean to shade recessions when set to TRUE
 #' @param dt_format optional character vector to specify date interval and date format of x-axis, e..g dt_format=c('3 months', '\%b-\%Y')
