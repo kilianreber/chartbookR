@@ -23,6 +23,7 @@
 #' @param y2_def optional number vector to specify start, end, and intervals of secondary y-axis, e.g. c(0, 10, 2)
 #' @param y2_rev optional boolean to invert secondary y-axis; y2_def needs to be supplied
 #' @param fn optional character to add footnote to plot
+#' @param fn_adj optional integer to specify alignment of footnote (0: left-align, 1: right-align, NULL (default): center)
 #' @param leg optional character to specify legend position; options are 'topleft', 'center', 'topright', 'left', 'center', 'right', 'bottomleft', 'bottom', 'bottomright'
 #' @param grid optional boolean to show grid when set to TRUE
 #' @param rec optional boolean to shade recessions when set to TRUE
@@ -44,7 +45,7 @@
 #' LineChart(data=zoo, title="Example Chart", d1=4:5, d2=6, y1="in %", y2="in USD mln", rec=TRUE)
 #' LineChart(data=zoo, title="Example Chart", d1=1, d2=2, y1="Unemployment (%)", y2="Budget Balance (%GDP)", y1_def=c(0, 10, 2), y2_def=c(-10,2,2), y2_rev=TRUE, leg="top", rec=TRUE)
 
-LineChart <- function(data, inception, title, no, d1, d2, y1, y2, y1_def, y2_def, y2_rev, fn, leg, grid, rec, dt_format, h, v) {
+LineChart <- function(data, inception, title, no, d1, d2, y1, y2, y1_def, y2_def, y2_rev, fn, fn_adj, leg, grid, rec, dt_format, h, v) {
 
 #Turn off warnings
 options(warn=-1)
@@ -59,6 +60,7 @@ if (missing(y2_def))      {y2_def  <- "none"      }
 if (missing(y2))          {y2      <- ""          }
 if (missing(d2))          {d2      <- "none"      }
 if (missing(fn))          {fn      <-  ""         }
+if (missing(fn_adj))      {fn_adj  <-  NULL       }
 if (missing(no))          {no      <-  ""         }
 if (missing(grid))        {grid    <-  FALSE      }
 if (missing(rec))         {rec     <-  FALSE      }
@@ -156,7 +158,7 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
   
   axis(side=1, at=bp_param[,1], labels=format(bp_param[,1], dt_format[2]), las=1, tck=0)
   axis(2, seq(y1_def[1], y1_def[2], y1_def[3]), las=1, tck=0)
-  title(sub=fn, font.sub=3, line = 3)
+  title(sub=fn, font.sub=3, line = 3, adj=fn_adj)
 
     #Prepare recession shading
     if (rec!=FALSE){
@@ -171,7 +173,10 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
 
     if (mymax(data1) > 0) {rect_max <- mymax(data1)*2} else {rect_max <- mymax(data1)*0.5}
     if (mymin(data1) > 0) {rect_min <- mymin(data1)*0.5} else {rect_min <- mymin(data1)*2}
-
+    
+    if(y1_def!="none")    {rect_min <- (y1_def[1] - y1_def[3])}
+    if(y1_def!="none")    {rect_max <- (y1_def[2] + y1_def[3])}
+    
     rec_start_dt <- min(index(data1))
     rec_end_dt <- max(index(data1))
 
@@ -210,7 +215,10 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
 
     if (mymax(data1) > 0) {rect_max <- mymax(data1)*2} else {rect_max <- mymax(data1)*0.5}
     if (mymin(data1) > 0) {rect_min <- mymin(data1)*0.5} else {rect_min <- mymin(data1)*2}
-
+  
+    if(y1_def!="none")    {rect_min <- (y1_def[1] - y1_def[3])}
+    if(y1_def!="none")    {rect_max <- (y1_def[2] + y1_def[3])}
+    
     rec_start_dt <- min(index(data1))
     rec_end_dt <- max(index(data1))
 
@@ -223,7 +231,7 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
     rect(as.Date(rec_start), rect_min, as.Date(rec_end), rect_max, density=NULL, border=NA, lwd=0, col= rgb(0,0,0.1, alpha=0.15))
     }
 
-  title(sub=fn, font.sub=3, line = 3)
+  title(sub=fn, font.sub=3, line = 3, adj=fn_adj)
 
   if (grid!=FALSE) {
     if (y1_def=="none") {grid(NA, ny=NULL, lty=1, lwd=1, col="grey")}

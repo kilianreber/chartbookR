@@ -5,7 +5,7 @@
 \title{Create custom line(s) plot}
 \usage{
 LineChart(data, inception, title, no, d1, d2, y1, y2, y1_def, y2_def,
-  y2_rev, fn, leg, grid, rec, dt_format, h, v)
+  y2_rev, fn, fn_adj, leg, grid, rec, dt_format, h, v)
 }
 \arguments{
 \item{data}{specification of zoo dataset to use for plot}
@@ -31,6 +31,8 @@ LineChart(data, inception, title, no, d1, d2, y1, y2, y1_def, y2_def,
 \item{y2_rev}{optional boolean to invert secondary y-axis; y2_def needs to be supplied}
 
 \item{fn}{optional character to add footnote to plot}
+
+\item{fn_adj}{optional integer to specify alignment of footnote (0: left-align, 1: right-align, NULL (default): center)}
 
 \item{leg}{optional character to specify legend position; options are 'topleft', 'center', 'topright', 'left', 'center', 'right', 'bottomleft', 'bottom', 'bottomright'}
 

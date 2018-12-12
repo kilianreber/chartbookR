@@ -25,6 +25,7 @@
 #' @param y2_def optional number vector to specify start, end, and intervals of secondary y-axis, e.g. c(0, 10, 2)
 #' @param y2_rev optional boolean to invert secondary y-axis; y2_def needs to be supplied
 #' @param fn optional character to add footnote to plot
+#' @param fn_adj optional integer to specify alignment of footnote (0: left-align, 1: right-align, NULL (default): center)
 #' @param leg optional character to specify legend position; options are 'topleft', 'center', 'topright', 'left', 'center', 'right', 'bottomleft', 'bottom', 'bottomright'
 #' @param grid optional boolean to show grid when set to TRUE
 #' @param rec optional boolean to shade recessions when set to TRUE
@@ -47,14 +48,15 @@
 #' BarChart(data=zoo, title="Example Chart", d1=4:5, d2=6, y1="in %", y2="in USD mln", rec=TRUE)
 #' BarChart(data=zoo, title="Example Chart", d1=1, d2=2, y1="Unemployment (%)", y2="Budget Balance (%GDP)", y1_def=c(0, 10, 2), y2_def=c(-10,2,2), y2_rev=TRUE, leg="top", rec=TRUE)
 
-BarChart <- function(data, inception, title, no, stacked, space, d1, d2, y1, y2, y1_def, y2_def, y2_rev, fn, leg, grid, rec, dt_format, h, v) {
+BarChart <- function(data, inception, title, no, stacked, space, d1, d2, y1, y2, y1_def, y2_def, y2_rev, fn, fn_adj, leg, grid, rec, dt_format, h, v) {
 
 #Turn off warnings
 options(warn=-1)
 
 #Set default values
 if (missing(title))       {title   <- ""    }
-if (missing(d1))          {d1 <- c(1:ncol(data))}
+if (missing(d1) &  is.null(ncol(data)))  {d1 <- 1}
+if (missing(d1) & !is.null(ncol(data)))  {d1 <- c(1:ncol(data))}
 if (missing(stacked))     {stacked <- TRUE  }
 if (missing(y1))          {y1      <- ""    }
 if (missing(y1_def))      {y1_def  <- "none"}
@@ -62,6 +64,7 @@ if (missing(y2_def))      {y2_def  <- "none"}
 if (missing(y2))          {y2      <- ""    }
 if (missing(d2))          {d2      <- "none"}
 if (missing(fn))          {fn      <-  ""   }
+if (missing(fn_adj))      {fn_adj  <-  NULL }
 if (missing(no))          {no      <-  ""   }
 if (missing(grid))        {grid    <-  FALSE}
 if (missing(rec))         {rec     <-  FALSE}
@@ -166,7 +169,7 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
   
   axis(side=1, at=bp[as.integer(bp_param[,1])], labels=as.character(bp_param[,2]), las=1, tck=0)
   axis(2, seq(y1_def[1], y1_def[2], y1_def[3]), las=1, tck=-0)
-  title(sub=fn, font.sub=3, line = 3)
+  title(sub=fn, font.sub=3, line = 3, adj=fn_adj)
 
     #Add horizontal abline
     if(h!="none") {abline(h=h, lty=1, lwd=1, col="black")}
@@ -202,6 +205,10 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     }
       
     if (rect_min >0) {rect_min <- 0}
+    
+    if(y1_def!="none")    {rect_min <- (y1_def[1] - y1_def[3])}
+    if(y1_def!="none")    {rect_max <- (y1_def[2] + y1_def[3])}
+    
     rec_start_dt <- min(index(data_rec))
     rec_end_dt <- max(index(data_rec))
     
@@ -255,6 +262,10 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     }
 
     if (rect_min >0) {rect_min <- 0}
+    
+    if(y1_def!="none")    {rect_min <- (y1_def[1] - y1_def[3])}
+    if(y1_def!="none")    {rect_max <- (y1_def[2] + y1_def[3])}
+    
     rec_start_dt <- min(index(data_rec))
     rec_end_dt <- max(index(data_rec))
     
@@ -276,7 +287,7 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     rect(rec_start, rect_min, rec_end, rect_max, density=NULL, border=NA, lwd=0, col=rgb(0,0,0.1, alpha=0.1))
     }
 
-  title(sub=fn, font.sub=3, line = 3)
+  title(sub=fn, font.sub=3, line = 3, adj=fn_adj)
 
   if (grid!=FALSE) {
     if (y1_def=="none") {grid(NA, ny=NULL, lty=1, lwd=1, col="grey")}
