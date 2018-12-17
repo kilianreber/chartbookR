@@ -4,8 +4,8 @@
 \alias{LineChart}
 \title{Create custom line(s) plot}
 \usage{
-LineChart(data, inception, title, no, d1, d2, y1, y2, y1_def, y2_def,
-  y2_rev, fn, fn_adj, leg, grid, rec, dt_format, h, v)
+LineChart(data, inception, title, title_adj, no, d1, d2, y1, y2, y1_def,
+  y2_def, y2_rev, fn, fn_adj, leg, grid, rec, dt_format, h, v)
 }
 \arguments{
 \item{data}{specification of zoo dataset to use for plot}
@@ -13,6 +13,8 @@ LineChart(data, inception, title, no, d1, d2, y1, y2, y1_def, y2_def,
 \item{inception}{optional boolean to show clipped inception date when set to 'TRUE'; default is 'FALSE'}
 
 \item{title}{optional character to add chart title}
+
+\item{title_adj}{optional integer to specify title alignment (0: left-align, 1: right-align, NULL (default): center)}
 
 \item{no}{optional integer to add chart number}
 
