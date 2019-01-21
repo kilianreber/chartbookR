@@ -156,7 +156,7 @@ bp_param <- Barplot_param(inception=inception, data=data1, stacked=TRUE, dt_form
 #Create plot, first y-axis, and content
 par(mar = c(5,5,5,5))
 
-if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_def[1], y1_def[2]), xaxt="n", yaxt="n", tck=0, las=1, lwd=3, col=1:length(d1), border=0.1, space=0); title(main=title, adj=title_adj)
+if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_def[1], y1_def[2]), xaxt="n", yaxt="n", tck=0, las=1, lwd=3, col=1:length(d1), border=0.1, space=0); title(main=title, adj=title_adj, line=0.75)
   title(ylab=y1)
   
   axis(side=1, at=bp_param[,1], labels=format(bp_param[,1], dt_format[2]), las=1, tck=0)
@@ -201,7 +201,7 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
     if(h!="none") {abline(h=h, lty=1, lwd=1, col="black")}
     if(v!="none") {abline(v=as.Date(v, "%d/%m/%Y"), lty=1, lwd=1)}
   
-} else {plot(data1, plot.type="s", ann=FALSE, bty="n", xaxt="n", tck=0, las=1, las=1, lwd=3, col=1:length(d1), border=0.1, space=0); title(main=title, adj=title_adj)
+} else {plot(data1, plot.type="s", ann=FALSE, bty="n", xaxt="n", tck=0, las=1, las=1, lwd=3, col=1:length(d1), border=0.1, space=0); title(main=title, adj=title_adj, line=0.75)
     title(ylab=y1)  
   
     axis(side=1, at=bp_param[,1], labels=format(bp_param[,1], dt_format[2]), las=1, tck=0)

@@ -4,7 +4,7 @@
 \alias{getBBG}
 \title{Bloomberg data as zoo object}
 \usage{
-getBBG(tickers, field, names, start, end, time, freq, na)
+getBBG(tickers, field, names, start, end, time, freq, na, last)
 }
 \arguments{
 \item{tickers}{character vector of Bloomberg ticker(s)}
@@ -22,6 +22,8 @@ getBBG(tickers, field, names, start, end, time, freq, na)
 \item{freq}{optional frequency for data download; options are 'DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'YEARLY'; default is 'MONTHLY'}
 
 \item{na}{optional boolean to replace NAs with the last observation if set to FALSE; default is TRUE}
+
+\item{last}{optional boolean to turn on/off the appending of the latest data points; default is TRUE}
 }
 \value{
 returns a zoo object with the downloaded Bloomberg data

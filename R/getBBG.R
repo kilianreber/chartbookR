@@ -8,6 +8,7 @@
 #' @import zoo
 #' @import Rblpapi
 #' @import lubridate
+#' @import xts
 #' 
 #' @param tickers character vector of Bloomberg ticker(s)
 #' @param field optional character vector of Bloomberg field(s); default is 'PX_LAST'
@@ -17,6 +18,7 @@
 #' @param freq optional frequency for data download; options are 'DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'YEARLY'; default is 'MONTHLY'
 #' @param time optional string to specify start date; options are 'D' (Days), 'W' (Weeks), 'M' (Months), 'Q' (Quarters), 'Y' (Years), or 'YTD' (Year-to-Date), e.g. '3M', '4Q', '5Y', 'YTD'; default is none
 #' @param na optional boolean to replace NAs with the last observation if set to FALSE; default is TRUE
+#' @param last optional boolean to turn on/off the appending of the latest data points; default is TRUE
 #' 
 #' @return returns a zoo object with the downloaded Bloomberg data
 #' 
@@ -29,7 +31,7 @@
 #' zoo <- getBBG(tickers=c('CPI YOY Index', 'PPI YOY Index'), names=c('CPI', 'PPI'), start='01/01/2000', end='01/01/2018')
 #' zoo <- getBBG(tickers=c('NAPMPMI', 'MPMIEZMA', 'MPMIEMMA'), names=c('United States (ISM)', 'Eurozone', 'Emerging Markets'), time='3Y')
 
-getBBG <- function(tickers, field, names, start, end, time, freq, na){
+getBBG <- function(tickers, field, names, start, end, time, freq, na, last){
 
   #Turn off warnings
   options(warn=-1)
@@ -44,8 +46,10 @@ getBBG <- function(tickers, field, names, start, end, time, freq, na){
   #Set defaults
   if(missing(names))         {names          <- tickers                   }
   if(length(tickers)==1)     {one_tickr_fix  <- TRUE} else {one_tickr_fix <- FALSE}
-  if(length(tickers)==1)     {tickers        <- rep(tickers, 2 )
+  if(length(tickers)==1)     {tickers        <- paste(tickers, "CO1 Comdty")
                               names          <- rep(names, 2)             }
+  #if(length(tickers)==1)     {tickers        <- rep(tickers, 2 )
+  #                            names          <- rep(names, 2)            }
   if(missing(freq))          {freq           <- "MONTHLY"                 }
   if(missing(field))         {field          <- "PX_LAST"                 }
   if(missing(time))          {time           <- "none"                    }
@@ -61,7 +65,8 @@ getBBG <- function(tickers, field, names, start, end, time, freq, na){
   if(time!="none" & time!="YTD" & tf=="W") {start <- as.Date(Sys.Date()-(7*as.numeric((gsub("W", "", time)))))}                          
   if(time!="none" & time!="YTD" & tf=="D") {start <- as.Date(Sys.Date()-(as.numeric((gsub("D", "", time)))))}
   if(missing(na))            {na             <- TRUE                      }
-
+  if(missing(last))          {last           <- TRUE                      }
+                              
   start <- as.Date(start, "%d/%m/%Y")
   end   <- as.Date(end, "%d/%m/%Y")
                               
@@ -153,7 +158,36 @@ getBBG <- function(tickers, field, names, start, end, time, freq, na){
   #Apply one_ticker_fix if necessary
   if (one_tickr_fix==TRUE) {bbg_trans <- bbg_trans[,1]}
   
+  #Add last data points
+  if (last == TRUE){
+
+    # Download and arrange data
+    bbg_last_dl  <- bdp(securities = tickers, fields = field, overrides = NULL)
+    bbg_last_dt  <- bdp(securities = tickers, fields = "LAST_UPDATE_DT", overrides = NULL)
+    bbg_last     <- cbind(bbg_last_dt, bbg_last_dl)
+    bbg_last[,1] <- format(as.Date(bbg_last[,1]), "%Y-%m-%d")
+
+    # Organize and clean data
+    bbg_last$Variable <- row.names(bbg_last)
+    rownames(bbg_last) <- c()
+    colnames(bbg_last) <- c("Dates", "Level", "Variable")
+
+    # Reshape to Wide Format
+    bbg_last <- reshape(bbg_last, idvar = "Dates", timevar = "Variable", direction = "wide")
+    colnames(bbg_last) <- c("Dates", row.names(bbg_last_dl))
+
+    # Convert to zoo object, merge, remove duplicates
+    zoo_last  <- read.zoo(bbg_last, format = "%Y-%m-%d")
+    comb      <- c(index(bbg_trans), index(zoo_last))
+    kill      <- comb[duplicated(comb)]
+    if (length(kill > 0)){
+    zoo_last  <- zoo_last[!index(zoo_last) == kill,]
+    }
+    if (length(zoo_last > 0 )){
+    bbg_trans <- rbind(bbg_trans, zoo_last)
+    }
+  }
+  
   #Return results
   return(bbg_trans)
-
 }
