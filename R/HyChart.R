@@ -1,8 +1,10 @@
 ############ PLOT HIGHCHARTER OBJECT #############
 ##################################################
 
+#' Returns highcharter object
+#' @export
 
-HyChart <- function(data, l1=NULL, l2 = NULL, a1 = NULL, a2 = NULL, c1 = NULL, c2 = NULL, series1 = NULL, stacking = NULL, title = NULL, subtitle = NULL, title_adj = "left", y1 = "", y2 = "", y1_def = c(NULL, NULL, NULL), y2_def = c(NULL, NULL, NULL), y1_right = FALSE, y1_rev = FALSE, y2_rev = FALSE, grid =c(1,1), lineWidth = 3, zoom = TRUE, zoom_cst = NULL, navigator = FALSE, tooltip = TRUE, decimals = 1, size = c(750, 600), linePos = 1, h1 = NULL, h2 = NULL, v = NULL, b1_from = NULL, b1_to = NULL, b2_from = NULL, b2_to = NULL, v_from = NULL, v_to = NULL, rec = FALSE) {
+HyChart <- function(data, l1=NULL, l2 = NULL, a1 = NULL, a2 = NULL, c1 = NULL, c2 = NULL, series1 = NULL, stacking = NULL, title = NULL, subtitle = NULL, title_adj = "left", y1 = "", y2 = "", y1_def = c(NULL, NULL, NULL), y2_def = c(NULL, NULL, NULL), y1_right = FALSE, y1_rev = FALSE, y2_rev = FALSE, grid =c(1,1), lineWidth = 3, zoom = TRUE, zoom_cst = "none", navigator = FALSE, tooltip = TRUE, decimals = 1, size = c(750, 600), linePos = 1, h1 = NULL, h2 = NULL, v = NULL, b1_from = NULL, b1_to = NULL, b2_from = NULL, b2_to = NULL, v_from = NULL, v_to = NULL, rec = FALSE) {
 
 library(highcharter)
 library(reshape2)
@@ -101,11 +103,11 @@ title <- paste("<b>", title, "</b>", sep = "")
 clrs <- palette()
 
 #Get periodicity
-p <- as.character(periodicity(data)[6])
+per <- as.character(xts::periodicity(data)[6])
 
-#Calculate custom zoom if zoom_cst is NULL and zoom is TRUE - for monthly data
-if (is.null(zoom_cst) & zoom == TRUE & p == "monthly") {
-years <- as.numeric((tail(index(zoo),1) - index(zoo)[1])/365)
+#Calculate custom zoom if zoom_cst is none and zoom is TRUE - for monthly data
+if (zoom_cst == "none" & zoom == TRUE & per == "monthly") {
+years <- as.numeric((tail(index(data),1) - index(data)[1])/365)
 if (years > 0 & years <= 1)    {zoom_cst <- c("6M", "9M", "12M")          }
 if (years > 1 & years <= 3)    {zoom_cst <- c("6M", "12M", "18M", "2Y")   }
 if (years > 3 & years <= 5)    {zoom_cst <- c("6M", "12M", "2Y", "3Y")    }
@@ -114,9 +116,9 @@ if (years > 10 & years <= 20)  {zoom_cst <- c("1Y", "3Y", "5Y", "10Y")    }
 if (years > 20)                {zoom_cst <- c("3Y", "5Y", "10Y", "20Y")   }
 }
 
-#Calculate custom zoom if zoom_cst is NULL and zoom is TRUE - for weekly data
-if (is.null(zoom_cst) & zoom == TRUE & p == "weekly") {
-  years <- as.numeric((tail(index(zoo),1) - index(zoo)[1])/365)
+#Calculate custom zoom if zoom_cst is none and zoom is TRUE - for weekly data
+if (zoom_cst == "none" & zoom == TRUE & per == "weekly") {
+  years <- as.numeric((tail(index(data),1) - index(data)[1])/365)
   if (years > 0 & years <= 1)    {zoom_cst <- c("3M", "6M", "9M")         }
   if (years > 1 & years <= 3)    {zoom_cst <- c("3M", "6M", "12M")        }
   if (years > 3 & years <= 5)    {zoom_cst <- c("3M", "6M", "1Y", "3Y")   }
@@ -125,9 +127,9 @@ if (is.null(zoom_cst) & zoom == TRUE & p == "weekly") {
   if (years > 20)                {zoom_cst <- c("3Y", "5Y", "10Y", "20Y") }
 }
 
-#Calculate custom zoom if zoom_cst is NULL and zoom is TRUE - for daily data
-if (is.null(zoom_cst) & zoom == TRUE & p == "daily") {
-  years <- as.numeric((tail(index(zoo),1) - index(zoo)[1])/365)
+#Calculate custom zoom if zoom_cst is none and zoom is TRUE - for daily data
+if (zoom_cst == "none" & zoom == TRUE & per == "daily") {
+  years <- as.numeric((tail(index(data),1) - index(data)[1])/365)
   if (years > 0 & years <= 1)    {zoom_cst <- c("1W", "1M", "3M", "6M")   }
   if (years > 1 & years <= 3)    {zoom_cst <- c("1W", "1M", "3M", "1Y")   }
   if (years > 3 & years <= 5)    {zoom_cst <- c("1M", "3M", "1Y", "3Y")   }
@@ -240,9 +242,7 @@ for (i in 1:length(zoom_cst)) {
   i + 1}
   ranges[[length(ranges)+1]] <- list(type = "ytd", text = "YTD")
   ranges[[length(ranges)+1]] <- list(type = "all", text = "All")
-} 
-
-else {ranges <- NULL}
+} else {ranges <- NULL}
   
 #CREATE CHARTS
   
@@ -287,7 +287,6 @@ else {ranges <- NULL}
     
     #chart <- hc_yAxis_multiples(hc = chart, list(title = list(text = y1, style = list(color = "black")), labels = list(style = list(color = "black")), tickColor = "grey", lineWidth = 1, lineColor = "grey", reversed = y1_rev, min = y1_def[1], max = y1_def[2], gridLineWidth = grid[1], opposite=FALSE, plotLines = ylines, plotBands = ybands), list(title = list(text = y2, style = list(color = "black")), labels = list(style = list(color = "black")), tickColor = "grey", lineWidth = 1, lineColor = "grey", gridLineWidth = grid[1], reversed = y2_rev, min = y2_def[1], max = y2_def[2], opposite=TRUE, plotBands = y2bands, plotLines = y2lines))
     chart <- hc_yAxis_multiples(hc = chart, list(title = list(text = y1, style = list(color = "black")), labels = list(style = list(color = "black")), tickColor = "grey", lineWidth = 1, lineColor = "grey", reversed = y1_rev, min = y1_def[1], max = y1_def[2], gridLineWidth = grid[1], opposite=FALSE, plotLines = ylines, plotBands = ybands), list(title = list(text = y2, style = list(color = "black")), labels = list(style = list(color = "black")), tickColor = "grey", lineWidth = 1, lineColor = "grey", gridLineWidth = 0, reversed = y2_rev, min = y2_def[1], max = y2_def[2], alignTicks = FALSE, opposite=TRUE, plotBands = y2bands, plotLines = y2lines))
-    
     chart <- hc_plotOptions(hc = chart, line = list(lineWidth = lineWidth), column = list(dataLabels = list(enabled = FALSE), stacking = stacking, enableMouseTracking = TRUE), area = list(dataLabels = list(enabled = FALSE), stacking = stacking, enableMouseTracking = TRUE), series = list(dataGrouping = list(enabled = FALSE)))
     chart <- hc_legend(hc = chart, enabled = TRUE, align = "center")
     chart <- hc_rangeSelector(hc = chart, enabled = zoom, buttons = ranges)
