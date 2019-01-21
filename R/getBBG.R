@@ -46,8 +46,8 @@ getBBG <- function(tickers, field, names, start, end, time, freq, na, last){
   #Set defaults
   if(missing(names))         {names          <- tickers                   }
   if(length(tickers)==1)     {one_tickr_fix  <- TRUE} else {one_tickr_fix <- FALSE}
-  if(length(tickers)==1)     {tickers        <- paste(tickers, "CO1 Comdty")
-                              names          <- rep(names, 2)             }
+  if(length(tickers)==1)     {tickers        <- c(tickers, "CO1 Comdty"   )
+                              names          <- c(names, "Oil")           }
   #if(length(tickers)==1)     {tickers        <- rep(tickers, 2 )
   #                            names          <- rep(names, 2)            }
   if(missing(freq))          {freq           <- "MONTHLY"                 }
@@ -142,22 +142,6 @@ getBBG <- function(tickers, field, names, start, end, time, freq, na, last){
   #Output dataframe
   bbg_trans <- read.zoo(bbg_trans, format = "%Y-%m-%d")
 
-  #Replace intermittent NAs (optional)
-  if (na==FALSE){
-  min <- sapply(bbg_trans, function(col) min(which(!is.na(col))))
-  max <- sapply(bbg_trans, function(col) max(which(!is.na(col))))
-  for(i in 1:ncol(bbg_trans)) {bbg_trans[min[i]:max[i],i] <- na.locf(bbg_trans[min[i]:max[i],i])}
-  }
-
-  #Replace preceding NAs (default)
-  if (na==FALSE) {bbg_trans <- na.locf(bbg_trans)}
-  
-  #Remove NAs in front & end
-  bbg_trans <- na.trim(bbg_trans, sides="both", is.na="all")
-  
-  #Apply one_ticker_fix if necessary
-  if (one_tickr_fix==TRUE) {bbg_trans <- bbg_trans[,1]}
-  
   #Add last data points
   if (last == TRUE){
 
@@ -180,13 +164,32 @@ getBBG <- function(tickers, field, names, start, end, time, freq, na, last){
     zoo_last  <- read.zoo(bbg_last, format = "%Y-%m-%d")
     comb      <- c(index(bbg_trans), index(zoo_last))
     kill      <- comb[duplicated(comb)]
-    if (length(kill > 0)){
-    zoo_last  <- zoo_last[!index(zoo_last) == kill,]
+    if (length(kill > 0)) {
+    zoo_last  <- zoo_last[!(index(zoo_last) %in% kill),]
     }
-    if (length(zoo_last > 0 )){
+    if (length(zoo_last > 0)) {
     bbg_trans <- rbind(bbg_trans, zoo_last)
     }
   }
+  
+  #Replace intermittent NAs (optional)
+  if (na==FALSE){
+    min <- sapply(bbg_trans, function(col) min(which(!is.na(col))))
+    max <- sapply(bbg_trans, function(col) max(which(!is.na(col))))
+    for(i in 1:ncol(bbg_trans)) {bbg_trans[min[i]:max[i],i] <- na.locf(bbg_trans[min[i]:max[i],i])}
+  }
+  
+  #Replace preceding NAs (default)
+  if (na==FALSE) {bbg_trans <- na.locf(bbg_trans)}
+  
+  #Remove NAs in front & end
+  bbg_trans <- na.trim(bbg_trans, sides="both", is.na="all")
+  
+  #Remove looking-ahead data
+  bbg_trans <- bbg_trans[!(index(bbg_trans) > Sys.Date()),]
+  
+  #Apply one_ticker_fix if necessary
+  if (one_tickr_fix==TRUE) {bbg_trans <- bbg_trans[,1]}
   
   #Return results
   return(bbg_trans)
