@@ -234,7 +234,7 @@ if (!is.null(rec_end))    {rec_close    <- datetime_to_timestamp(as.Date(rec_end
 if (rec == TRUE & !is.null(rec_start) & !is.null(rec_end)){
   rec_bands = list()
   for (i in 1:length(rec_open)) {
-    temp  <- list(from = rec_open[i], to = rec_close[i], color="rgba(5, 0, 0, 0.1)", label = list(text = NULL))
+    temp  <- list(from = rec_open[i], to = rec_close[i], color="rgba(5, 0, 0, 0.1)", label = list(x = 7.5, y = 15, text = NULL))
     rec_bands[[length(rec_bands)+1]] <- temp
     i + 1}} else {rec_bands <- NULL}
 
@@ -242,7 +242,7 @@ if (rec == TRUE & !is.null(rec_start) & !is.null(rec_end)){
 if (!is.null(v_from)){
 xbands = list()
 for (i in 1:length(dates_open)) {
-  temp  <- list(from = dates_open[i], to = dates_close[i], color="rgba(100, 0, 0, 0.1)", label = list(text = vb_lab[i]))
+  temp  <- list(from = dates_open[i], to = dates_close[i], color="rgba(100, 0, 0, 0.1)", label = list(x = 7.5, y = 15, text = vb_lab[i]))
   xbands[[length(xbands)+1]] <- temp
   i + 1}
 } else {
@@ -268,7 +268,7 @@ for (i in 1:length(b2_from)) {
 #Create vLines
 xlines = list()
 for (i in 1:length(v)) {
-  temp  <- list(color = "black", zIndex = linePos, width = 1.2, value = v[i], label = list(rotation = 0, text = v_lab[i]))
+  temp  <- list(color = "black", zIndex = linePos, width = 1.2, value = v[i], label = list(x = 7.5, y = 17.5, rotation = 0, text = v_lab[i]))
   xlines[[length(xlines)+1]] <- temp
   i + 1}
 
