@@ -17,8 +17,8 @@
 #' @param no optional integer to add chart number
 #' @param stacked optional boolean to unstack bars when set to FALSE; default is TRUE
 #' @param space optional integer to specify space between bars and data groups, e.g. space=c(0.5, 1); default is space=c(0.1, 0.25)
-#' @param d1 optional integer vector to specify which columns to plot on primary y-axis
-#' @param d2 optional integer vector to specify which columns to plot on secondary y-axis
+#' @param c1 optional integer vector to specify which columns to plot (as columns) on primary y-axis
+#' @param l2 optional integer vector to specify which columns to plot (as lines) on secondary y-axis
 #' @param y1 optional character to specify description of primary y-axis
 #' @param y2 optional character to specify description of secondary y-axis
 #' @param y1_def optional number vector to specify start, end, and intervals of primary y-axis, e.g. c(0, 10, 2)
@@ -41,21 +41,21 @@
 #' 
 #' Note that these examples require corresponding zoo objects to create plots
 #' 
-#' BarChart(data=zoo, d1=1:3, leg="topleft", fn="This is a footnote.", stacked=TRUE, space=0)
-#' BarChart(data=zoo, d1=1:3, leg="topleft", fn="This is a footnote.", stacked=FALSE, space=c(0.5, 1))
-#' BarChart(data=zoo, title="Example Chart", no="1.1", d1=1:3, y1="Index", leg="topleft", dt_format=c("5 years", "%Y"), v="01/01/2018")
-#' BarChart(data=zoo, title="Example Chart", d1=1:3, y1="Index", leg="topleft", grid=TRUE, h=0)
-#' BarChart(data=zoo, title="Example Chart", d1=4:5, d2=6, y1="in %", y2="in USD mln", rec=TRUE)
-#' BarChart(data=zoo, title="Example Chart", d1=1, d2=2, y1="Unemployment (%)", y2="Budget Balance (%GDP)", y1_def=c(0, 10, 2), y2_def=c(-10,2,2), y2_rev=TRUE, leg="top", rec=TRUE)
+#' BarChart(data=zoo, c1=1:3, leg="topleft", fn="This is a footnote.", stacked=TRUE, space=0)
+#' BarChart(data=zoo, c1=1:3, leg="topleft", fn="This is a footnote.", stacked=FALSE, space=c(0.5, 1))
+#' BarChart(data=zoo, title="Example Chart", no="1.1", c1=1:3, y1="Index", leg="topleft", dt_format=c("5 years", "%Y"), v="01/01/2018")
+#' BarChart(data=zoo, title="Example Chart", c1=1:3, y1="Index", leg="topleft", grid=TRUE, h=0)
+#' BarChart(data=zoo, title="Example Chart", c1=4:5, l2=6, y1="in %", y2="in USD mln", rec=TRUE)
+#' BarChart(data=zoo, title="Example Chart", c1=1, l2=2, y1="Unemployment (%)", y2="Budget Balance (%GDP)", y1_def=c(0, 10, 2), y2_def=c(-10,2,2), y2_rev=TRUE, leg="top", rec=TRUE)
 
-BarChart <- function(data, inception = FALSE, title = NULL, no = NULL, stacked = TRUE, space, d1, d2 = "none", y1 = NULL, y2 = NULL, y1_def = "none", y2_def = "none", y2_rev, fn = NULL, fn_adj = NULL, leg = "topleft", grid = FALSE, rec = FALSE, dt_format, h1 = "none", v = "none") {
+BarChart <- function(data, inception = FALSE, title = NULL, no = "", stacked = TRUE, space, c1, l2 = "none", y1 = NULL, y2 = NULL, y1_def = "none", y2_def = "none", y2_rev, fn = NULL, fn_adj = NULL, leg = "topleft", grid = FALSE, rec = FALSE, dt_format, h1 = "none", v = "none") {
 
 #Turn off warnings
 options(warn=-1)
 
 #Set default values
-if (missing(d1) &  is.null(ncol(data)))  {d1 <- 1}
-if (missing(d1) & !is.null(ncol(data)))  {d1 <- c(1:ncol(data))}
+if (missing(c1) &  is.null(ncol(data)))  {c1 <- 1}
+if (missing(c1) & !is.null(ncol(data)))  {c1 <- c(1:ncol(data))}
 if (missing(y2_rev))      {y2_rev  <- FALSE }
 if (missing(space) & stacked==TRUE)  {space <- 0.25}
 if (missing(space) & stacked==FALSE) {space <- c(0.25, 0.1)}
@@ -72,20 +72,20 @@ if (is.null(ncol(data)))  {data <- cbind(data, data)
 colnames(data) <- c("Series", "Series")}
 
 #Create data vectors and data column vectors
-data1 <- as.data.frame(data[,d1])
-colnames(data1) <- colnames(data)[d1]
+data1 <- as.data.frame(data[,c1])
+colnames(data1) <- colnames(data)[c1]
 data1 <- as.zoo(data1)
 
-if(d2!="none")  {
-  data2 <- as.data.frame(data[,d2])
-  colnames(data2) <- colnames(data)[d2]
+if(l2!="none")  {
+  data2 <- as.data.frame(data[,l2])
+  colnames(data2) <- colnames(data)[l2]
   data2 <- as.zoo(data2)
 }
 
 #Trim data block
-if (d2!="none") {
-  d11 <- length(d1)
-  d22 <- length(d2)
+if (l2!="none") {
+  d11 <- length(c1)
+  d22 <- length(l2)
   
   block <- cbind(data1, data2)
   block <- na.trim(block, sides="both", is.na="all")
@@ -93,14 +93,14 @@ if (d2!="none") {
   data2 <- block[,c((d11+1):(d11+d22))]
 }
 
-if (d2=="none") {data1 <- na.trim(data1, sides="both", is.na="all")}
+if (l2=="none") {data1 <- na.trim(data1, sides="both", is.na="all")}
 
 #Create d1, d2, d3
-if(d2!="none")  {d3 <- c(d1, d2)} else {d3 <- d1}
-if(d2!="none")  {data3 <- data[,d3]} else {data3 <- data1}
+if(l2!="none")  {d3 <- c(c1, l2)} else {d3 <- c1}
+if(l2!="none")  {data3 <- data[,d3]} else {data3 <- data1}
 
 #Calculate length of data1
-if (is.null(ncol(data1))) {length_d1 <- 1} else {length_d1 <- ncol(data1)}
+if (is.null(ncol(data1))) {length_c1 <- 1} else {length_c1 <- ncol(data1)}
 
 if (!missing(dt_format)){
 #Override unforunate dt_format inputs by user
@@ -150,7 +150,7 @@ bp_param <- Barplot_param(inception=inception, data=data1, stacked=stacked, dt_f
 #Create plot, first y-axis, and content
 par(mar = c(5,5,5,5))
 
-if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_def[2]), space=space, ann=FALSE, xaxt = "n", yaxt="n", tck=0, las=1, lwd=3, col=1:length(d1), border=NA); title(main=title, ylab=y1)
+if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_def[2]), space=space, ann=FALSE, xaxt = "n", yaxt="n", tck=0, las=1, lwd=3, col=1:length(c1), border=NA); title(main=title, ylab=y1)
   
   axis(side=1, at=bp[as.integer(bp_param[,1])], labels=as.character(bp_param[,2]), las=1, tck=0)
   axis(2, seq(y1_def[1], y1_def[2], y1_def[3]), las=1, tck=-0)
@@ -163,13 +163,13 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     if(v!="none") {
     v <- as.Date(v, "%d/%m/%Y")
     v_tick <- match.closest(v, index(data1))
-    if (stacked==FALSE) {v_tick <- (v_tick*((length((d1))*bars_width)+((length(d1)-1)*space[1])+space[2]))+(0.5*space[2])}
+    if (stacked==FALSE) {v_tick <- (v_tick*((length((c1))*bars_width)+((length(c1)-1)*space[1])+space[2]))+(0.5*space[2])}
     if (stacked==TRUE)  {v_tick <- (v_tick*bars_width)*(1+space)+0.5*space}
     abline(v=v_tick, lty=1, lwd=2, col="black")}
     
     #Prepare recession shading
     if (rec!=FALSE){
-      if (length_d1 >1) {data_rec <- data1} else {data_rec <- cbind(data1,data1)}
+      if (length_c1 >1) {data_rec <- data1} else {data_rec <- cbind(data1,data1)}
 
     #Load recession data & create date vectors
     rec_start <- as.Date(nber$Rec_Start)
@@ -207,7 +207,7 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     rec_end <- match.closest(rec_end, index(data_rec))
     
     #Set bars_width
-    if (stacked==FALSE) {bars_width <- length(d1)}
+    if (stacked==FALSE) {bars_width <- length(c1)}
     
     #Add recession shading
     rec_start <- (rec_start*bars_width)*(1+space)
@@ -220,13 +220,13 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     else {seq <- seq(y1_def[1], y1_def[2], y1_def[3])
     abline(h=seq, lty=1, lwd=1, col="grey")}}
   
-  } else {bp <- barplot(data1, beside=!stacked, ann=FALSE, bty="n", xaxt = "n", space=space, tck=0, las=1, lwd=1, col=1:length(d1), border=NA); title(main=title, ylab=y1)
+  } else {bp <- barplot(data1, beside=!stacked, ann=FALSE, bty="n", xaxt = "n", space=space, tck=0, las=1, lwd=1, col=1:length(c1), border=NA); title(main=title, ylab=y1)
     
     axis(side=1, at=bp[as.integer(bp_param[,1])], labels=as.character(bp_param[,2]), las=1, tck=0)
 
     #ADD RECESSION SHADING
     if (rec!=FALSE){
-      if (length_d1 >1) {data_rec <- data1} else {data_rec <- cbind(data1,data1)}
+      if (length_c1 >1) {data_rec <- data1} else {data_rec <- cbind(data1,data1)}
 
     #Load recession data & create date vectors
     rec_start <- as.Date(nber$Rec_Start)
@@ -264,7 +264,7 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     rec_end <- match.closest(rec_end, index(data1))
     
     #Set bars_width
-    if (stacked==FALSE) {bars_width <- length(d1)}
+    if (stacked==FALSE) {bars_width <- length(c1)}
     
     #Add recession shading
     rec_start <- (rec_start*bars_width)*(1+space)
@@ -288,22 +288,22 @@ if(h1!="none") {abline(h=h1, lty=1, lwd=1, col="black")}
 if(v!="none") {
   v <- as.Date(v, "%d/%m/%Y")
   v_tick <- match.closest(v, index(data1))
-  if (stacked==FALSE) {v_tick <- (v_tick*((length((d1))*bars_width)+((length(d1)-1)*space[1])+space[2]))+(0.5*space[2])}
+  if (stacked==FALSE) {v_tick <- (v_tick*((length((c1))*bars_width)+((length(c1)-1)*space[1])+space[2]))+(0.5*space[2])}
   if (stacked==TRUE)  {v_tick <- (v_tick*bars_width)*(1+space)+0.5*space}
   abline(v=v_tick, lty=1, lwd=2, col="black")}
 
 #Create second y-axis, and content (if available)
-if (d2!="none") {par(new = T)
+if (l2!="none") {par(new = T)
 
-  if (y2_def!="none") {plot(data2, plot.type="s", bty="n", ylim=ylim_input, col=(length(d1)+1):(length(d3)), axes=F, lwd=3, ann=FALSE)
+  if (y2_def!="none") {plot(data2, plot.type="s", bty="n", ylim=ylim_input, col=(length(c1)+1):(length(d3)), axes=F, lwd=3, ann=FALSE)
     axis(4, seq(y2_def[1], y2_def[2], y2_def[3]), las=1, lwd=0, tck=-0)
-    } else {plot(data2, plot.type="s", bty="n", col=(length(d1)+1):(length(d3)), axes=F, lwd=3, las=1, ann=FALSE, tck=-0)
+    } else {plot(data2, plot.type="s", bty="n", col=(length(c1)+1):(length(d3)), axes=F, lwd=3, las=1, ann=FALSE, tck=-0)
     axis(4, las=1, lwd=0, tck=-0)}
     mtext(side = 4, line = 3, y2)
 
     legend(leg, box.lty=0, bg="#FFFFFF", legend=colnames(data3), pch=15, col=1:length(d3), ncol=1)
     } else {legend(leg, box.lty=0, bg="#FFFFFF", legend=colnames(data3), pch=15, col=1:length(d3), ncol=1)}
 
-if (d2=="none") {box(which = "plot", bty = "l")} else {box(which = "plot", bty = "u")}
+if (l2=="none") {box(which = "plot", bty = "l")} else {box(which = "plot", bty = "u")}
 
 }

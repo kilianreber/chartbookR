@@ -8,8 +8,8 @@
 #' @param data specification of zoo dataset to use for plot
 #' @param l1 optional integer vector to specify which columns to plot (as lines) on primary y-axis
 #' @param l2 optional integer vector to specify which columns to plot (as lines) on secondary y-axis
-#' @param c1 optional integer vector to specify which columns to plot (as bars) on primary y-axis
-#' @param c2 optional integer vector to specify which columns to plot (as bars) on secondary y-axis
+#' @param c1 optional integer vector to specify which columns to plot (as columns) on primary y-axis
+#' @param c2 optional integer vector to specify which columns to plot (as columns) on secondary y-axis
 #' @param a1 optional integer vector to specify which columns to plot (as areas) on primary y-axis
 #' @param a2 optional integer vector to specify which columns to plot (as areas) on secondary y-axis
 #' @param a2 optional integer to override series name if only one series is available; default is "series1"
@@ -38,15 +38,15 @@
 #' @param h2 optional argument to specify horizontal line(s) at specific height on secondary y-axis
 #' @param h2_lab optional argument to specify horizontal line(s) labels on secondary y-axis
 #' @param v optional date to specify vertical date line(s), e.g. v='2012-01-01'
-#' @param v_lab optional argument to specify vertical date line label(s)
+#' @param v_lab optional argument to specify vertical date line label(s), e.g. v='31/12/2012'
 #' @param b1_from optional argument to specify start of horizontal range band(s) on primary y-axis
 #' @param b1_to optional argument to specify end of horizontal range band(s) on primary y-axis
 #' @param b1_lab optional argument to specify horizontal range band(s) label(s) on primary y-axis
 #' @param b2_from optional argument to specify start of horizontal range band(s) on secondary y-axis
 #' @param b2_to optional argument to specify end of horizontal range band(s) on secondary y-axis
 #' @param b2_lab optional argument to specify horizontal range band(s) label(s) on secondary y-axis
-#' @param v_from optional date(s) to specify start of vertical range band(s), e.g. v='2012-01-01'
-#' @param v_to optional date(s) to specify end of vertical range band(s), e.g. v='2013-01-01'
+#' @param v_from optional date(s) to specify start of vertical range band(s), e.g. v='31/12/2012'
+#' @param v_to optional date(s) to specify end of vertical range band(s), e.g. e.g. v='31/12/2012'
 #' @param vb_lab optional argument to specify label(s) of vertical range band(s)
 #' @param rec optional boolean to shade recessions when set to TRUE
 #' 
@@ -216,6 +216,11 @@ rec_end_dt   <- max(index(data))
 rec_start    <- subset(rec_start, rec_start >= as.Date(rec_start_dt))
 items        <- length(rec_start)
 rec_end      <- rec_end[(length(rec_end) - items + 1):length(rec_end)]
+
+#Convert date formats
+if (!is.null(v))       {v <- as.Date(v, "%d/%m/%Y")}
+if (!is.null(v_from))  {v_from <- as.Date(v_from, "%d/%m/%Y")}
+if (!is.null(v_to))    {v_to <- as.Date(v_to, "%d/%m/%Y")}
 
 #Convert date vector to dates
 if (!is.null(v))          {v <- datetime_to_timestamp(as.Date(v, tz="UTC"))}

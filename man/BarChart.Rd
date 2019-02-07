@@ -4,8 +4,8 @@
 \alias{BarChart}
 \title{Create custom bar(s)/line(s) plot}
 \usage{
-BarChart(data, inception = FALSE, title = NULL, no = NULL,
-  stacked = TRUE, space, d1, d2 = "none", y1 = NULL, y2 = NULL,
+BarChart(data, inception = FALSE, title = NULL, no = "",
+  stacked = TRUE, space, c1, l2 = "none", y1 = NULL, y2 = NULL,
   y1_def = "none", y2_def = "none", y2_rev, fn = NULL,
   fn_adj = NULL, leg = "topleft", grid = FALSE, rec = FALSE,
   dt_format, h1 = "none", v = "none")
@@ -23,9 +23,9 @@ BarChart(data, inception = FALSE, title = NULL, no = NULL,
 
 \item{space}{optional integer to specify space between bars and data groups, e.g. space=c(0.5, 1); default is space=c(0.1, 0.25)}
 
-\item{d1}{optional integer vector to specify which columns to plot on primary y-axis}
+\item{c1}{optional integer vector to specify which columns to plot (as columns) on primary y-axis}
 
-\item{d2}{optional integer vector to specify which columns to plot on secondary y-axis}
+\item{l2}{optional integer vector to specify which columns to plot (as lines) on secondary y-axis}
 
 \item{y1}{optional character to specify description of primary y-axis}
 
@@ -63,10 +63,10 @@ Create custom bar(s)/line(s) plot based on user inputs
 
 Note that these examples require corresponding zoo objects to create plots
 
-BarChart(data=zoo, d1=1:3, leg="topleft", fn="This is a footnote.", stacked=TRUE, space=0)
-BarChart(data=zoo, d1=1:3, leg="topleft", fn="This is a footnote.", stacked=FALSE, space=c(0.5, 1))
-BarChart(data=zoo, title="Example Chart", no="1.1", d1=1:3, y1="Index", leg="topleft", dt_format=c("5 years", "\%Y"), v="01/01/2018")
-BarChart(data=zoo, title="Example Chart", d1=1:3, y1="Index", leg="topleft", grid=TRUE, h=0)
-BarChart(data=zoo, title="Example Chart", d1=4:5, d2=6, y1="in \%", y2="in USD mln", rec=TRUE)
-BarChart(data=zoo, title="Example Chart", d1=1, d2=2, y1="Unemployment (\%)", y2="Budget Balance (\%GDP)", y1_def=c(0, 10, 2), y2_def=c(-10,2,2), y2_rev=TRUE, leg="top", rec=TRUE)
+BarChart(data=zoo, c1=1:3, leg="topleft", fn="This is a footnote.", stacked=TRUE, space=0)
+BarChart(data=zoo, c1=1:3, leg="topleft", fn="This is a footnote.", stacked=FALSE, space=c(0.5, 1))
+BarChart(data=zoo, title="Example Chart", no="1.1", c1=1:3, y1="Index", leg="topleft", dt_format=c("5 years", "\%Y"), v="01/01/2018")
+BarChart(data=zoo, title="Example Chart", c1=1:3, y1="Index", leg="topleft", grid=TRUE, h=0)
+BarChart(data=zoo, title="Example Chart", c1=4:5, l2=6, y1="in \%", y2="in USD mln", rec=TRUE)
+BarChart(data=zoo, title="Example Chart", c1=1, l2=2, y1="Unemployment (\%)", y2="Budget Balance (\%GDP)", y1_def=c(0, 10, 2), y2_def=c(-10,2,2), y2_rev=TRUE, leg="top", rec=TRUE)
 }
