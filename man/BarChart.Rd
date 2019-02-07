@@ -4,8 +4,11 @@
 \alias{BarChart}
 \title{Create custom bar(s)/line(s) plot}
 \usage{
-BarChart(data, inception, title, no, stacked, space, d1, d2, y1, y2,
-  y1_def, y2_def, y2_rev, fn, fn_adj, leg, grid, rec, dt_format, h, v)
+BarChart(data, inception = FALSE, title = NULL, no = NULL,
+  stacked = TRUE, space, d1, d2 = "none", y1 = NULL, y2 = NULL,
+  y1_def = "none", y2_def = "none", y2_rev, fn = NULL,
+  fn_adj = NULL, leg = "topleft", grid = FALSE, rec = FALSE,
+  dt_format, h1 = "none", v = "none")
 }
 \arguments{
 \item{data}{specification of zoo dataset to use for plot}
@@ -46,7 +49,7 @@ BarChart(data, inception, title, no, stacked, space, d1, d2, y1, y2,
 
 \item{dt_format}{optional character vector to specify date interval and date format of x-axis, e..g dt_format=c('3 months','\%b-\%Y')}
 
-\item{h}{optional argument to specify horizontal line at specific height}
+\item{h1}{optional argument to specify horizontal line at specific height}
 
 \item{v}{optional date to specify vertical date line, e.g. v='31/12/2012'}
 }

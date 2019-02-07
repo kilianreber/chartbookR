@@ -15,7 +15,7 @@ The chartbookR package consists of four types of functions for chartbook creatio
 \itemize{
 \item Data download: \code{\link[chartbookR]{getBBG}} and \code{\link{getFRED}}
 \item Data transformation: \code{\link{Transform}}
-\item Customized plotting: \code{\link{LineChart}} and \code{\link{BarChart}}
+\item Customized plotting: \code{\link{LineChart}}, \code{\link{BarChart}} and \code{\link{HyChart}}
 \item Exporting to Powerpoint: \code{\link{makePPT}}
 }
 }

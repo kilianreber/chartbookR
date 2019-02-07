@@ -44,22 +44,11 @@
 
 
 #Define function
-Transform <- function(data, start, chg, chg_type, pma, pms, lag, lead, rebase, Z){
+Transform <- function(data, start = "01/01/1666", chg = "none", chg_type = "perc", pma = "none", pms = "none", lag = "none", lead = "none", rebase = "FALSE", Z = "none"){
 
 #Turn off warnings
 options(warn=-1)
   
-#Set missing values
-if (missing(start))      {start      <- "01/01/1666" }
-if (missing(chg))        {chg        <- "none"       }
-if (missing(chg_type))   {chg_type   <- "perc"       }
-if (missing(pma))        {pma        <- "none"       }
-if (missing(pms))        {pms        <- "none"       }
-if (missing(lag))        {lag        <- "none"       }
-if (missing(lead))       {lead       <- "none"       }
-if (missing(rebase))     {rebase     <- FALSE        }
-if (missing(Z))          {Z          <- "none"       }
-
 #Prepare data
 periodicity <- periodicity(data)$scale
 MovPer <- substring(periodicity(data)$scale, 1, 1)

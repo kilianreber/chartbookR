@@ -1,10 +1,61 @@
 ############ PLOT HIGHCHARTER OBJECT #############
 ##################################################
 
-#' Returns highcharter object
+#' Create highcharter object
+#' 
+#' Create highcharter object based on user inputs
+#' 
+#' @param data specification of zoo dataset to use for plot
+#' @param l1 optional integer vector to specify which columns to plot (as lines) on primary y-axis
+#' @param l2 optional integer vector to specify which columns to plot (as lines) on secondary y-axis
+#' @param c1 optional integer vector to specify which columns to plot (as bars) on primary y-axis
+#' @param c2 optional integer vector to specify which columns to plot (as bars) on secondary y-axis
+#' @param a1 optional integer vector to specify which columns to plot (as areas) on primary y-axis
+#' @param a2 optional integer vector to specify which columns to plot (as areas) on secondary y-axis
+#' @param a2 optional integer to override series name if only one series is available; default is "series1"
+#' @param stacking optional integer to specify if and how bars or areas should be stacked; default is NULL
+#' @param space optional integer to specify space between bars; default is 1.5
+#' @param title optional character to add chart title
+#' @param title_adj optional integer to specify title alignment ("left" (default), "right", "center")
+#' @param y1 optional character to specify description of primary y-axis
+#' @param y2 optional character to specify description of secondary y-axis
+#' @param y1_def optional number vector to specify start, end, and intervals of primary y-axis, e.g. c(0, 10, 2)
+#' @param y2_def optional number vector to specify start, end, and intervals of secondary y-axis, e.g. c(0, 10, 2)
+#' @param y1_right optional boolean to display primary y-axis on right-hand side; default is FALSE
+#' @param y1_rev optional boolean to invert primary y-axis
+#' @param y2_rev optional boolean to invert secondary y-axis
+#' @param grid optional integer vector to specify line width of grid (horizontal, vertical); default is c(1, 1)
+#' @param lineWidth optional integer vector to specify width of lines
+#' @param zoom optional boolean to show or hide zoom function; default is TRUE
+#' @param zoom_cst optional integer to specify custom zoom intervals, e.g. c("1W", "1M", "3M", "6M"); default is "none"
+#' @param navigator optional boolean to show or hide range navigator; default is FALSE
+#' @param tooltip optional boolean to show or hide tooltip; default is FALSE
+#' @param decimals optional integer to specify number of decimals shown in tooltip; default is 1
+#' @param size optional integer vector to specify chart output size; default is c(750, 600)
+#' @param linePos optional integer vector to specify linePos... WHAT IS THAT???
+#' @param h1 optional argument to specify horizontal line(s) at specific height on primary y-axis
+#' @param h1_lab optional argument to specify horizontal line(s) labels on primary y-axis
+#' @param h2 optional argument to specify horizontal line(s) at specific height on secondary y-axis
+#' @param h2_lab optional argument to specify horizontal line(s) labels on secondary y-axis
+#' @param v optional date to specify vertical date line(s), e.g. v='2012-01-01'
+#' @param v_lab optional argument to specify vertical date line label(s)
+#' @param b1_from optional argument to specify start of horizontal range band(s) on primary y-axis
+#' @param b1_to optional argument to specify end of horizontal range band(s) on primary y-axis
+#' @param b1_lab optional argument to specify horizontal range band(s) label(s) on primary y-axis
+#' @param b2_from optional argument to specify start of horizontal range band(s) on secondary y-axis
+#' @param b2_to optional argument to specify end of horizontal range band(s) on secondary y-axis
+#' @param b2_lab optional argument to specify horizontal range band(s) label(s) on secondary y-axis
+#' @param v_from optional date(s) to specify start of vertical range band(s), e.g. v='2012-01-01'
+#' @param v_to optional date(s) to specify end of vertical range band(s), e.g. v='2013-01-01'
+#' @param vb_lab optional argument to specify label(s) of vertical range band(s)
+#' @param rec optional boolean to shade recessions when set to TRUE
+#' 
+#' @return returns highchart object
+#' 
 #' @export
 
-HyChart <- function(data, l1=NULL, l2 = NULL, a1 = NULL, a2 = NULL, c1 = NULL, c2 = NULL, series1 = NULL, stacking = NULL, title = NULL, subtitle = NULL, title_adj = "left", y1 = "", y2 = "", y1_def = c(NULL, NULL, NULL), y2_def = c(NULL, NULL, NULL), y1_right = FALSE, y1_rev = FALSE, y2_rev = FALSE, grid =c(1,1), lineWidth = 3, zoom = TRUE, zoom_cst = "none", navigator = FALSE, tooltip = TRUE, decimals = 1, size = c(750, 600), linePos = 1, h1 = NULL, h2 = NULL, v = NULL, b1_from = NULL, b1_to = NULL, b2_from = NULL, b2_to = NULL, v_from = NULL, v_to = NULL, rec = FALSE) {
+
+HyChart <- function(data, l1=NULL, l2 = NULL, a1 = NULL, a2 = NULL, c1 = NULL, c2 = NULL, series1 = NULL, stacking = NULL, space = 1.5, title = NULL, subtitle = NULL, title_adj = "left", y1 = "", y2 = "", y1_def = c(NULL, NULL, NULL), y2_def = c(NULL, NULL, NULL), y1_right = FALSE, y1_rev = FALSE, y2_rev = FALSE, grid =c(1,1), lineWidth = 3, zoom = TRUE, zoom_cst = "none", navigator = FALSE, tooltip = TRUE, decimals = 1, size = c(750, 600), linePos = 1, h1 = NULL, h1_lab = NULL, h2 = NULL, h2_lab = NULL, v = NULL, v_lab = NULL, b1_from = NULL, b1_to = NULL, b1_lab = NULL, b2_from = NULL, b2_to = NULL, b2_lab = NULL, v_from = NULL, v_to = NULL, vb_lab = NULL, rec = FALSE) {
 
 library(highcharter)
 library(reshape2)
@@ -15,7 +66,7 @@ library(xts)
 # Default settings
 if(is.null(l1) & is.null(l2) & is.null(a1) & is.null(a2) & is.null(c1) & is.null(c2)) {if(is.null(ncol(data))) {l1 <- 1} else {l1  <- 1:ncol(data) }}
 if(is.null(series1))     {series1 <- "Series1"}
-
+if(space!= 1.5) {space <- space - 0.33}
   
 #PREPARE LINE VECTORS
   
@@ -138,6 +189,7 @@ if (zoom_cst == "none" & zoom == TRUE & per == "daily") {
   if (years > 20)                {zoom_cst <- c("1M", "5Y", "10Y", "20Y") }
 }
 
+
 # -> For quarterly data, yearly data
 
 
@@ -177,15 +229,15 @@ if (!is.null(rec_end))    {rec_close    <- datetime_to_timestamp(as.Date(rec_end
 if (rec == TRUE & !is.null(rec_start) & !is.null(rec_end)){
   rec_bands = list()
   for (i in 1:length(rec_open)) {
-    temp  <- list(from = rec_open[i], to = rec_close[i], color="rgba(5, 0, 0, 0.1)")
+    temp  <- list(from = rec_open[i], to = rec_close[i], color="rgba(5, 0, 0, 0.1)", label = list(text = NULL))
     rec_bands[[length(rec_bands)+1]] <- temp
     i + 1}} else {rec_bands <- NULL}
 
-#Create xBands
+#Create vBands
 if (!is.null(v_from)){
 xbands = list()
 for (i in 1:length(dates_open)) {
-  temp  <- list(from = dates_open[i], to = dates_close[i], color="rgba(100, 0, 0, 0.1)")
+  temp  <- list(from = dates_open[i], to = dates_close[i], color="rgba(100, 0, 0, 0.1)", label = list(text = vb_lab[i]))
   xbands[[length(xbands)+1]] <- temp
   i + 1}
 } else {
@@ -197,39 +249,35 @@ xbands_final <- c(xbands, rec_bands)
 #Create y1_Bands
 ybands = list()
 for (i in 1:length(b1_from)) {
-  #temp  <- list(from = b1_from[i], to = b1_to[i], color="rgba(5, 0, 0, 0.1)", zIndex = 1, label = list(text = "This is a plotBand"))
-  temp  <- list(from = b1_from[i], to = b1_to[i], color="rgba(5, 0, 0, 0.1)")
+  temp  <- list(from = b1_from[i], to = b1_to[i], color="rgba(5, 0, 0, 0.1)", zIndex = 1, label = list(text = b1_lab[i]))
   ybands[[length(ybands)+1]] <- temp
   i + 1}
 
 #Create y2_Bands
 y2bands = list()
 for (i in 1:length(b2_from)) {
-  temp  <- list(from = b2_from[i], to = b2_to[i], color="rgba(5, 0, 0, 0.1)")
+  temp  <- list(from = b2_from[i], to = b2_to[i], color="rgba(5, 0, 0, 0.1)", zIndex = 1, label = list(text = b2_lab[i]))
   y2bands[[length(y2bands)+1]] <- temp
   i + 1}
 
-#Create xLines
+#Create vLines
 xlines = list()
 for (i in 1:length(v)) {
-  temp  <- list(color = "black", zIndex = linePos, width = 1.2, value = v[i])
+  temp  <- list(color = "black", zIndex = linePos, width = 1.2, value = v[i], label = list(rotation = 0, text = v_lab[i]))
   xlines[[length(xlines)+1]] <- temp
   i + 1}
 
-#h1_labels <- c("label 1 ", "label 2")
-h1_labels <- NULL
-
-#Create y1_Lines
+#Create h1_Lines
 ylines = list()
 for (i in 1:length(h1)) {
-  temp  <- list(color = "black", zIndex = linePos, width = 1.2, value = h1[i], label = list(text = h1_labels[i]))
+  temp  <- list(color = "black", zIndex = linePos, width = 1.2, value = h1[i], label = list(text = h1_lab[i]))
   ylines[[length(ylines)+1]] <- temp
   i + 1}
 
-#Create y2_Lines
+#Create h2_Lines
 y2lines = list()
 for (i in 1:length(h2)) {
-  temp  <- list(color = "black", zIndex = linePos, width = 1.2, value = h2[i])
+  temp  <- list(color = "black", zIndex = linePos, width = 1.2, value = h2[i], label = list(text = h2_lab[i]))
   y2lines[[length(y2lines)+1]] <- temp
   i + 1}
 
@@ -250,14 +298,14 @@ for (i in 1:length(zoom_cst)) {
   if (is.null(l2) & is.null(a2) & is.null(c2)){
     chart <- highchart(type = "stock")
     if (!is.null(a1)) {chart <- hc_add_series(hc = chart, data = df3, type = "area", hcaes(x = time, y = value, group = variable))}
-    if (!is.null(l1)) {chart <- hc_add_series(hc = chart, data = df1, type = "line", hcaes(x = time, y = value, group = variable))}
     if (!is.null(c1)) {chart <- hc_add_series(hc = chart, data = df5, type = "column", hcaes(x = time, y = value, group = variable))}
+    if (!is.null(l1)) {chart <- hc_add_series(hc = chart, data = df1, type = "line", hcaes(x = time, y = value, group = variable))}
     chart <- hc_title(hc = chart, text = title, align = title_adj, style = list(color = "black"))
     chart <- hc_subtitle(hc = chart, text = subtitle, align = title_adj, style = list(color = "grey"))
     chart <- hc_add_theme(hc = chart, hc_theme_flat(colors = clrs, chart = list(backgroundColor = "white") ))
     chart <- hc_xAxis(hc = chart, title = list(text = ""), labels = list(style = list(color = "black")), tickColor="grey", lineColor = "grey", gridLineWidth = grid[2], plotLines = xlines, plotBands = xbands_final)
     chart <- hc_yAxis(hc= chart, reversed = y1_rev, min = y1_def[1], max = y1_def[2], title = list(text = y1, style = list(color = "black")), labels = list(style = list(color = "black")), tickColor="grey", lineWidth = 1, lineColor = "grey", gridLineWidth = grid[1], opposite = y1_right, plotLines = ylines, plotBands = ybands)
-    chart <- hc_plotOptions(hc = chart, line = list(lineWidth = lineWidth), column = list(dataLabels = list(enabled = FALSE), stacking = stacking, enableMouseTracking = TRUE), area = list(dataLabels = list(enabled = FALSE), stacking = stacking, enableMouseTracking = TRUE), series = list(dataGrouping = list(enabled = FALSE)))
+    chart <- hc_plotOptions(hc = chart, line = list(lineWidth = lineWidth), column = list(dataLabels = list(enabled = FALSE), pointPadding = space, stacking = stacking, enableMouseTracking = TRUE), area = list(dataLabels = list(enabled = FALSE), stacking = stacking, enableMouseTracking = TRUE), series = list(dataGrouping = list(enabled = FALSE)))
     chart <- hc_legend(hc = chart, enabled = TRUE, align = "center")
     chart <- hc_rangeSelector(hc = chart, enabled = zoom, buttons = ranges)
     chart <- hc_navigator(hc = chart, enabled = navigator)
@@ -284,10 +332,8 @@ for (i in 1:length(zoom_cst)) {
     chart <- hc_subtitle(hc = chart, text = subtitle, align = title_adj, style = list(color = "grey"))
     chart <- hc_add_theme(hc = chart, hc_theme_flat(colors = clrs, chart = list(backgroundColor = "white") ))
     chart <- hc_xAxis(hc = chart, title = list(text = ""), labels = list(style = list(color = "black")), tickColor="grey", lineColor = "grey", gridLineWidth = grid[2], plotLines = xlines, plotBands = xbands_final)
-    
-    #chart <- hc_yAxis_multiples(hc = chart, list(title = list(text = y1, style = list(color = "black")), labels = list(style = list(color = "black")), tickColor = "grey", lineWidth = 1, lineColor = "grey", reversed = y1_rev, min = y1_def[1], max = y1_def[2], gridLineWidth = grid[1], opposite=FALSE, plotLines = ylines, plotBands = ybands), list(title = list(text = y2, style = list(color = "black")), labels = list(style = list(color = "black")), tickColor = "grey", lineWidth = 1, lineColor = "grey", gridLineWidth = grid[1], reversed = y2_rev, min = y2_def[1], max = y2_def[2], opposite=TRUE, plotBands = y2bands, plotLines = y2lines))
     chart <- hc_yAxis_multiples(hc = chart, list(title = list(text = y1, style = list(color = "black")), labels = list(style = list(color = "black")), tickColor = "grey", lineWidth = 1, lineColor = "grey", reversed = y1_rev, min = y1_def[1], max = y1_def[2], gridLineWidth = grid[1], opposite=FALSE, plotLines = ylines, plotBands = ybands), list(title = list(text = y2, style = list(color = "black")), labels = list(style = list(color = "black")), tickColor = "grey", lineWidth = 1, lineColor = "grey", gridLineWidth = 0, reversed = y2_rev, min = y2_def[1], max = y2_def[2], alignTicks = FALSE, opposite=TRUE, plotBands = y2bands, plotLines = y2lines))
-    chart <- hc_plotOptions(hc = chart, line = list(lineWidth = lineWidth), column = list(dataLabels = list(enabled = FALSE), stacking = stacking, enableMouseTracking = TRUE), area = list(dataLabels = list(enabled = FALSE), stacking = stacking, enableMouseTracking = TRUE), series = list(dataGrouping = list(enabled = FALSE)))
+    chart <- hc_plotOptions(hc = chart, line = list(lineWidth = lineWidth), column = list(dataLabels = list(enabled = FALSE), pointPadding = space, stacking = stacking, enableMouseTracking = TRUE), area = list(dataLabels = list(enabled = FALSE), stacking = stacking, enableMouseTracking = TRUE), series = list(dataGrouping = list(enabled = FALSE)))
     chart <- hc_legend(hc = chart, enabled = TRUE, align = "center")
     chart <- hc_rangeSelector(hc = chart, enabled = zoom, buttons = ranges)
     chart <- hc_navigator(hc = chart, enabled = navigator)

@@ -16,8 +16,8 @@
 #' @param title optional character to add chart title
 #' @param title_adj optional integer to specify title alignment (0: left-align, 1: right-align, NULL (default): center)
 #' @param no optional integer to add chart number
-#' @param d1 optional integer vector to specify which columns to plot on primary y-axis
-#' @param d2 optional integer vector to specify which columns to plot on secondary y-axis
+#' @param l1 optional integer vector to specify which columns to plot (as lines) on primary y-axis
+#' @param l2 optional integer vector to specify which columns to plot (as lines) on secondary y-axis
 #' @param y1 optional character to specify description of primary y-axis
 #' @param y2 optional character to specify description of secondary y-axis
 #' @param y1_def optional number vector to specify start, end, and intervals of primary y-axis, e.g. c(0, 10, 2)
@@ -29,7 +29,7 @@
 #' @param grid optional boolean to show grid when set to TRUE
 #' @param rec optional boolean to shade recessions when set to TRUE
 #' @param dt_format optional character vector to specify date interval and date format of x-axis, e..g dt_format=c('3 months', '\%b-\%Y')
-#' @param h optional argument to specify horizontal line at specific height
+#' @param h1 optional argument to specify horizontal line at specific height
 #' @param v optional date to specify vertical date line, e.g. v='31/12/2012'
 #' 
 #' @return plots R base plot
@@ -40,39 +40,22 @@
 #' 
 #' Note that these examples require corresponding zoo objects to create plots
 #' 
-#' LineChart(data=zoo, d1=1:3, leg="topleft", fn="This is a footnote.")
-#' LineChart(data=zoo, title="Example Chart", no="1.1", d1=1:3, y1="Index", leg="topleft", dt_format=c("5 years", "%Y"), v="01/01/2018")
-#' LineChart(data=zoo, title="Example Chart", d1=1:3, y1="Index", leg="topleft", grid=TRUE, h=0)
-#' LineChart(data=zoo, title="Example Chart", d1=4:5, d2=6, y1="in %", y2="in USD mln", rec=TRUE)
-#' LineChart(data=zoo, title="Example Chart", d1=1, d2=2, y1="Unemployment (%)", y2="Budget Balance (%GDP)", y1_def=c(0, 10, 2), y2_def=c(-10,2,2), y2_rev=TRUE, leg="top", rec=TRUE)
+#' LineChart(data=zoo, l1=1:3, leg="topleft", fn="This is a footnote.")
+#' LineChart(data=zoo, title="Example Chart", no="1.1", l1=1:3, y1="Index", leg="topleft", dt_format=c("5 years", "%Y"), v="01/01/2018")
+#' LineChart(data=zoo, title="Example Chart", l1=1:3, y1="Index", leg="topleft", grid=TRUE, h=0)
+#' LineChart(data=zoo, title="Example Chart", l1=4:5, l2=6, y1="in %", y2="in USD mln", rec=TRUE)
+#' LineChart(data=zoo, title="Example Chart", l1=1, l2=2, y1="Unemployment (%)", y2="Budget Balance (%GDP)", y1_def=c(0, 10, 2), y2_def=c(-10,2,2), y2_rev=TRUE, leg="top", rec=TRUE)
 
-LineChart <- function(data, inception, title, title_adj, no, d1, d2, y1, y2, y1_def, y2_def, y2_rev, fn, fn_adj, leg, grid, rec, dt_format, h, v) {
+LineChart <- function(data, inception = FALSE, title = NULL, title_adj = NULL, no = "", l1, l2 = "none", y1 = NULL, y2 = NULL, y1_def = "none", y2_def = "none", y2_rev = FALSE, fn = NULL, fn_adj = NULL, leg ="topleft", grid = FALSE, rec = FALSE, dt_format, h1 = "none", v = "none") {
 
 #Turn off warnings
 options(warn=-1)
 
 #Set default values
-if (missing(title))       {title   <- ""          }
-if (missing(title_adj))   {title_adj  <-  NULL    }  
-if (missing(d1) &  is.null(ncol(data)))  {d1 <- 1 }
-if (missing(d1) & !is.null(ncol(data)))  {d1 <- c(1:ncol(data))}
-if (missing(y1))          {y1 <- ""               }
-if (missing(y1_def))      {y1_def  <- "none"      }
-if (missing(y2_def))      {y2_def  <- "none"      }
-if (missing(y2))          {y2      <- ""          }
-if (missing(d2))          {d2      <- "none"      }
-if (missing(fn))          {fn      <-  ""         }
-if (missing(fn_adj))      {fn_adj  <-  NULL       }
-if (missing(no))          {no      <-  ""         }
-if (missing(grid))        {grid    <-  FALSE      }
-if (missing(rec))         {rec     <-  FALSE      }
-if (missing(leg))         {leg     <- "topleft"   }
-if (missing(h))           {h       <- "none"      }
-if (missing(v))           {v       <- "none"      }
-if (missing(y2_rev))      {y2_rev  <- FALSE       }
+if (missing(l1) &  is.null(ncol(data)))  {l1 <- 1 }
+if (missing(l1) & !is.null(ncol(data)))  {l1 <- c(1:ncol(data))}
 if (y2_def!="none")       {ylim_input=c(y2_def[1], y2_def[2])}
 if (y2_def!="none" & y2_rev==TRUE) {ylim_input=rev(range(c(y2_def[1], y2_def[2])))}
-if (missing(inception)) {inception <- FALSE}
 dt_format_override <- FALSE
 
 #Fix data when it has only one column
@@ -80,20 +63,20 @@ if (is.null(ncol(data)))  {data <- cbind(data, data)
 colnames(data) <- c("Series", "Series")}
 
 #Create data vectors and data column vectors
-data1 <- as.data.frame(data[,d1])
-colnames(data1) <- colnames(data)[d1]
+data1 <- as.data.frame(data[,l1])
+colnames(data1) <- colnames(data)[l1]
 data1 <- as.zoo(data1)
 
-if(d2!="none")  {
-  data2 <- as.data.frame(data[,d2])
-  colnames(data2) <- colnames(data)[d2]
+if(l2!="none")  {
+  data2 <- as.data.frame(data[,l2])
+  colnames(data2) <- colnames(data)[l2]
   data2 <- as.zoo(data2)
 }
 
 #Trim data block
-if (d2!="none") {
-  d11 <- length(d1)
-  d22 <- length(d2)
+if (l2!="none") {
+  d11 <- length(l1)
+  d22 <- length(l2)
   
   block <- cbind(data1, data2)
   block <- na.trim(block, sides="both", is.na="all")
@@ -101,11 +84,11 @@ if (d2!="none") {
   data2 <- block[,c((d11+1):(d11+d22))]
 }
 
-if (d2=="none") {data1 <- na.trim(data1, sides="both", is.na="all")}
+if (l2=="none") {data1 <- na.trim(data1, sides="both", is.na="all")}
 
 #Create d1, d2, d3
-if(d2!="none")  {d3 <- c(d1, d2)} else {d3 <- d1}
-if(d2!="none")  {data3 <- data[,d3]} else {data3 <- data1}
+if(l2!="none")  {d3 <- c(l1, l2)} else {d3 <- l1}
+if(l2!="none")  {data3 <- data[,d3]} else {data3 <- data1}
 
 if (!missing(dt_format)){
 
@@ -156,7 +139,7 @@ bp_param <- Barplot_param(inception=inception, data=data1, stacked=TRUE, dt_form
 #Create plot, first y-axis, and content
 par(mar = c(5,5,5,5))
 
-if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_def[1], y1_def[2]), xaxt="n", yaxt="n", tck=0, las=1, lwd=3, col=1:length(d1), border=0.1, space=0); title(main=title, adj=title_adj, line=0.75)
+if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_def[1], y1_def[2]), xaxt="n", yaxt="n", tck=0, las=1, lwd=3, col=1:length(l1), border=0.1, space=0); title(main=title, adj=title_adj, line=0.75)
   title(ylab=y1)
   
   axis(side=1, at=bp_param[,1], labels=format(bp_param[,1], dt_format[2]), las=1, tck=0)
@@ -198,10 +181,10 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
     abline(h=seq, lty=1, lwd=1, col="lavenderblush3")}}
 
     # Add ablines
-    if(h!="none") {abline(h=h, lty=1, lwd=1, col="black")}
+    if(h1!="none") {abline(h=h1, lty=1, lwd=1, col="black")}
     if(v!="none") {abline(v=as.Date(v, "%d/%m/%Y"), lty=1, lwd=1)}
   
-} else {plot(data1, plot.type="s", ann=FALSE, bty="n", xaxt="n", tck=0, las=1, las=1, lwd=3, col=1:length(d1), border=0.1, space=0); title(main=title, adj=title_adj, line=0.75)
+} else {plot(data1, plot.type="s", ann=FALSE, bty="n", xaxt="n", tck=0, las=1, las=1, lwd=3, col=1:length(l1), border=0.1, space=0); title(main=title, adj=title_adj, line=0.75)
     title(ylab=y1)  
   
     axis(side=1, at=bp_param[,1], labels=format(bp_param[,1], dt_format[2]), las=1, tck=0)
@@ -244,23 +227,23 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
     }}
 
   # Add ablines
-  if(h!="none") {abline(h=h, lty=1, lwd=1, col="black")}
+  if(h1!="none") {abline(h=h1, lty=1, lwd=1, col="black")}
   if(v!="none") {abline(v=as.Date(v, "%d/%m/%Y"), lty=1, lwd=1)}
   
   }
 
 #Create second y-axis, and content (if available)
-if (d2!="none") {par(new = T)
+if (l2!="none") {par(new = T)
 
-  if (y2_def!="none") {plot(data2, plot.type="s", bty="n", ylim=ylim_input, col=(length(d1)+1):(length(d3)), axes=F, lwd=3, ann=FALSE)
+  if (y2_def!="none") {plot(data2, plot.type="s", bty="n", ylim=ylim_input, col=(length(l1)+1):(length(d3)), axes=F, lwd=3, ann=FALSE)
     axis(4, seq(y2_def[1], y2_def[2], y2_def[3]), las=1, lwd=0, tck=0)
-    } else {plot(data2, plot.type="s", bty="n", col=(length(d1)+1):(length(d3)), axes=F, lwd=3, las=1, ann=FALSE, tck=-0)
+    } else {plot(data2, plot.type="s", bty="n", col=(length(l1)+1):(length(d3)), axes=F, lwd=3, las=1, ann=FALSE, tck=-0)
     axis(4, las=1, lwd=0, tck=0)}
     mtext(side = 4, line = 3, y2)
 
   legend(leg, box.lty=0, bg="#FFFFFF", legend=colnames(data3), pch=15, col=1:length(d3), ncol=1)
   } else {legend(leg, box.lty=0, bg="#FFFFFF", legend=colnames(data3), pch=15, col=1:length(d3), ncol=1)}
 
-if (d2=="none") {box(which = "plot", bty = "l")} else {box(which = "plot", bty = "u")}
+if (l2=="none") {box(which = "plot", bty = "l")} else {box(which = "plot", bty = "u")}
 
 }

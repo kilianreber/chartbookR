@@ -4,7 +4,8 @@
 \alias{getFRED}
 \title{FRED data as zoo object}
 \usage{
-getFRED(tickers, names, start, end, time, na)
+getFRED(tickers, names, start = "01/01/1666", end = "01/01/1666", time,
+  na = TRUE)
 }
 \arguments{
 \item{tickers}{character vector of FRED ticker(s)}

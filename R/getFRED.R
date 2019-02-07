@@ -29,7 +29,7 @@
 #' zoo <- getFRED(tickers=c("T10YIE", "T5YIE"), names=c("10Y Breakeven", "5Y Breakeven"), start='01/01/2015')
 #' zoo <- getFRED(tickers=c("CPIAUCSL", "PCEPILFE"), names=c("CPI", "Core PCE"), start='01/01/2000', end='01/01/2018')
 
-getFRED <- function(tickers, names, start, end, time, na){
+getFRED <- function(tickers, names, start = "01/01/1666", end = "01/01/1666", time, na = TRUE){
 
   #Turn off warnings
   options(warn=-1)
@@ -47,8 +47,6 @@ getFRED <- function(tickers, names, start, end, time, na){
   if(missing(time))          {time           <- "none"         }
                               tf             <- "none"
   if(time!="none")           {tf             <- gsub('[[:digit:]]+', '', time)}
-  if(missing(start))         {start          <- "01/01/1666"   }
-  if(missing(end))           {end            <- "01/01/1666"   }
   if(time=="ytd") {time <- "YTD"}
   if(time=="YTD")            {start          <- start_ytd      }
   if(time!="none" & time!="YTD" & tf=="Y") {start <- as.Date(Sys.Date()-(365*as.numeric((gsub("Y", "", time)))))}
@@ -56,7 +54,6 @@ getFRED <- function(tickers, names, start, end, time, na){
   if(time!="none" & time!="YTD" & tf=="M") {start <- as.Date(Sys.Date()-(30*as.numeric((gsub("M", "", time)))))}
   if(time!="none" & time!="YTD" & tf=="W") {start <- as.Date(Sys.Date()-(7*as.numeric((gsub("W", "", time)))))}                                                        
   if(time!="none" & time!="YTD" & tf=="D") {start <- as.Date(Sys.Date()-(as.numeric((gsub("D", "", time)))))}
-  if(missing(na))            {na             <- TRUE           }
   
   #Prepare data
   if (start!="01/01/1666") {start <- as.Date(start, "%d/%m/%Y")}

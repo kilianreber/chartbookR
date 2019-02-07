@@ -4,7 +4,10 @@
 \alias{getBBG}
 \title{Bloomberg data as zoo object}
 \usage{
-getBBG(tickers, field, names, start, end, time, freq, na, last)
+getBBG(tickers, field = "PX_LAST", names,
+  start = (LastDayInMonth(Sys.Date()) - 3 * 365),
+  end = as.Date(Sys.Date() - 1), time, freq = "MONTHLY", na = TRUE,
+  last = FALSE)
 }
 \arguments{
 \item{tickers}{character vector of Bloomberg ticker(s)}

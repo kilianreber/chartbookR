@@ -30,7 +30,7 @@
 #' @param grid optional boolean to show grid when set to TRUE
 #' @param rec optional boolean to shade recessions when set to TRUE
 #' @param dt_format optional character vector to specify date interval and date format of x-axis, e..g dt_format=c('3 months','\%b-\%Y')
-#' @param h optional argument to specify horizontal line at specific height
+#' @param h1 optional argument to specify horizontal line at specific height
 #' @param v optional date to specify vertical date line, e.g. v='31/12/2012'
 #' 
 #' @return plots R base plot
@@ -48,29 +48,14 @@
 #' BarChart(data=zoo, title="Example Chart", d1=4:5, d2=6, y1="in %", y2="in USD mln", rec=TRUE)
 #' BarChart(data=zoo, title="Example Chart", d1=1, d2=2, y1="Unemployment (%)", y2="Budget Balance (%GDP)", y1_def=c(0, 10, 2), y2_def=c(-10,2,2), y2_rev=TRUE, leg="top", rec=TRUE)
 
-BarChart <- function(data, inception, title, no, stacked, space, d1, d2, y1, y2, y1_def, y2_def, y2_rev, fn, fn_adj, leg, grid, rec, dt_format, h, v) {
+BarChart <- function(data, inception = FALSE, title = NULL, no = NULL, stacked = TRUE, space, d1, d2 = "none", y1 = NULL, y2 = NULL, y1_def = "none", y2_def = "none", y2_rev, fn = NULL, fn_adj = NULL, leg = "topleft", grid = FALSE, rec = FALSE, dt_format, h1 = "none", v = "none") {
 
 #Turn off warnings
 options(warn=-1)
 
 #Set default values
-if (missing(title))       {title   <- ""    }
 if (missing(d1) &  is.null(ncol(data)))  {d1 <- 1}
 if (missing(d1) & !is.null(ncol(data)))  {d1 <- c(1:ncol(data))}
-if (missing(stacked))     {stacked <- TRUE  }
-if (missing(y1))          {y1      <- ""    }
-if (missing(y1_def))      {y1_def  <- "none"}
-if (missing(y2_def))      {y2_def  <- "none"}
-if (missing(y2))          {y2      <- ""    }
-if (missing(d2))          {d2      <- "none"}
-if (missing(fn))          {fn      <-  ""   }
-if (missing(fn_adj))      {fn_adj  <-  NULL }
-if (missing(no))          {no      <-  ""   }
-if (missing(grid))        {grid    <-  FALSE}
-if (missing(rec))         {rec     <-  FALSE}
-if (missing(leg))         {leg  <- "topleft"}
-if (missing(h))           {h       <- "none"}
-if (missing(v))           {v       <- "none"}
 if (missing(y2_rev))      {y2_rev  <- FALSE }
 if (missing(space) & stacked==TRUE)  {space <- 0.25}
 if (missing(space) & stacked==FALSE) {space <- c(0.25, 0.1)}
@@ -78,7 +63,7 @@ if (stacked==TRUE)        {space <- space[1]}
 if (stacked==FALSE &  length(space)==1) {space <- c(space[1], 1)}
 if (y2_def!="none")       {ylim_input=c(y2_def[1], y2_def[2])}
 if (y2_def!="none" & y2_rev==TRUE) {ylim_input=rev(range(c(y2_def[1], y2_def[2])))}
-if (missing(inception)) {inception <- FALSE}
+
 bars_width <- 1
 dt_format_override <- FALSE
 
@@ -172,7 +157,7 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
   title(sub=fn, font.sub=3, line = 3, adj=fn_adj)
 
     #Add horizontal abline
-    if(h!="none") {abline(h=h, lty=1, lwd=1, col="black")}
+    if(h1!="none") {abline(h=h1, lty=1, lwd=1, col="black")}
     
     #Add vertical abline
     if(v!="none") {
@@ -297,7 +282,7 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
   }
 
 #Add horizontal abline
-if(h!="none") {abline(h=h, lty=1, lwd=1, col="black")}
+if(h1!="none") {abline(h=h1, lty=1, lwd=1, col="black")}
 
 #Add vertical abline
 if(v!="none") {

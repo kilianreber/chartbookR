@@ -31,7 +31,7 @@
 #' zoo <- getBBG(tickers=c('CPI YOY Index', 'PPI YOY Index'), names=c('CPI', 'PPI'), start='01/01/2000', end='01/01/2018')
 #' zoo <- getBBG(tickers=c('NAPMPMI', 'MPMIEZMA', 'MPMIEMMA'), names=c('United States (ISM)', 'Eurozone', 'Emerging Markets'), time='3Y')
 
-getBBG <- function(tickers, field, names, start, end, time, freq, na, last){
+getBBG <- function(tickers, field = "PX_LAST", names, start = (LastDayInMonth(Sys.Date())-3*365), end = as.Date(Sys.Date()-1), time, freq = "MONTHLY", na = TRUE, last = FALSE){
 
   #Turn off warnings
   options(warn=-1)
@@ -48,15 +48,9 @@ getBBG <- function(tickers, field, names, start, end, time, freq, na, last){
   if(length(tickers)==1)     {one_tickr_fix  <- TRUE} else {one_tickr_fix <- FALSE}
   if(length(tickers)==1)     {tickers        <- c(tickers, "CO1 Comdty"   )
                               names          <- c(names, "Oil")           }
-  #if(length(tickers)==1)     {tickers        <- rep(tickers, 2 )
-  #                            names          <- rep(names, 2)            }
-  if(missing(freq))          {freq           <- "MONTHLY"                 }
-  if(missing(field))         {field          <- "PX_LAST"                 }
   if(missing(time))          {time           <- "none"                    }
                               tf             <- "none"
   if(time!="none")           {tf             <- gsub('[[:digit:]]+', '', time)}
-  if(missing(start))         {start <- (LastDayInMonth(Sys.Date())-3*365)}
-  if(missing(end))           {end            <- as.Date(Sys.Date()-1)     }
   if(time=="ytd") {time <- "YTD"}
   if(time=="YTD")            {start          <- start_ytd                 }
   if(time!="none" & time!="YTD" & tf=="Y") {start <- as.Date(Sys.Date()-(365*as.numeric((gsub("Y", "", time)))))}
@@ -64,9 +58,7 @@ getBBG <- function(tickers, field, names, start, end, time, freq, na, last){
   if(time!="none" & time!="YTD" & tf=="M") {start <- as.Date(Sys.Date()-(30*as.numeric((gsub("M", "", time)))))}
   if(time!="none" & time!="YTD" & tf=="W") {start <- as.Date(Sys.Date()-(7*as.numeric((gsub("W", "", time)))))}                          
   if(time!="none" & time!="YTD" & tf=="D") {start <- as.Date(Sys.Date()-(as.numeric((gsub("D", "", time)))))}
-  if(missing(na))            {na             <- TRUE                      }
-  if(missing(last))          {last           <- TRUE                      }
-                              
+  
   start <- as.Date(start, "%d/%m/%Y")
   end   <- as.Date(end, "%d/%m/%Y")
                               

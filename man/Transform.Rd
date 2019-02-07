@@ -4,7 +4,9 @@
 \alias{Transform}
 \title{Transformation of zoo object}
 \usage{
-Transform(data, start, chg, chg_type, pma, pms, lag, lead, rebase, Z)
+Transform(data, start = "01/01/1666", chg = "none",
+  chg_type = "perc", pma = "none", pms = "none", lag = "none",
+  lead = "none", rebase = "FALSE", Z = "none")
 }
 \arguments{
 \item{data}{specification of zoo object}
