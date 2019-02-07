@@ -28,9 +28,9 @@ HyChart(data, l1 = NULL, l2 = NULL, a1 = NULL, a2 = NULL,
 
 \item{a2}{optional integer vector to specify which columns to plot (as areas) on secondary y-axis}
 
-\item{c1}{optional integer vector to specify which columns to plot (as bars) on primary y-axis}
+\item{c1}{optional integer vector to specify which columns to plot (as columns) on primary y-axis}
 
-\item{c2}{optional integer vector to specify which columns to plot (as bars) on secondary y-axis}
+\item{c2}{optional integer vector to specify which columns to plot (as columns) on secondary y-axis}
 
 \item{stacking}{optional integer to specify if and how bars or areas should be stacked; default is NULL}
 
@@ -82,7 +82,7 @@ HyChart(data, l1 = NULL, l2 = NULL, a1 = NULL, a2 = NULL,
 
 \item{v}{optional date to specify vertical date line(s), e.g. v='2012-01-01'}
 
-\item{v_lab}{optional argument to specify vertical date line label(s)}
+\item{v_lab}{optional argument to specify vertical date line label(s), e.g. v='31/12/2012'}
 
 \item{b1_from}{optional argument to specify start of horizontal range band(s) on primary y-axis}
 
@@ -96,9 +96,9 @@ HyChart(data, l1 = NULL, l2 = NULL, a1 = NULL, a2 = NULL,
 
 \item{b2_lab}{optional argument to specify horizontal range band(s) label(s) on secondary y-axis}
 
-\item{v_from}{optional date(s) to specify start of vertical range band(s), e.g. v='2012-01-01'}
+\item{v_from}{optional date(s) to specify start of vertical range band(s), e.g. v='31/12/2012'}
 
-\item{v_to}{optional date(s) to specify end of vertical range band(s), e.g. v='2013-01-01'}
+\item{v_to}{optional date(s) to specify end of vertical range band(s), e.g. e.g. v='31/12/2012'}
 
 \item{vb_lab}{optional argument to specify label(s) of vertical range band(s)}
 
