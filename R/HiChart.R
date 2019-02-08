@@ -55,7 +55,7 @@
 #' @export
 
 
-HyChart <- function(data, l1=NULL, l2 = NULL, a1 = NULL, a2 = NULL, c1 = NULL, c2 = NULL, series1 = NULL, stacking = NULL, space = 1.5, title = NULL, subtitle = NULL, title_adj = "left", y1 = "", y2 = "", y1_def = c(NULL, NULL, NULL), y2_def = c(NULL, NULL, NULL), y1_right = FALSE, y1_rev = FALSE, y2_rev = FALSE, grid =c(1,1), lineWidth = 3, zoom = TRUE, zoom_cst = "none", navigator = FALSE, tooltip = TRUE, decimals = 1, size = c(750, 600), linePos = 1, h1 = NULL, h1_lab = NULL, h2 = NULL, h2_lab = NULL, v = NULL, v_lab = NULL, b1_from = NULL, b1_to = NULL, b1_lab = NULL, b2_from = NULL, b2_to = NULL, b2_lab = NULL, v_from = NULL, v_to = NULL, vb_lab = NULL, rec = FALSE) {
+HiChart <- function(data, l1=NULL, l2 = NULL, a1 = NULL, a2 = NULL, c1 = NULL, c2 = NULL, series1 = NULL, stacking = NULL, space = 1.5, title = NULL, subtitle = NULL, title_adj = "left", y1 = "", y2 = "", y1_def = c(NULL, NULL, NULL), y2_def = c(NULL, NULL, NULL), y1_right = FALSE, y1_rev = FALSE, y2_rev = FALSE, grid =c(1,1), lineWidth = 3, zoom = TRUE, zoom_cst = "none", navigator = FALSE, tooltip = TRUE, decimals = 1, size = c(750, 600), linePos = 1, h1 = NULL, h1_lab = NULL, h2 = NULL, h2_lab = NULL, v = NULL, v_lab = NULL, b1_from = NULL, b1_to = NULL, b1_lab = NULL, b2_from = NULL, b2_to = NULL, b2_lab = NULL, v_from = NULL, v_to = NULL, vb_lab = NULL, rec = FALSE) {
 
 library(highcharter)
 library(reshape2)
@@ -254,35 +254,35 @@ xbands_final <- c(xbands, rec_bands)
 #Create y1_Bands
 ybands = list()
 for (i in 1:length(b1_from)) {
-  temp  <- list(from = b1_from[i], to = b1_to[i], color="rgba(5, 0, 0, 0.1)", zIndex = 1, label = list(text = b1_lab[i]))
+  temp  <- list(from = b1_from[i], to = b1_to[i], color="rgba(5, 0, 0, 0.1)", zIndex = 1, label = list(zIndex = 100, x = 20, align = "left", text = b1_lab[i]))
   ybands[[length(ybands)+1]] <- temp
   i + 1}
 
 #Create y2_Bands
 y2bands = list()
 for (i in 1:length(b2_from)) {
-  temp  <- list(from = b2_from[i], to = b2_to[i], color="rgba(5, 0, 0, 0.1)", zIndex = 1, label = list(text = b2_lab[i]))
+  temp  <- list(from = b2_from[i], to = b2_to[i], color="rgba(5, 0, 0, 0.1)", zIndex = 1, label = list(zIndex = 100, x = -20, align = "right", text = b2_lab[i]))
   y2bands[[length(y2bands)+1]] <- temp
   i + 1}
 
 #Create vLines
 xlines = list()
 for (i in 1:length(v)) {
-  temp  <- list(color = "black", zIndex = linePos, width = 1.2, value = v[i], label = list(x = 7.5, y = 17.5, rotation = 0, text = v_lab[i]))
+  temp  <- list(color = "black", zIndex = linePos, width = 1.2, value = v[i], zIndex = 1, label = list(zIndex = 100, x = 7.5, y = 17.5, rotation = 0, text = v_lab[i]))
   xlines[[length(xlines)+1]] <- temp
   i + 1}
 
 #Create h1_Lines
 ylines = list()
 for (i in 1:length(h1)) {
-  temp  <- list(color = "black", zIndex = linePos, width = 1.2, value = h1[i], label = list(text = h1_lab[i]))
+  temp  <- list(color = "black", zIndex = linePos, width = 1.2, value = h1[i], zIndex = 1, label = list(zIndex = 100, x = 20, align = "left", text = h1_lab[i]))
   ylines[[length(ylines)+1]] <- temp
   i + 1}
 
 #Create h2_Lines
 y2lines = list()
 for (i in 1:length(h2)) {
-  temp  <- list(color = "black", zIndex = linePos, width = 1.2, value = h2[i], label = list(text = h2_lab[i]))
+  temp  <- list(color = "black", zIndex = linePos, width = 1.2, value = h2[i], zIndex = 1, label = list(zIndex = 100, x = -20, align = "right", text = h2_lab[i]))
   y2lines[[length(y2lines)+1]] <- temp
   i + 1}
 
@@ -315,7 +315,7 @@ for (i in 1:length(zoom_cst)) {
     chart <- hc_rangeSelector(hc = chart, enabled = zoom, buttons = ranges)
     chart <- hc_navigator(hc = chart, enabled = navigator)
     chart <- hc_scrollbar(hc = chart, enabled = FALSE)
-    chart <- hc_tooltip(hc = chart, enabled = tooltip, valueDecimals = decimals)
+    chart <- hc_tooltip(hc = chart, split = TRUE, enabled = tooltip, valueDecimals = decimals)
     chart <- hc_size(hc = chart, width = size[1], height = size[2])
     return(chart)
   }
@@ -343,7 +343,7 @@ for (i in 1:length(zoom_cst)) {
     chart <- hc_rangeSelector(hc = chart, enabled = zoom, buttons = ranges)
     chart <- hc_navigator(hc = chart, enabled = navigator)
     chart <- hc_scrollbar(hc = chart, enabled = FALSE)
-    chart <- hc_tooltip(hc = chart, enabled = tooltip, valueDecimals = decimals)
+    chart <- hc_tooltip(hc = chart, split = TRUE, enabled = tooltip, valueDecimals = decimals)
     chart <- hc_size(hc = chart, width = size[1], height = size[2])
     return(chart)
   }

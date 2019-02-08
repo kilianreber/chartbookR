@@ -8,7 +8,7 @@
 #' \itemize{
 #' \item Data download: \code{\link[chartbookR]{getBBG}} and \code{\link{getFRED}}
 #' \item Data transformation: \code{\link{Transform}}
-#' \item Customized plotting: \code{\link{LineChart}}, \code{\link{BarChart}} and \code{\link{HyChart}}
+#' \item Customized plotting: \code{\link{LineChart}}, \code{\link{BarChart}} and \code{\link{HiChart}}
 #' \item Exporting to Powerpoint: \code{\link{makePPT}}
 #' }
 #'  
@@ -16,6 +16,8 @@
 #' While all functions are based on existing packages, they make the chartbook creation an efficient and convenient process.
 #' 
 #' In order to use the \code{\link{getBBG}} function, you need to have a running Bloomberg terminal session. If this is not the case, you can still use \code{\link{getFRED}} to download freely available data from the St. Louis Fed database (\url{https://fred.stlouisfed.org}).
+#' 
+#' The \code{\link{HyChart}} function relies on highcharts (www.highcharts.com) - a Highsoft product which is not free for commercial and Governmental use.
 #' 
 #' @section Author/Maintainer:
 #' Kilian Reber \email{kilian.d.reber@gmail.com}
