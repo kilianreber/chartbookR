@@ -30,6 +30,7 @@
 #' @param zoom_cst optional integer to specify custom zoom intervals, e.g. c("1W", "1M", "3M", "6M"); default is "none"
 #' @param navigator optional boolean to show or hide range navigator; default is FALSE
 #' @param tooltip optional boolean to show or hide tooltip; default is FALSE
+#' @param stickyLabels optional boolean to turn on or off sticky labels; default is FALSE
 #' @param decimals optional integer to specify number of decimals shown in tooltip; default is 1
 #' @param size optional integer vector to specify chart output size; default is c(750, 600)
 #' @param linePos optional integer vector to specify linePos... WHAT IS THAT???
@@ -55,7 +56,7 @@
 #' @export
 
 
-HiChart <- function(data, l1=NULL, l2 = NULL, a1 = NULL, a2 = NULL, c1 = NULL, c2 = NULL, series1 = NULL, stacking = NULL, space = 1.5, title = NULL, subtitle = NULL, title_adj = "left", y1 = "", y2 = "", y1_def = c(NULL, NULL, NULL), y2_def = c(NULL, NULL, NULL), y1_right = FALSE, y1_rev = FALSE, y2_rev = FALSE, grid =c(1,1), lineWidth = 3, zoom = TRUE, zoom_cst = "none", navigator = FALSE, tooltip = TRUE, decimals = 1, size = c(750, 600), linePos = 1, h1 = NULL, h1_lab = NULL, h2 = NULL, h2_lab = NULL, v = NULL, v_lab = NULL, b1_from = NULL, b1_to = NULL, b1_lab = NULL, b2_from = NULL, b2_to = NULL, b2_lab = NULL, v_from = NULL, v_to = NULL, vb_lab = NULL, rec = FALSE) {
+HiChart <- function(data, l1=NULL, l2 = NULL, a1 = NULL, a2 = NULL, c1 = NULL, c2 = NULL, series1 = NULL, stacking = NULL, space = 1.5, title = NULL, subtitle = NULL, title_adj = "left", y1 = "", y2 = "", y1_def = c(NULL, NULL, NULL), y2_def = c(NULL, NULL, NULL), y1_right = FALSE, y1_rev = FALSE, y2_rev = FALSE, grid =c(1,1), lineWidth = 3, zoom = TRUE, zoom_cst = "none", navigator = FALSE, tooltip = TRUE, stickyLabels = FALSE, decimals = 1, size = c(750, 600), linePos = 1, h1 = NULL, h1_lab = NULL, h2 = NULL, h2_lab = NULL, v = NULL, v_lab = NULL, b1_from = NULL, b1_to = NULL, b1_lab = NULL, b2_from = NULL, b2_to = NULL, b2_lab = NULL, v_from = NULL, v_to = NULL, vb_lab = NULL, rec = FALSE) {
 
 library(highcharter)
 library(reshape2)
@@ -67,7 +68,7 @@ library(xts)
 if(is.null(l1) & is.null(l2) & is.null(a1) & is.null(a2) & is.null(c1) & is.null(c2)) {if(is.null(ncol(data))) {l1 <- 1} else {l1  <- 1:ncol(data) }}
 if(is.null(series1))     {series1 <- "Series1"}
 if(space!= 1.5) {space <- space - 0.33}
-  
+
 #PREPARE LINE VECTORS
   
 #Create df1 and convert to Long Format
@@ -315,7 +316,7 @@ for (i in 1:length(zoom_cst)) {
     chart <- hc_rangeSelector(hc = chart, enabled = zoom, buttons = ranges)
     chart <- hc_navigator(hc = chart, enabled = navigator)
     chart <- hc_scrollbar(hc = chart, enabled = FALSE)
-    chart <- hc_tooltip(hc = chart, split = F, shared = FALSE, enabled = tooltip, valueDecimals = decimals)
+    chart <- hc_tooltip(hc = chart, split = stickyLabels, shared = FALSE, enabled = tooltip, valueDecimals = decimals)
     chart <- hc_size(hc = chart, width = size[1], height = size[2])
     return(chart)
   }
@@ -326,10 +327,8 @@ for (i in 1:length(zoom_cst)) {
     
     if (!is.null(a1)) {chart <- hc_add_series(hc = chart, data = df3, type = "area",   hcaes(x = time, y = value, group = variable))}
     if (!is.null(a2)) {chart <- hc_add_series(hc = chart, data = df4, type = "area",   yAxis = 1, hcaes(x = time, y = value, group = variable))}
-    
     if (!is.null(c1)) {chart <- hc_add_series(hc = chart, data = df5, type = "column", hcaes(x = time, y = value, group = variable))}
     if (!is.null(c2)) {chart <- hc_add_series(hc = chart, data = df6, type = "column", yAxis = 1, hcaes(x = time, y = value, group = variable))}
-    
     if (!is.null(l1)) {chart <- hc_add_series(hc = chart, data = df1, type = "line",   hcaes(x = time, y = value, group = variable))}
     if (!is.null(l2)) {chart <- hc_add_series(hc = chart, data = df2, type = "line",   yAxis = 1, hcaes(x = time, y = value, group = variable))}
     
@@ -343,7 +342,7 @@ for (i in 1:length(zoom_cst)) {
     chart <- hc_rangeSelector(hc = chart, enabled = zoom, buttons = ranges)
     chart <- hc_navigator(hc = chart, enabled = navigator)
     chart <- hc_scrollbar(hc = chart, enabled = FALSE)
-    chart <- hc_tooltip(hc = chart, split = F, shared = FALSE, enabled = tooltip, valueDecimals = decimals)
+    chart <- hc_tooltip(hc = chart, split = stickyLabels, shared = FALSE, enabled = tooltip, valueDecimals = decimals)
     chart <- hc_size(hc = chart, width = size[1], height = size[2])
     return(chart)
   }

@@ -1,19 +1,17 @@
 # FUNCTION TO CREATE TICKS AND LABELS FOR R BARPLOTS
 
 library(stringr)
-
 library(zoo)
-data1 <- df
-stacked <- TRUE
-dt_format <- c("3 years", "%Y")
-type <- "B"
-inception <- FALSE
 
-Barplot_param <- function(inception, data1, stacked, dt_format, type){
+# data1 <- df
+# stacked <- TRUE
+# dt_format <- c("3 years", "%Y")
+# type <- "B"
+# inception <- FALSE
+
+Barplot_param <- function(inception = FALSE, data1, stacked = TRUE, dt_format, type){
 
 #Prepare variables & set defaults
-if (missing(stacked)) {stacked <- TRUE}
-if (missing(inception))   {inception <- FALSE}
 data1 <- as.zoo(data1)
 if (is.null(ncol(data1))) {length_d1 <- 1} else {length_d1 <- ncol(data1)}
 

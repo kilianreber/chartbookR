@@ -48,21 +48,20 @@
 #' BarChart(data=zoo, title="Example Chart", c1=4:5, l2=6, y1="in %", y2="in USD mln", rec=TRUE)
 #' BarChart(data=zoo, title="Example Chart", c1=1, l2=2, y1="Unemployment (%)", y2="Budget Balance (%GDP)", y1_def=c(0, 10, 2), y2_def=c(-10,2,2), y2_rev=TRUE, leg="top", rec=TRUE)
 
-BarChart <- function(data, inception = FALSE, title = NULL, no = "", stacked = TRUE, space, c1, l2 = "none", y1 = NULL, y2 = NULL, y1_def = "none", y2_def = "none", y2_rev, fn = NULL, fn_adj = NULL, leg = "topleft", grid = FALSE, rec = FALSE, dt_format, h1 = "none", v = "none") {
-
-#Turn off warnings
-options(warn=-1)
-
-#Set default values
-if (missing(c1) &  is.null(ncol(data)))  {c1 <- 1}
-if (missing(c1) & !is.null(ncol(data)))  {c1 <- c(1:ncol(data))}
-if (missing(y2_rev))      {y2_rev  <- FALSE }
-if (missing(space) & stacked==TRUE)  {space <- 0.25}
-if (missing(space) & stacked==FALSE) {space <- c(0.25, 0.1)}
-if (stacked==TRUE)        {space <- space[1]}
-if (stacked==FALSE &  length(space)==1) {space <- c(space[1], 1)}
-if (y2_def!="none")       {ylim_input=c(y2_def[1], y2_def[2])}
-if (y2_def!="none" & y2_rev==TRUE) {ylim_input=rev(range(c(y2_def[1], y2_def[2])))}
+BarChart <- function(data, inception = FALSE, title = "", no = "", stacked = TRUE, space, c1, l2 = "none", y1 = "", y2 = "", y1_def = "none", y2_def = "none", y2_rev = FALSE, fn = "", fn_adj = NULL, leg = "topleft", grid = FALSE, rec = FALSE, dt_format, h1 = "none", v = "none")  {
+  
+  #Turn off warnings
+  options(warn=-1)
+  
+  #Set default values
+  if (missing(c1) &  is.null(ncol(data)))  {c1 <- 1}
+  if (missing(c1) & !is.null(ncol(data)))  {c1 <- c(1:ncol(data))}
+  if (missing(space) & stacked==TRUE)  {space <- 0.25}
+  if (missing(space) & stacked==FALSE) {space <- c(0.25, 0.1)}
+  if (stacked==TRUE)        {space <- space[1]}
+  if (stacked==FALSE &  length(space)==1) {space <- c(space[1], 1)}
+  if (y2_def!="none")       {ylim_input=c(y2_def[1], y2_def[2])}
+  if (y2_def!="none" & y2_rev==TRUE) {ylim_input=rev(range(c(y2_def[1], y2_def[2])))}
 
 bars_width <- 1
 dt_format_override <- FALSE
@@ -95,7 +94,7 @@ if (l2!="none") {
 
 if (l2=="none") {data1 <- na.trim(data1, sides="both", is.na="all")}
 
-#Create d1, d2, d3
+#Create c1, l2
 if(l2!="none")  {d3 <- c(c1, l2)} else {d3 <- c1}
 if(l2!="none")  {data3 <- data[,d3]} else {data3 <- data1}
 
@@ -103,6 +102,7 @@ if(l2!="none")  {data3 <- data[,d3]} else {data3 <- data1}
 if (is.null(ncol(data1))) {length_c1 <- 1} else {length_c1 <- ncol(data1)}
 
 if (!missing(dt_format)){
+
 #Override unforunate dt_format inputs by user
 dt_format[1] <- gsub("y", "Y", dt_format[1])
 dt_format[1] <- gsub("m", "M", dt_format[1])
@@ -160,8 +160,7 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
     if(h1!="none") {abline(h=h1, lty=1, lwd=1, col="black")}
     
     #Add vertical abline
-    if(v!="none") {
-    v <- as.Date(v, "%d/%m/%Y")
+    if(v!="none") {v <- as.Date(v, "%d/%m/%Y")
     v_tick <- match.closest(v, index(data1))
     if (stacked==FALSE) {v_tick <- (v_tick*((length((c1))*bars_width)+((length(c1)-1)*space[1])+space[2]))+(0.5*space[2])}
     if (stacked==TRUE)  {v_tick <- (v_tick*bars_width)*(1+space)+0.5*space}
@@ -285,12 +284,12 @@ if (y1_def!="none") {bp <- barplot(data1, beside=!stacked, ylim=c(y1_def[1], y1_
 if(h1!="none") {abline(h=h1, lty=1, lwd=1, col="black")}
 
 #Add vertical abline
-if(v!="none") {
-  v <- as.Date(v, "%d/%m/%Y")
-  v_tick <- match.closest(v, index(data1))
-  if (stacked==FALSE) {v_tick <- (v_tick*((length((c1))*bars_width)+((length(c1)-1)*space[1])+space[2]))+(0.5*space[2])}
-  if (stacked==TRUE)  {v_tick <- (v_tick*bars_width)*(1+space)+0.5*space}
-  abline(v=v_tick, lty=1, lwd=2, col="black")}
+# if(v!="none") {v <- as.Date(v, "%d/%m/%Y")
+#     v_tick <- match.closest(v, index(data1))
+#   if (stacked==FALSE) {v_tick <- (v_tick*((length((c1))*bars_width)+((length(c1)-1)*space[1])+space[2]))+(0.5*space[2])}
+#   if (stacked==TRUE)  {v_tick <- (v_tick*bars_width)*(1+space)+0.5*space}
+#   abline(v=v_tick, lty=1, lwd=2, col="black")
+#   }
 
 #Create second y-axis, and content (if available)
 if (l2!="none") {par(new = T)

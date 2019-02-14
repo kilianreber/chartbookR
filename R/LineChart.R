@@ -229,7 +229,6 @@ if (y1_def!="none") {plot(data1, plot.type="s", ann=FALSE, bty="n", ylim=c(y1_de
   # Add ablines
   if(h1!="none") {abline(h=h1, lty=1, lwd=1, col="black")}
   if(v!="none") {abline(v=as.Date(v, "%d/%m/%Y"), lty=1, lwd=1)}
-  
   }
 
 #Create second y-axis, and content (if available)

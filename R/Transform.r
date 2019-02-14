@@ -14,6 +14,7 @@
 #' 
 #' @param data specification of zoo object
 #' @param start optional start date to trim 'data'; format is 'dd/mm/yyyy'
+#' @param end optional end date to trim 'data'; format is 'dd/mm/yyyy'
 #' @param chg optional string to calculate periodical changes; options are 'YoY' (Year-on-Year), 'QoQ' (Quarter-on-Quarter), 'MoM' (Month-on-Month), 'WoW' (Week-on-Week), 'DoD' (Day-on-Day)
 #' @param chg_type optional string to specify calculation of changes; options are 'perc' (percentage change) or 'delta' (difference); default is 'perc'
 #' @param pma optional integer to specify number of data points for calculation of period-moving-averages
@@ -44,7 +45,7 @@
 
 
 #Define function
-Transform <- function(data, start = "01/01/1666", chg = "none", chg_type = "perc", pma = "none", pms = "none", lag = "none", lead = "none", rebase = "FALSE", Z = "none"){
+Transform <- function(data, start = "01/01/1666", end = "01/01/1666", chg = "none", chg_type = "perc", pma = "none", pms = "none", lag = "none", lead = "none", rebase = "FALSE", Z = "none"){
 
 #Turn off warnings
 options(warn=-1)
@@ -53,6 +54,7 @@ options(warn=-1)
 periodicity <- periodicity(data)$scale
 MovPer <- substring(periodicity(data)$scale, 1, 1)
 if (start!="01/01/1666") {start <- as.Date(start, "%d/%m/%Y")}
+if (end!="01/01/1666")   {end <- as.Date(end, "%d/%m/%Y")}
 delta <- intToUtf8(916)
 if (chg!="none" & chg!="Overall") {chg <- gsub("O", "o", chg)}
 
@@ -218,6 +220,9 @@ if (pms!="none"){
 
 #Subset data according to start date provided
 if (start!="01/01/1666") {data <- subset(data, index(data)>=start)}
+
+#Subset data according to end date provided
+if (end!="01/01/1666") {data <- subset(data, index(data)<end)}
 
 #Apply rebasing
 if (rebase==TRUE) {
