@@ -190,8 +190,25 @@ if (zoom_cst == "none" & zoom == TRUE & per == "daily") {
   if (years > 20)                {zoom_cst <- c("1M", "5Y", "10Y", "20Y") }
 }
 
+#Calculate custom zoom if zoom_cst is none and zoom is TRUE - for quarterly data
+if (zoom_cst == "none" & zoom == TRUE & per == "quarterly") {
+  years <- as.numeric((tail(index(data),1) - index(data)[1])/365)
+  if (years > 0 & years <= 2)    {zoom_cst <- NULL                          }
+  if (years > 2 & years <= 3)    {zoom_cst <- c("12M", "18M", "2Y")         }
+  if (years > 3 & years <= 5)    {zoom_cst <- c("12M", "18M", "2Y", "3Y")   }
+  if (years > 5 & years <= 10)   {zoom_cst <- c("1Y", "3Y", "5Y")           }
+  if (years > 10 & years <= 20)  {zoom_cst <- c("1Y", "3Y", "5Y", "10Y")    }
+  if (years > 20)                {zoom_cst <- c("3Y", "5Y", "10Y", "20Y")   }
+}
 
-# -> For quarterly data, yearly data
+#Calculate custom zoom if zoom_cst is none and zoom is TRUE - for yearly data
+if (zoom_cst == "none" & zoom == TRUE & per == "yearly") {
+  years <- as.numeric((tail(index(data),1) - index(data)[1])/365)
+  if (years > 0 & years <= 5)    {zoom_cst <- NULL                          }
+  if (years > 5 & years <= 10)   {zoom_cst <- c("5Y", "10Y")                }
+  if (years > 10 & years <= 20)  {zoom_cst <- c("5Y", "10Y", "15Y")         }
+  if (years > 20)                {zoom_cst <- c("5Y", "10Y", "15Y", "20Y")  }
+  }
 
 
 #Create zoom range vectors
