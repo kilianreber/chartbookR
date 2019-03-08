@@ -2,26 +2,26 @@
 % Please edit documentation in R/BarChart.r
 \name{BarChart}
 \alias{BarChart}
-\title{Create custom bar(s)/line(s) plot}
+\title{Create custom bar(s) / line(s) plot}
 \usage{
-BarChart(data, inception = FALSE, title = NULL, no = "",
-  stacked = TRUE, space, c1, l2 = "none", y1 = NULL, y2 = NULL,
-  y1_def = "none", y2_def = "none", y2_rev, fn = NULL,
+BarChart(data, inception = FALSE, title = "", no = "",
+  stacked = TRUE, space, c1, l2 = "none", y1 = "", y2 = "",
+  y1_def = "none", y2_def = "none", y2_rev = FALSE, fn = "",
   fn_adj = NULL, leg = "topleft", grid = FALSE, rec = FALSE,
   dt_format, h1 = "none", v = "none")
 }
 \arguments{
 \item{data}{specification of zoo dataset to use for plot}
 
-\item{inception}{optional boolean to show inception date when set to 'TRUE'; default is FALSE}
+\item{inception}{optional boolean to show inception date when set to 'TRUE'}
 
 \item{title}{optional character to add chart title}
 
 \item{no}{optional integer to add chart number}
 
-\item{stacked}{optional boolean to unstack bars when set to FALSE; default is TRUE}
+\item{stacked}{optional boolean to unstack bars when set to FALSE}
 
-\item{space}{optional integer to specify space between bars and data groups, e.g. space=c(0.5, 1); default is space=c(0.1, 0.25)}
+\item{space}{optional integer to specify space between bars and data groups, e.g. space = c(0.5, 1); default is space = c(0.1, 0.25)}
 
 \item{c1}{optional integer vector to specify which columns to plot (as columns) on primary y-axis}
 
@@ -39,7 +39,7 @@ BarChart(data, inception = FALSE, title = NULL, no = "",
 
 \item{fn}{optional character to add footnote to plot}
 
-\item{fn_adj}{optional integer to specify alignment of footnote (0: left-align, 1: right-align, NULL (default): center)}
+\item{fn_adj}{optional integer to specify alignment of footnote (0: left-align, 1: right-align, NULL: center)}
 
 \item{leg}{optional character to specify legend position; options are 'topleft', 'center', 'topright', 'left', 'center', 'right', 'bottomleft', 'bottom', 'bottomright'}
 
@@ -47,26 +47,26 @@ BarChart(data, inception = FALSE, title = NULL, no = "",
 
 \item{rec}{optional boolean to shade recessions when set to TRUE}
 
-\item{dt_format}{optional character vector to specify date interval and date format of x-axis, e..g dt_format=c('3 months','\%b-\%Y')}
+\item{dt_format}{optional character vector to specify date interval and date format of x-axis, e..g dt_format = c('3 months','\%b-\%Y')}
 
-\item{h1}{optional argument to specify horizontal line at specific height}
+\item{h1}{optional argument to specify horizontal line(s) at specific height}
 
-\item{v}{optional date to specify vertical date line, e.g. v='31/12/2012'}
+\item{v}{optional date to specify vertical date line(s), e.g. v = '31/12/2012'}
 }
 \value{
 plots R base plot
 }
 \description{
-Create custom bar(s)/line(s) plot based on user inputs
+Create custom bar(s) / line(s) plot based on user inputs
 }
 \examples{
 
-Note that these examples require corresponding zoo objects to create plots
+Note that these examples require corresponding zoo objects to work properly
 
-BarChart(data=zoo, c1=1:3, leg="topleft", fn="This is a footnote.", stacked=TRUE, space=0)
-BarChart(data=zoo, c1=1:3, leg="topleft", fn="This is a footnote.", stacked=FALSE, space=c(0.5, 1))
-BarChart(data=zoo, title="Example Chart", no="1.1", c1=1:3, y1="Index", leg="topleft", dt_format=c("5 years", "\%Y"), v="01/01/2018")
-BarChart(data=zoo, title="Example Chart", c1=1:3, y1="Index", leg="topleft", grid=TRUE, h=0)
-BarChart(data=zoo, title="Example Chart", c1=4:5, l2=6, y1="in \%", y2="in USD mln", rec=TRUE)
-BarChart(data=zoo, title="Example Chart", c1=1, l2=2, y1="Unemployment (\%)", y2="Budget Balance (\%GDP)", y1_def=c(0, 10, 2), y2_def=c(-10,2,2), y2_rev=TRUE, leg="top", rec=TRUE)
+BarChart(data = zoo, c1 = 1:3, leg = "topleft", fn = "This is a footnote.", stacked = TRUE, space = 0)
+BarChart(data = zoo, c1 = 1:3, leg = "topleft", fn = "This is a footnote.", stacked = FALSE, space = c(0.5, 1))
+BarChart(data = zoo, title = "Example Chart", no = "1.1", c1 = 1:3, y1 = "Index", leg = "topleft", dt_format = c("5 years", "\%Y"), v = "01/01/2018")
+BarChart(data = zoo, title = "Example Chart", c1 = 1:3, y1 = "Index", leg = "topleft", grid = TRUE, h = 0)
+BarChart(data = zoo, title = "Example Chart", c1 = 4:5, l2 = 6, y1 = "in \%", y2 = "in USD mln", rec = TRUE)
+BarChart(data = zoo, title = "Example Chart", c1 = 1, l2 = 2, y1 = "Unemployment (\%)", y2 = "Budget Balance (\%GDP)", y1_def = c(0, 10, 2), y2_def = c(-10,2,2), y2_rev = TRUE, leg = "top", rec = TRUE)
 }

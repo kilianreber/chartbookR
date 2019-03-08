@@ -34,8 +34,8 @@ Before charts can be added to a Powerpoint file, it needs to be initiated using 
 doc <- read_pptx("C:/Documents/Powerpoint/Template.pptx")
 
 Charts can then be added via: 
-makePPT(path="C:/temp", header="US GDP Figures", source="Bloomberg, Fed. Saint Louis")
+makePPT(path = "C:/temp", header="US GDP Figures", source = "Bloomberg, Fed. Saint Louis")
 
 Once all charts are added, the Powerpoint file is saved via: 
-print(doc, target="C:/Documents/Powerpoint/US_Macro_Slideset.pptx")
+print(doc, target = "C:/Documents/Powerpoint/US_Macro_Slideset.pptx")
 }

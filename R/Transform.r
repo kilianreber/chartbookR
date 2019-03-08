@@ -16,7 +16,7 @@
 #' @param start optional start date to trim 'data'; format is 'dd/mm/yyyy'
 #' @param end optional end date to trim 'data'; format is 'dd/mm/yyyy'
 #' @param chg optional string to calculate periodical changes; options are 'YoY' (Year-on-Year), 'QoQ' (Quarter-on-Quarter), 'MoM' (Month-on-Month), 'WoW' (Week-on-Week), 'DoD' (Day-on-Day)
-#' @param chg_type optional string to specify calculation of changes; options are 'perc' (percentage change) or 'delta' (difference); default is 'perc'
+#' @param chg_type optional string to specify calculation of changes; options are 'perc' (percentage change) or 'delta' (difference)
 #' @param pma optional integer to specify number of data points for calculation of period-moving-averages
 #' @param pms optional integer to specify number of data points for calculation of period-moving-sums
 #' @param lag optional integer to lag the data by a number of periods
@@ -30,18 +30,18 @@
 #' 
 #' @examples
 #' 
-#' Note that these examples require corresponding zoo objects to create plots
+#' Note that these examples require corresponding zoo objects to work properly
 #' 
-#' zoo <- Transform(data=zoo, chg="YoY", chg_type='perc')
-#' zoo <- Transform(data=zoo, chg="MoM", chg_type="delta")
-#' zoo <- Transform(data=zoo, start="01/01/2010", pma=12)
-#' zoo <- Transform(data=zoo, pma=3)
-#' zoo <- Transform(data=zoo, pms=6)
-#' zoo <- Transform(data=zoo, lag=3)
-#' zoo <- Transform(data=zoo, lead=3)
-#' zoo <- Transform(data=zoo, rebase=TRUE)
-#' zoo <- Transform(data=zoo, Z=12)
-#' zoo <- Transform(data=zoo, Z=all)
+#' zoo <- Transform(data = zoo, chg = "YoY", chg_type = 'perc')
+#' zoo <- Transform(data = zoo, chg = "MoM", chg_type = "delta")
+#' zoo <- Transform(data = zoo, start = "01/01/2010", pma = 12)
+#' zoo <- Transform(data = zoo, pma = 3)
+#' zoo <- Transform(data = zoo, pms = 6)
+#' zoo <- Transform(data = zoo, lag = 3)
+#' zoo <- Transform(data = zoo, lead = 3)
+#' zoo <- Transform(data = zoo, rebase = TRUE)
+#' zoo <- Transform(data = zoo, Z = 12)
+#' zoo <- Transform(data = zoo, Z = all)
 
 
 #Define function

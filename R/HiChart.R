@@ -12,42 +12,42 @@
 #' @param c2 optional integer vector to specify which columns to plot (as columns) on secondary y-axis
 #' @param a1 optional integer vector to specify which columns to plot (as areas) on primary y-axis
 #' @param a2 optional integer vector to specify which columns to plot (as areas) on secondary y-axis
-#' @param a2 optional integer to override series name if only one series is available; default is "series1"
-#' @param stacking optional integer to specify if and how bars or areas should be stacked; default is NULL
-#' @param space optional integer to specify space between bars; default is 1.5
+#' @param series1 optional integer to override series name if only one series is available; default is "series1"
+#' @param stacking optional integer to specify if and how bars or areas should be stacked
+#' @param space optional integer to specify space between bars
 #' @param title optional character to add chart title
-#' @param title_adj optional integer to specify title alignment ("left" (default), "right", "center")
+#' @param title_adj optional integer to specify title alignment ("left", "right", "center")
 #' @param y1 optional character to specify description of primary y-axis
 #' @param y2 optional character to specify description of secondary y-axis
 #' @param y1_def optional number vector to specify start, end, and intervals of primary y-axis, e.g. c(0, 10, 2)
 #' @param y2_def optional number vector to specify start, end, and intervals of secondary y-axis, e.g. c(0, 10, 2)
-#' @param y1_right optional boolean to display primary y-axis on right-hand side; default is FALSE
+#' @param y1_right optional boolean to display primary y-axis on right-hand side
 #' @param y1_rev optional boolean to invert primary y-axis
 #' @param y2_rev optional boolean to invert secondary y-axis
-#' @param grid optional integer vector to specify line width of grid (horizontal, vertical); default is c(1, 1)
+#' @param grid optional integer vector to specify line width of grid (horizontal, vertical)
 #' @param lineWidth optional integer vector to specify width of lines
-#' @param zoom optional boolean to show or hide zoom function; default is TRUE
-#' @param zoom_cst optional integer to specify custom zoom intervals, e.g. c("1W", "1M", "3M", "6M"); default is "none"
-#' @param navigator optional boolean to show or hide range navigator; default is FALSE
-#' @param tooltip optional boolean to show or hide tooltip; default is FALSE
-#' @param stickyLabels optional boolean to turn on or off sticky labels; default is FALSE
-#' @param decimals optional integer to specify number of decimals shown in tooltip; default is 1
-#' @param size optional integer vector to specify chart output size; default is c(750, 600)
-#' @param linePos optional integer vector to specify linePos... WHAT IS THAT???
+#' @param zoom optional boolean to show or hide zoom function
+#' @param zoom_cst optional integer to specify custom zoom intervals, e.g. c("1W", "1M", "3M", "6M")
+#' @param navigator optional boolean to show or hide range navigator
+#' @param tooltip optional boolean to show or hide tooltip
+#' @param stickyLabels optional boolean to turn on or off sticky labels
+#' @param decimals optional integer to specify number of decimals shown in tooltip
+#' @param size optional integer vector to specify chart output size
+#' @param linePos optional integer vector to specify at which level (front, back) of the plot h1, h2, and v lines are drawn
 #' @param h1 optional argument to specify horizontal line(s) at specific height on primary y-axis
 #' @param h1_lab optional argument to specify horizontal line(s) labels on primary y-axis
 #' @param h2 optional argument to specify horizontal line(s) at specific height on secondary y-axis
 #' @param h2_lab optional argument to specify horizontal line(s) labels on secondary y-axis
-#' @param v optional date to specify vertical date line(s), e.g. v='2012-01-01'
-#' @param v_lab optional argument to specify vertical date line label(s), e.g. v='31/12/2012'
+#' @param v optional date to specify vertical date line(s), e.g. v = '2012-01-01'
+#' @param v_lab optional argument to specify vertical date line label(s), e.g. v = '31/12/2012'
 #' @param b1_from optional argument to specify start of horizontal range band(s) on primary y-axis
 #' @param b1_to optional argument to specify end of horizontal range band(s) on primary y-axis
 #' @param b1_lab optional argument to specify horizontal range band(s) label(s) on primary y-axis
 #' @param b2_from optional argument to specify start of horizontal range band(s) on secondary y-axis
 #' @param b2_to optional argument to specify end of horizontal range band(s) on secondary y-axis
 #' @param b2_lab optional argument to specify horizontal range band(s) label(s) on secondary y-axis
-#' @param v_from optional date(s) to specify start of vertical range band(s), e.g. v='31/12/2012'
-#' @param v_to optional date(s) to specify end of vertical range band(s), e.g. e.g. v='31/12/2012'
+#' @param v_from optional date(s) to specify start of vertical range band(s), e.g. v = '31/12/2012'
+#' @param v_to optional date(s) to specify end of vertical range band(s), e.g. e.g. v = '31/12/2012'
 #' @param vb_lab optional argument to specify label(s) of vertical range band(s)
 #' @param rec optional boolean to shade recessions when set to TRUE
 #' 

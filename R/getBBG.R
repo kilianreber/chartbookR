@@ -11,25 +11,25 @@
 #' @import xts
 #' 
 #' @param tickers character vector of Bloomberg ticker(s)
-#' @param field optional character vector of Bloomberg field(s); default is 'PX_LAST'
+#' @param field optional character vector of Bloomberg field(s)
 #' @param names optional character vector of column name(s) for zoo object; default uses 'tickers' vector
-#' @param start optional start date for data download; format is 'dd/mm/yyyy'; default is Sys.Date() - 3*365
-#' @param end optional end date for data download; format is 'dd/mm/yyyy'; default is Sys.Date() -1
+#' @param start optional start date for data download; format is 'dd/mm/yyyy'
+#' @param end optional end date for data download; format is 'dd/mm/yyyy'
 #' @param freq optional frequency for data download; options are 'DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'YEARLY'; default is 'MONTHLY'
-#' @param time optional string to specify start date; options are 'D' (Days), 'W' (Weeks), 'M' (Months), 'Q' (Quarters), 'Y' (Years), or 'YTD' (Year-to-Date), e.g. '3M', '4Q', '5Y', 'YTD'; default is none
-#' @param na optional boolean to replace NAs with the last observation if set to FALSE; default is TRUE
-#' @param last optional boolean to turn on/off the appending of the latest data points; default is TRUE
+#' @param time optional string to specify start date; options are 'D' (Days), 'W' (Weeks), 'M' (Months), 'Q' (Quarters), 'Y' (Years), or 'YTD' (Year-to-Date), e.g. '3M', '4Q', '5Y', 'YTD'
+#' @param na optional boolean to replace NAs with the last observation if set to FALSE
+#' @param last optional boolean to turn on/off the appending of the latest data points
 #' 
 #' @return returns a zoo object with the downloaded Bloomberg data
 #' 
 #' @export
 #' 
 #' @examples
-#' zoo <- getBBG(tickers='VIX Index', time='YTD')
-#' zoo <- getBBG(tickers='VIX Index', names='VIX', freq='DAILY', time='30Y', na=FALSE)
-#' zoo <- getBBG(tickers=c('CPI YOY Index', 'PPI YOY Index'), names=c('CPI', 'PPI'), start='01/01/2000')
-#' zoo <- getBBG(tickers=c('CPI YOY Index', 'PPI YOY Index'), names=c('CPI', 'PPI'), start='01/01/2000', end='01/01/2018')
-#' zoo <- getBBG(tickers=c('NAPMPMI', 'MPMIEZMA', 'MPMIEMMA'), names=c('United States (ISM)', 'Eurozone', 'Emerging Markets'), time='3Y')
+#' zoo <- getBBG(tickers = 'VIX Index', time = 'YTD')
+#' zoo <- getBBG(tickers = 'VIX Index', names = 'VIX', freq = 'DAILY', time = '30Y', na = FALSE)
+#' zoo <- getBBG(tickers = c('CPI YOY Index', 'PPI YOY Index'), names = c('CPI', 'PPI'), start = '01/01/2000')
+#' zoo <- getBBG(tickers = c('CPI YOY Index', 'PPI YOY Index'), names = c('CPI', 'PPI'), start = '01/01/2000', end = '01/01/2018')
+#' zoo <- getBBG(tickers = c('NAPMPMI', 'MPMIEZMA', 'MPMIEMMA'), names = c('United States (ISM)', 'Eurozone', 'Emerging Markets'), time = '3Y')
 
 getBBG <- function(tickers, field = "PX_LAST", names, start = (LastDayInMonth(Sys.Date())-3*365), end = as.Date(Sys.Date()-1), time, freq = "MONTHLY", na = TRUE, last = FALSE){
 

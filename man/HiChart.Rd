@@ -10,12 +10,12 @@ HiChart(data, l1 = NULL, l2 = NULL, a1 = NULL, a2 = NULL,
   y1 = "", y2 = "", y1_def = c(NULL, NULL, NULL), y2_def = c(NULL,
   NULL, NULL), y1_right = FALSE, y1_rev = FALSE, y2_rev = FALSE,
   grid = c(1, 1), lineWidth = 3, zoom = TRUE, zoom_cst = "none",
-  navigator = FALSE, tooltip = TRUE, decimals = 1, size = c(750,
-  600), linePos = 1, h1 = NULL, h1_lab = NULL, h2 = NULL,
-  h2_lab = NULL, v = NULL, v_lab = NULL, b1_from = NULL,
-  b1_to = NULL, b1_lab = NULL, b2_from = NULL, b2_to = NULL,
-  b2_lab = NULL, v_from = NULL, v_to = NULL, vb_lab = NULL,
-  rec = FALSE)
+  navigator = FALSE, tooltip = TRUE, stickyLabels = FALSE,
+  decimals = 1, size = c(750, 600), linePos = 1, h1 = NULL,
+  h1_lab = NULL, h2 = NULL, h2_lab = NULL, v = NULL,
+  v_lab = NULL, b1_from = NULL, b1_to = NULL, b1_lab = NULL,
+  b2_from = NULL, b2_to = NULL, b2_lab = NULL, v_from = NULL,
+  v_to = NULL, vb_lab = NULL, rec = FALSE)
 }
 \arguments{
 \item{data}{specification of zoo dataset to use for plot}
@@ -32,13 +32,15 @@ HiChart(data, l1 = NULL, l2 = NULL, a1 = NULL, a2 = NULL,
 
 \item{c2}{optional integer vector to specify which columns to plot (as columns) on secondary y-axis}
 
-\item{stacking}{optional integer to specify if and how bars or areas should be stacked; default is NULL}
+\item{series1}{optional integer to override series name if only one series is available; default is "series1"}
 
-\item{space}{optional integer to specify space between bars; default is 1.5}
+\item{stacking}{optional integer to specify if and how bars or areas should be stacked}
+
+\item{space}{optional integer to specify space between bars}
 
 \item{title}{optional character to add chart title}
 
-\item{title_adj}{optional integer to specify title alignment ("left" (default), "right", "center")}
+\item{title_adj}{optional integer to specify title alignment ("left", "right", "center")}
 
 \item{y1}{optional character to specify description of primary y-axis}
 
@@ -48,29 +50,31 @@ HiChart(data, l1 = NULL, l2 = NULL, a1 = NULL, a2 = NULL,
 
 \item{y2_def}{optional number vector to specify start, end, and intervals of secondary y-axis, e.g. c(0, 10, 2)}
 
-\item{y1_right}{optional boolean to display primary y-axis on right-hand side; default is FALSE}
+\item{y1_right}{optional boolean to display primary y-axis on right-hand side}
 
 \item{y1_rev}{optional boolean to invert primary y-axis}
 
 \item{y2_rev}{optional boolean to invert secondary y-axis}
 
-\item{grid}{optional integer vector to specify line width of grid (horizontal, vertical); default is c(1, 1)}
+\item{grid}{optional integer vector to specify line width of grid (horizontal, vertical)}
 
 \item{lineWidth}{optional integer vector to specify width of lines}
 
-\item{zoom}{optional boolean to show or hide zoom function; default is TRUE}
+\item{zoom}{optional boolean to show or hide zoom function}
 
-\item{zoom_cst}{optional integer to specify custom zoom intervals, e.g. c("1W", "1M", "3M", "6M"); default is "none"}
+\item{zoom_cst}{optional integer to specify custom zoom intervals, e.g. c("1W", "1M", "3M", "6M")}
 
-\item{navigator}{optional boolean to show or hide range navigator; default is FALSE}
+\item{navigator}{optional boolean to show or hide range navigator}
 
-\item{tooltip}{optional boolean to show or hide tooltip; default is FALSE}
+\item{tooltip}{optional boolean to show or hide tooltip}
 
-\item{decimals}{optional integer to specify number of decimals shown in tooltip; default is 1}
+\item{stickyLabels}{optional boolean to turn on or off sticky labels}
 
-\item{size}{optional integer vector to specify chart output size; default is c(750, 600)}
+\item{decimals}{optional integer to specify number of decimals shown in tooltip}
 
-\item{linePos}{optional integer vector to specify linePos... WHAT IS THAT???}
+\item{size}{optional integer vector to specify chart output size}
+
+\item{linePos}{optional integer vector to specify at which level (front, back) of the plot h1, h2, and v lines are drawn}
 
 \item{h1}{optional argument to specify horizontal line(s) at specific height on primary y-axis}
 
@@ -80,9 +84,9 @@ HiChart(data, l1 = NULL, l2 = NULL, a1 = NULL, a2 = NULL,
 
 \item{h2_lab}{optional argument to specify horizontal line(s) labels on secondary y-axis}
 
-\item{v}{optional date to specify vertical date line(s), e.g. v='2012-01-01'}
+\item{v}{optional date to specify vertical date line(s), e.g. v = '2012-01-01'}
 
-\item{v_lab}{optional argument to specify vertical date line label(s), e.g. v='31/12/2012'}
+\item{v_lab}{optional argument to specify vertical date line label(s), e.g. v = '31/12/2012'}
 
 \item{b1_from}{optional argument to specify start of horizontal range band(s) on primary y-axis}
 
@@ -96,15 +100,13 @@ HiChart(data, l1 = NULL, l2 = NULL, a1 = NULL, a2 = NULL,
 
 \item{b2_lab}{optional argument to specify horizontal range band(s) label(s) on secondary y-axis}
 
-\item{v_from}{optional date(s) to specify start of vertical range band(s), e.g. v='31/12/2012'}
+\item{v_from}{optional date(s) to specify start of vertical range band(s), e.g. v = '31/12/2012'}
 
-\item{v_to}{optional date(s) to specify end of vertical range band(s), e.g. e.g. v='31/12/2012'}
+\item{v_to}{optional date(s) to specify end of vertical range band(s), e.g. e.g. v = '31/12/2012'}
 
 \item{vb_lab}{optional argument to specify label(s) of vertical range band(s)}
 
 \item{rec}{optional boolean to shade recessions when set to TRUE}
-
-\item{a2}{optional integer to override series name if only one series is available; default is "series1"}
 }
 \value{
 returns highchart object

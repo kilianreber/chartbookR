@@ -4,18 +4,20 @@
 \alias{Transform}
 \title{Transformation of zoo object}
 \usage{
-Transform(data, start = "01/01/1666", chg = "none",
-  chg_type = "perc", pma = "none", pms = "none", lag = "none",
-  lead = "none", rebase = "FALSE", Z = "none")
+Transform(data, start = "01/01/1666", end = "01/01/1666",
+  chg = "none", chg_type = "perc", pma = "none", pms = "none",
+  lag = "none", lead = "none", rebase = "FALSE", Z = "none")
 }
 \arguments{
 \item{data}{specification of zoo object}
 
 \item{start}{optional start date to trim 'data'; format is 'dd/mm/yyyy'}
 
+\item{end}{optional end date to trim 'data'; format is 'dd/mm/yyyy'}
+
 \item{chg}{optional string to calculate periodical changes; options are 'YoY' (Year-on-Year), 'QoQ' (Quarter-on-Quarter), 'MoM' (Month-on-Month), 'WoW' (Week-on-Week), 'DoD' (Day-on-Day)}
 
-\item{chg_type}{optional string to specify calculation of changes; options are 'perc' (percentage change) or 'delta' (difference); default is 'perc'}
+\item{chg_type}{optional string to specify calculation of changes; options are 'perc' (percentage change) or 'delta' (difference)}
 
 \item{pma}{optional integer to specify number of data points for calculation of period-moving-averages}
 
@@ -37,16 +39,16 @@ Adds new columns to zoo object with transformed data; applies for all columns in
 }
 \examples{
 
-Note that these examples require corresponding zoo objects to create plots
+Note that these examples require corresponding zoo objects to work properly
 
-zoo <- Transform(data=zoo, chg="YoY", chg_type='perc')
-zoo <- Transform(data=zoo, chg="MoM", chg_type="delta")
-zoo <- Transform(data=zoo, start="01/01/2010", pma=12)
-zoo <- Transform(data=zoo, pma=3)
-zoo <- Transform(data=zoo, pms=6)
-zoo <- Transform(data=zoo, lag=3)
-zoo <- Transform(data=zoo, lead=3)
-zoo <- Transform(data=zoo, rebase=TRUE)
-zoo <- Transform(data=zoo, Z=12)
-zoo <- Transform(data=zoo, Z=all)
+zoo <- Transform(data = zoo, chg = "YoY", chg_type = 'perc')
+zoo <- Transform(data = zoo, chg = "MoM", chg_type = "delta")
+zoo <- Transform(data = zoo, start = "01/01/2010", pma = 12)
+zoo <- Transform(data = zoo, pma = 3)
+zoo <- Transform(data = zoo, pms = 6)
+zoo <- Transform(data = zoo, lag = 3)
+zoo <- Transform(data = zoo, lead = 3)
+zoo <- Transform(data = zoo, rebase = TRUE)
+zoo <- Transform(data = zoo, Z = 12)
+zoo <- Transform(data = zoo, Z = all)
 }

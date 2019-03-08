@@ -13,11 +13,11 @@ LineChart(data, inception = FALSE, title = NULL, title_adj = NULL,
 \arguments{
 \item{data}{specification of zoo dataset to use for plot}
 
-\item{inception}{optional boolean to show clipped inception date when set to 'TRUE'; default is 'FALSE'}
+\item{inception}{optional boolean to show clipped inception date when set to 'TRUE'}
 
 \item{title}{optional character to add chart title}
 
-\item{title_adj}{optional integer to specify title alignment (0: left-align, 1: right-align, NULL (default): center)}
+\item{title_adj}{optional integer to specify title alignment (0: left-align, 1: right-align, NULL: center)}
 
 \item{no}{optional integer to add chart number}
 
@@ -37,7 +37,7 @@ LineChart(data, inception = FALSE, title = NULL, title_adj = NULL,
 
 \item{fn}{optional character to add footnote to plot}
 
-\item{fn_adj}{optional integer to specify alignment of footnote (0: left-align, 1: right-align, NULL (default): center)}
+\item{fn_adj}{optional integer to specify alignment of footnote (0: left-align, 1: right-align, NULL: center)}
 
 \item{leg}{optional character to specify legend position; options are 'topleft', 'center', 'topright', 'left', 'center', 'right', 'bottomleft', 'bottom', 'bottomright'}
 
@@ -47,9 +47,9 @@ LineChart(data, inception = FALSE, title = NULL, title_adj = NULL,
 
 \item{dt_format}{optional character vector to specify date interval and date format of x-axis, e..g dt_format=c('3 months', '\%b-\%Y')}
 
-\item{h1}{optional argument to specify horizontal line at specific height}
+\item{h1}{optional argument to specify horizontal line(s) at specific height}
 
-\item{v}{optional date to specify vertical date line, e.g. v='31/12/2012'}
+\item{v}{optional date to specify vertical date line(s), e.g. v='31/12/2012'}
 }
 \value{
 plots R base plot
@@ -59,11 +59,11 @@ Create custom line(s) plot based on user inputs
 }
 \examples{
 
-Note that these examples require corresponding zoo objects to create plots
+Note that these examples require corresponding zoo objects to work properly
 
-LineChart(data=zoo, l1=1:3, leg="topleft", fn="This is a footnote.")
-LineChart(data=zoo, title="Example Chart", no="1.1", l1=1:3, y1="Index", leg="topleft", dt_format=c("5 years", "\%Y"), v="01/01/2018")
-LineChart(data=zoo, title="Example Chart", l1=1:3, y1="Index", leg="topleft", grid=TRUE, h=0)
-LineChart(data=zoo, title="Example Chart", l1=4:5, l2=6, y1="in \%", y2="in USD mln", rec=TRUE)
-LineChart(data=zoo, title="Example Chart", l1=1, l2=2, y1="Unemployment (\%)", y2="Budget Balance (\%GDP)", y1_def=c(0, 10, 2), y2_def=c(-10,2,2), y2_rev=TRUE, leg="top", rec=TRUE)
+LineChart(data = zoo, l1 = 1:3, leg = "topleft", fn = "This is a footnote.")
+LineChart(data = zoo, title = "Example Chart", no = "1.1", l1 = 1:3, y1 = "Index", leg = "topleft", dt_format = c("5 years", "\%Y"), v = "01/01/2018")
+LineChart(data = zoo, title = "Example Chart", l1 = 1:3, y1 = "Index", leg = "topleft", grid = TRUE, h = 0)
+LineChart(data = zoo, title = "Example Chart", l1 = 4:5, l2 = 6, y1 = "in \%", y2 = "in USD mln", rec = TRUE)
+LineChart(data = zoo, title = "Example Chart", l1 = 1, l2 = 2, y1 = "Unemployment (\%)", y2 = "Budget Balance (\%GDP)", y1_def = c(0, 10, 2), y2_def = c(-10,2,2), y2_rev = TRUE, leg = "top", rec = TRUE)
 }

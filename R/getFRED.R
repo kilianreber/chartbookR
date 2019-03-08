@@ -14,20 +14,20 @@
 #' 
 #' @param tickers character vector of FRED ticker(s)
 #' @param names optional character vector of column name(s) for zoo object; default uses 'tickers' vector
-#' @param start optional start date for data download; format is 'dd/mm/yyyy'; default is Sys.Date() - 3*365
-#' @param end optional end date for data download; format is 'dd/mm/yyyy'; default is Sys.Date() -1
-#' @param time optional string to specify start date; options are 'D' (Days), 'W' (Weeks), 'M' (Months), 'Q' (Quarters), 'Y' (Years), or 'YTD' (Year-to-Date), e.g. '3M', '4Q', '5Y', 'YTD'; default is none
-#' @param na optional boolean to replace NAs with the last observation if set to FALSE; default is TRUE
+#' @param start optional start date for data download; format is 'dd/mm/yyyy'
+#' @param end optional end date for data download; format is 'dd/mm/yyyy'
+#' @param time optional string to specify start date; options are 'D' (Days), 'W' (Weeks), 'M' (Months), 'Q' (Quarters), 'Y' (Years), or 'YTD' (Year-to-Date), e.g. '3M', '4Q', '5Y', 'YTD'
+#' @param na optional boolean to replace NAs with the last observation if set to FALSE
 #' 
 #' @return returns a zoo object with the downloaded FRED data
 #' 
 #' @export
 #' 
 #' @examples
-#' zoo <- getFRED(tickers=c('UNRATE', 'NROU'), names=c('US Unemployment', 'Natural Unemployment'))
-#' zoo <- getFRED(tickers=c('UNRATE', 'NROU'), names=c('US Unemployment', 'Natural Unemployment'), time='15Y', na=FALSE)
-#' zoo <- getFRED(tickers=c("T10YIE", "T5YIE"), names=c("10Y Breakeven", "5Y Breakeven"), start='01/01/2015')
-#' zoo <- getFRED(tickers=c("CPIAUCSL", "PCEPILFE"), names=c("CPI", "Core PCE"), start='01/01/2000', end='01/01/2018')
+#' zoo <- getFRED(tickers = c('UNRATE', 'NROU'), names = c('US Unemployment', 'Natural Unemployment'))
+#' zoo <- getFRED(tickers = c('UNRATE', 'NROU'), names = c('US Unemployment', 'Natural Unemployment'), time = '15Y', na = FALSE)
+#' zoo <- getFRED(tickers = c("T10YIE", "T5YIE"), names = c("10Y Breakeven", "5Y Breakeven"), start = '01/01/2015')
+#' zoo <- getFRED(tickers = c("CPIAUCSL", "PCEPILFE"), names = c("CPI", "Core PCE"), start = '01/01/2000', end = '01/01/2018')
 
 getFRED <- function(tickers, names, start = "01/01/1666", end = "01/01/1666", time, na = TRUE){
 
