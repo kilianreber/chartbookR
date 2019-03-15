@@ -7,7 +7,7 @@
 getBBG(tickers, field = "PX_LAST", names,
   start = (LastDayInMonth(Sys.Date()) - 3 * 365),
   end = as.Date(Sys.Date() - 1), time, freq = "MONTHLY", na = TRUE,
-  last = FALSE, fut_dates = FALSE)
+  last = FALSE, fut_dt = FALSE)
 }
 \arguments{
 \item{tickers}{character vector of Bloomberg ticker(s)}
@@ -28,7 +28,7 @@ getBBG(tickers, field = "PX_LAST", names,
 
 \item{last}{optional boolean to toggle appending of the latest data points}
 
-\item{fut_dates}{optional boolean to toggle deletion of data points that lie in the future}
+\item{fut_dt}{optional boolean to toggle deletion of data points that lie in the future}
 }
 \value{
 returns a zoo object with the downloaded Bloomberg data
