@@ -18,7 +18,8 @@
 #' @param freq optional frequency for data download; options are 'DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'YEARLY'; default is 'MONTHLY'
 #' @param time optional string to specify start date; options are 'D' (Days), 'W' (Weeks), 'M' (Months), 'Q' (Quarters), 'Y' (Years), or 'YTD' (Year-to-Date), e.g. '3M', '4Q', '5Y', 'YTD'
 #' @param na optional boolean to replace NAs with the last observation if set to FALSE
-#' @param last optional boolean to turn on/off the appending of the latest data points
+#' @param last optional boolean to toggle appending of the latest data points
+#' @param fut_dates optional boolean to toggle deletion of data points that lie in the future
 #' 
 #' @return returns a zoo object with the downloaded Bloomberg data
 #' 
@@ -31,7 +32,7 @@
 #' zoo <- getBBG(tickers = c('CPI YOY Index', 'PPI YOY Index'), names = c('CPI', 'PPI'), start = '01/01/2000', end = '01/01/2018')
 #' zoo <- getBBG(tickers = c('NAPMPMI', 'MPMIEZMA', 'MPMIEMMA'), names = c('United States (ISM)', 'Eurozone', 'Emerging Markets'), time = '3Y')
 
-getBBG <- function(tickers, field = "PX_LAST", names, start = (LastDayInMonth(Sys.Date())-3*365), end = as.Date(Sys.Date()-1), time, freq = "MONTHLY", na = TRUE, last = FALSE){
+getBBG <- function(tickers, field = "PX_LAST", names, start = (LastDayInMonth(Sys.Date())-3*365), end = as.Date(Sys.Date()-1), time, freq = "MONTHLY", na = TRUE, last = FALSE, fut_dates = FALSE){
 
   #Turn off warnings
   options(warn=-1)
@@ -178,7 +179,9 @@ getBBG <- function(tickers, field = "PX_LAST", names, start = (LastDayInMonth(Sy
   bbg_trans <- na.trim(bbg_trans, sides="both", is.na="all")
   
   #Remove looking-ahead data
+  if (fut_dates == FALSE){
   bbg_trans <- bbg_trans[!(index(bbg_trans) > Sys.Date()),]
+  }
   
   #Apply one_ticker_fix if necessary
   if (one_tickr_fix==TRUE) {bbg_trans <- bbg_trans[,1]}
