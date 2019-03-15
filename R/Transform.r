@@ -19,8 +19,7 @@
 #' @param chg_type optional string to specify calculation of changes; options are 'perc' (percentage change) or 'delta' (difference)
 #' @param pma optional integer to specify number of data points for calculation of period-moving-averages
 #' @param pms optional integer to specify number of data points for calculation of period-moving-sums
-#' @param lag optional integer to lag the data by a number of periods
-#' @param lead optional integer to lead the data by a number of periods
+#' @param lag optional integer to lag the data by a number of periods; use negative integer for lead
 #' @param rebase optional boolean to rebase the data to 100 at first observation
 #' @param Z optional integer (or character) to specify the rolling number of periods over which the data is normalized; use 'all' to compute z-scores over all available periods
 #' 
@@ -38,14 +37,14 @@
 #' zoo <- Transform(data = zoo, pma = 3)
 #' zoo <- Transform(data = zoo, pms = 6)
 #' zoo <- Transform(data = zoo, lag = 3)
-#' zoo <- Transform(data = zoo, lead = 3)
+#' zoo <- Transform(data = zoo, lag = -3)
 #' zoo <- Transform(data = zoo, rebase = TRUE)
 #' zoo <- Transform(data = zoo, Z = 12)
 #' zoo <- Transform(data = zoo, Z = all)
 
 
 #Define function
-Transform <- function(data, start = "01/01/1666", end = "01/01/1666", chg = "none", chg_type = "perc", pma = "none", pms = "none", lag = "none", lead = "none", rebase = "FALSE", Z = "none"){
+Transform <- function(data, start = "01/01/1666", end = "01/01/1666", chg = "none", chg_type = "perc", pma = "none", pms = "none", lag = "none", rebase = "FALSE", Z = "none"){
 
 #Turn off warnings
 options(warn=-1)

@@ -6,7 +6,7 @@
 \usage{
 Transform(data, start = "01/01/1666", end = "01/01/1666",
   chg = "none", chg_type = "perc", pma = "none", pms = "none",
-  lag = "none", lead = "none", rebase = "FALSE", Z = "none")
+  lag = "none", rebase = "FALSE", Z = "none")
 }
 \arguments{
 \item{data}{specification of zoo object}
@@ -23,9 +23,7 @@ Transform(data, start = "01/01/1666", end = "01/01/1666",
 
 \item{pms}{optional integer to specify number of data points for calculation of period-moving-sums}
 
-\item{lag}{optional integer to lag the data by a number of periods}
-
-\item{lead}{optional integer to lead the data by a number of periods}
+\item{lag}{optional integer to lag the data by a number of periods; use negative integer for lead}
 
 \item{rebase}{optional boolean to rebase the data to 100 at first observation}
 
@@ -47,7 +45,7 @@ zoo <- Transform(data = zoo, start = "01/01/2010", pma = 12)
 zoo <- Transform(data = zoo, pma = 3)
 zoo <- Transform(data = zoo, pms = 6)
 zoo <- Transform(data = zoo, lag = 3)
-zoo <- Transform(data = zoo, lead = 3)
+zoo <- Transform(data = zoo, lag = -3)
 zoo <- Transform(data = zoo, rebase = TRUE)
 zoo <- Transform(data = zoo, Z = 12)
 zoo <- Transform(data = zoo, Z = all)
