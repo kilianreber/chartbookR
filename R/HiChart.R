@@ -272,14 +272,14 @@ xbands_final <- c(xbands, rec_bands)
 #Create y1_Bands
 ybands = list()
 for (i in 1:length(b1_from)) {
-  temp  <- list(from = b1_from[i], to = b1_to[i], color="rgba(5, 0, 0, 0.1)", zIndex = 1, label = list(zIndex = 100, x = 20, align = "left", text = b1_lab[i]))
+  temp  <- list(from = b1_from[i], to = b1_to[i], color="rgba(100, 0, 0, 0.1)", zIndex = 1, label = list(zIndex = 100, x = 20, align = "left", text = b1_lab[i]))
   ybands[[length(ybands)+1]] <- temp
   i + 1}
 
 #Create y2_Bands
 y2bands = list()
 for (i in 1:length(b2_from)) {
-  temp  <- list(from = b2_from[i], to = b2_to[i], color="rgba(5, 0, 0, 0.1)", zIndex = 1, label = list(zIndex = 100, x = -20, align = "right", text = b2_lab[i]))
+  temp  <- list(from = b2_from[i], to = b2_to[i], color="rgba(100, 0, 0, 0.1)", zIndex = 1, label = list(zIndex = 100, x = -20, align = "right", text = b2_lab[i]))
   y2bands[[length(y2bands)+1]] <- temp
   i + 1}
 

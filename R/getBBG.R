@@ -132,28 +132,32 @@ getBBG <- function(tickers, field = "PX_LAST", names, start = (LastDayInMonth(Sy
   colnames(bbg_trans) <- db$names[match(colnames(bbg_trans), db$tickers)]
   colnames(bbg_trans)[1] <- "Dates"
 
-  #Output dataframe
+  #Output zoo object
   bbg_trans <- read.zoo(bbg_trans, format = "%Y-%m-%d")
 
   #Add last data points
   if (last == TRUE){
 
-    # Download and arrange data
+    #Download and arrange data
     bbg_last_dl  <- bdp(securities = tickers, fields = field, overrides = NULL)
     bbg_last_dt  <- bdp(securities = tickers, fields = "LAST_UPDATE_DT", overrides = NULL)
     bbg_last     <- cbind(bbg_last_dt, bbg_last_dl)
     bbg_last[,1] <- format(as.Date(bbg_last[,1]), "%Y-%m-%d")
 
-    # Organize and clean data
+    #Organize and clean data
     bbg_last$Variable <- row.names(bbg_last)
     rownames(bbg_last) <- c()
     colnames(bbg_last) <- c("Dates", "Level", "Variable")
 
-    # Reshape to Wide Format
+    #Reshape to Wide Format
     bbg_last <- reshape(bbg_last, idvar = "Dates", timevar = "Variable", direction = "wide")
-    colnames(bbg_last) <- c("Dates", row.names(bbg_last_dl))
-
-    # Convert to zoo object, merge, remove duplicates
+    
+    #Create db2 & replace column names
+    db$tickers2 <- paste0("Level.", tickers)
+    colnames(bbg_last) <- db$names[match(colnames(bbg_last), db$tickers2)]
+    colnames(bbg_last)[1] <- "Dates"
+    
+    #Convert to zoo object, merge, remove duplicates
     zoo_last  <- read.zoo(bbg_last, format = "%Y-%m-%d")
     comb      <- c(index(bbg_trans), index(zoo_last))
     kill      <- comb[duplicated(comb)]
