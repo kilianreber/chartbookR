@@ -270,35 +270,35 @@ xbands_final <- c(xbands, rec_bands)
 #Create y1_Bands
 ybands = list()
 for (i in 1:length(b1_from)) {
-  temp  <- list(from = b1_from[i], to = b1_to[i], color="rgba(100, 0, 0, 0.1)", zIndex = 1, label = list(zIndex = 100, x = 20, align = "left", text = b1_lab[i]))
+  temp  <- list(from = b1_from[i], to = b1_to[i], color="rgba(100, 0, 0, 0.1)", zIndex = 100, label = list(zIndex = 100, x = 20, align = "left", text = b1_lab[i]))
   ybands[[length(ybands)+1]] <- temp
   i + 1}
 
 #Create y2_Bands
 y2bands = list()
 for (i in 1:length(b2_from)) {
-  temp  <- list(from = b2_from[i], to = b2_to[i], color="rgba(100, 0, 0, 0.1)", zIndex = 1, label = list(zIndex = 100, x = -20, align = "right", text = b2_lab[i]))
+  temp  <- list(from = b2_from[i], to = b2_to[i], color="rgba(100, 0, 0, 0.1)", zIndex = 100, label = list(zIndex = 100, x = -20, align = "right", text = b2_lab[i]))
   y2bands[[length(y2bands)+1]] <- temp
   i + 1}
 
 #Create vLines
 xlines = list()
 for (i in 1:length(v)) {
-  temp  <- list(color = "black", zIndex = linePos, width = 1.2, value = v[i], zIndex = 1, label = list(zIndex = 100, x = 7.5, y = 17.5, rotation = 0, text = v_lab[i]))
+  temp  <- list(color = "black", zIndex = linePos, width = 1.2, value = v[i], zIndex = 100, label = list(zIndex = 100, x = 7.5, y = 17.5, rotation = 0, text = v_lab[i]))
   xlines[[length(xlines)+1]] <- temp
   i + 1}
 
 #Create h1_Lines
 ylines = list()
 for (i in 1:length(h1)) {
-  temp  <- list(color = "black", zIndex = linePos, width = 1.2, value = h1[i], zIndex = 1, label = list(zIndex = 100, x = 20, align = "left", text = h1_lab[i]))
+  temp  <- list(color = "black", zIndex = linePos, width = 1.2, value = h1[i], zIndex = 100, label = list(zIndex = 100, x = 20, align = "left", text = h1_lab[i]))
   ylines[[length(ylines)+1]] <- temp
   i + 1}
 
 #Create h2_Lines
 y2lines = list()
 for (i in 1:length(h2)) {
-  temp  <- list(color = "black", zIndex = linePos, width = 1.2, value = h2[i], zIndex = 1, label = list(zIndex = 100, x = -20, align = "right", text = h2_lab[i]))
+  temp  <- list(color = "black", zIndex = linePos, width = 1.2, value = h2[i], zIndex = 100, label = list(zIndex = 100, x = -20, align = "right", text = h2_lab[i]))
   y2lines[[length(y2lines)+1]] <- temp
   i + 1}
 
