@@ -78,16 +78,14 @@ getBBG <- function(tickers, field = "PX_LAST", names, start = (LastDayInMonth(Sy
                      "nonTradingDayFillMethod",
                      "periodicityAdjustment",
                      "adjustmentFollowDPDF",
-                     "pricingOption",
-                     "currency")
+                     "pricingOption")
 
   option.values <- c( freq,
                       "NON_TRADING_WEEKDAYS",
                       "NIL_VALUE",
                       "CALENDAR",
                       "TRUE",
-                      "PRICING_OPTION_PRICE",
-                      "USD")
+                      "PRICING_OPTION_PRICE")
 
   bbg.options <- structure(option.values, names = option.fields)
 
