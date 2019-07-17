@@ -5,6 +5,7 @@
 #' 
 #' Create highcharter object based on user inputs
 #' 
+#' @import highcharter
 #' @import reshape2
 #' @import zoo
 #' @import xts
@@ -61,9 +62,6 @@
 
 HiChart <- function(data, l1=NULL, l2 = NULL, a1 = NULL, a2 = NULL, c1 = NULL, c2 = NULL, series1 = NULL, stacking = NULL, space = 1.5, title = NULL, subtitle = NULL, title_adj = "left", y1 = "", y2 = "", y1_def = c(NULL, NULL, NULL), y2_def = c(NULL, NULL, NULL), y1_right = FALSE, y1_rev = FALSE, y2_rev = FALSE, grid =c(1,1), lineWidth = 3, zoom = TRUE, zoom_cst = "none", navigator = FALSE, tooltip = TRUE, stickyLabels = FALSE, decimals = 1, size = c(750, 600), linePos = 1, h1 = NULL, h1_lab = NULL, h2 = NULL, h2_lab = NULL, v = NULL, v_lab = NULL, b1_from = NULL, b1_to = NULL, b1_lab = NULL, b2_from = NULL, b2_to = NULL, b2_lab = NULL, v_from = NULL, v_to = NULL, vb_lab = NULL, rec = FALSE) {
 
-#Load highcharter library
-library(highcharter)
-  
 # Default settings
 if(is.null(l1) & is.null(l2) & is.null(a1) & is.null(a2) & is.null(c1) & is.null(c2)) {if(is.null(ncol(data))) {l1 <- 1} else {l1  <- 1:ncol(data) }}
 if(is.null(series1))     {series1 <- "Series1"}
