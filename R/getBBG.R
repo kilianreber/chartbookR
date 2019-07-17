@@ -130,6 +130,10 @@ getBBG <- function(tickers, field = "PX_LAST", names, start = (LastDayInMonth(Sy
   colnames(bbg_trans) <- db$names[match(colnames(bbg_trans), db$tickers)]
   colnames(bbg_trans)[1] <- "Dates"
 
+  #Sort data according to names vector
+  bbg_ordering <- c("Dates", names)
+  bbg_trans <- bbg_trans[, bbg_ordering]
+  
   #Output zoo object
   bbg_trans <- read.zoo(bbg_trans, format = "%Y-%m-%d")
 
